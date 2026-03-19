@@ -78,17 +78,21 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 
 | What they build | Thesis | Team |
 |---|---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, cybersecurity | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
 | Fintech, payments, insurance, compliance, legal, payroll, tax | Fintech | Malin Posern, Marjorie Lengereau |
-| Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience | Jack Wang, Miha Pavlovic |
+| Defense, hardware, chips, non-GNSS navigation, cloud infrastructure | European Resilience | Jack Wang, Miha Pavlovic |
 | Supply chain, logistics, manufacturing, materials, robotics | Global Supply Chain | Philipp Werner, Oskar Lingk |
-| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf | Ciara Gumsheimer |
+| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture, sales tools, HR tools, productivity software | Surf and Turf | Ciara Gumsheimer |
 
 **Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
 - Building AI tools / infrastructure / agents → Future of Autonomous Work
 - Using AI to solve a domain problem (e.g. AI for insurance, AI for logistics, AI for plant breeding) → route to that domain's thesis
 
 Never default to Future of Autonomous Work without applying this test first.
+
+**Additional routing rules:**
+- Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work, not European Resilience
+- AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
 
 ### 4c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.
