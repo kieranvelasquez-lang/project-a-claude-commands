@@ -11,6 +11,7 @@ Custom Claude Code slash commands for the Project A investment team.
 | `/daily-dealflow` | Pulls new #deal-flow Slack messages, enriches them, routes by thesis, and posts back to Slack |
 | `/deal-flow-review` | Pulls deal flow for a specific team member + date range and sends a formatted DM to their Slack |
 | `/investment-team-dealflow-meetings` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
+| `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by thesis, and posts a signal digest to Slack |
 
 ---
 
@@ -40,7 +41,7 @@ ln -s ~/project-a-claude-commands/commands ~/.claude/commands
 mkdir -p ~/.claude/memory
 ```
 
-That's it. Open a new Claude Code session and `/daily-dealflow`, `/deal-flow-review`, and `/investment-team-dealflow-meetings` will be available.
+That's it. Open a new Claude Code session and `/daily-dealflow`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, and `/evertrace-signals` will be available.
 
 ---
 
@@ -60,6 +61,7 @@ Each command learns from your feedback and stores corrections in `~/.claude/memo
 
 - `daily-dealflow-corrections.md` — thesis routing overrides (e.g. "CompanyX should be Fintech")
 - `investment-team-dealflow-meetings-corrections.md` — name, company, and HQ country fixes from Granola transcripts
+- `evertrace-signals-corrections.md` — theme routing overrides, name and company name corrections for Evertrace signals
 
 These files live on **your machine only** — not in the repo. They're personal to each user and build up over time.
 
@@ -94,6 +96,15 @@ Paste a Granola meeting transcript and get back two ready-to-send email summarie
 
 ---
 
+### `/evertrace-signals`
+Export a CSV from Evertrace, run this command, answer three questions (CSV path, week label, include stealth?), and get a clean signal digest posted to Slack. Companies are auto-routed to thesis owners. Previews in #automation-tests before posting to #deal-flow.
+
+**Usage:** `/evertrace-signals` then follow prompts (drag CSV into terminal for path)
+
+**Requires:** Slack MCP
+
+---
+
 ## Repo structure
 
 ```
@@ -102,6 +113,7 @@ project-a-claude-commands/
 └── commands/
     ├── daily-dealflow.md
     ├── deal-flow-review.md
+    ├── evertrace-signals.md
     └── investment-team-dealflow-meetings.md
 ```
 
