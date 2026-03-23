@@ -1,9 +1,9 @@
 ---
-description: Format Granola weekly deal flow meeting transcript into ready-to-send email summaries
+description: Format Granola investment team dealflow meeting transcript into ready-to-send email summaries
 allowed-tools: Write, Read, Bash(open:*)
 ---
 
-# Weekly Dealflow Meeting Notes Formatter
+# Investment Team Dealflow Meeting Notes Formatter
 
 The user has pasted a Granola meeting transcript. Format it into ready-to-copy email blocks for Gmail.
 
@@ -19,7 +19,7 @@ Ask the user exactly this, then wait for their full answer before proceeding:
 
 ## Step 2: Extract from the transcript
 
-First, read the corrections memory file at `~/.claude/projects/-Users-kvelasquez-Projects/memory/weekly-dealflow-corrections.md` using the Read tool. If it exists, load all corrections into context:
+First, read the corrections memory file at `~/.claude/projects/-Users-kvelasquez-Projects/memory/investment-team-dealflow-meetings-corrections.md` using the Read tool. If it exists, load all corrections into context:
 - **Name corrections**: apply case-insensitively to all first names found
 - **Company name corrections**: apply case-insensitively to all company names found
 - **HQ country corrections**: when a company appears in the transcript, check if its HQ country matches a correction entry — if so, replace it with the correct country
@@ -93,7 +93,7 @@ After formatting the content, use the Write tool to create HTML files on the Des
 
 ### Always create Version 1 HTML file:
 
-Write the file to `/Users/kvelasquez/Desktop/weekly-dealflow-v1.html` with this structure:
+Write the file to `/Users/kvelasquez/Desktop/investment-team-dealflow-meetings-v1.html` with this structure:
 
 ```html
 <!DOCTYPE html>
@@ -146,7 +146,7 @@ Fill in:
 
 ### If user answered "yes" to V2, also create Version 2 HTML file:
 
-Write the file to `/Users/kvelasquez/Desktop/weekly-dealflow-v2.html` with the same structure but:
+Write the file to `/Users/kvelasquez/Desktop/investment-team-dealflow-meetings-v2.html` with the same structure but:
 - Title: `Version 2 — Clean Summary`
 - Recipients: `Investment Team &lt;investmentteam@project-a.vc&gt;, Anton Waitz &lt;anton.waitz@project-a.vc&gt;, Vincent Synde &lt;vincent.synde@project-a.vc&gt;, Miriam Ayasse &lt;miriam.ayasse@project-a.vc&gt;, Martin Laudien &lt;martin.laudien@project-a.vc&gt;, Christian Kurz &lt;christian.kurz@project-a.vc&gt;, Andreas Kühnke &lt;andreas.kuehnke@project-a.vc&gt;, Anton Grabovski &lt;anton.grabovski@project-a.vc&gt;, Jan-Willem Jensen &lt;jan-willem.jensen@project-a.vc&gt;, Elias Wahl &lt;elias.wahl@project-a.vc&gt;`
 - Subject: `Summary Dealflow [DATE]`
@@ -156,8 +156,8 @@ Write the file to `/Users/kvelasquez/Desktop/weekly-dealflow-v2.html` with the s
 ### Then open the file(s):
 
 Use Bash to run:
-- `open /Users/kvelasquez/Desktop/weekly-dealflow-v1.html`
-- `open /Users/kvelasquez/Desktop/weekly-dealflow-v2.html` (if V2 was created)
+- `open /Users/kvelasquez/Desktop/investment-team-dealflow-meetings-v1.html`
+- `open /Users/kvelasquez/Desktop/investment-team-dealflow-meetings-v2.html` (if V2 was created)
 
 ## Step 5: Tell the user
 
@@ -188,10 +188,10 @@ If the user pastes a corrected version:
 - Compare it against the output you generated
 - Identify changed first names, company names, and HQ countries
 - Check if each correction already exists in the corrections file
-- If the corrections file doesn't exist yet, create it at `~/.claude/projects/-Users-kvelasquez-Projects/memory/weekly-dealflow-corrections.md` with this header:
+- If the corrections file doesn't exist yet, create it at `~/.claude/projects/-Users-kvelasquez-Projects/memory/investment-team-dealflow-meetings-corrections.md` with this header:
 
 ```markdown
-# Weekly Dealflow — Corrections Memory
+# Investment Team Dealflow Meetings — Corrections Memory
 
 ## Name Corrections
 <!-- Format: WRONG → CORRECT | added YYYY-MM-DD -->

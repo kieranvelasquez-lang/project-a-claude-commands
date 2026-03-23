@@ -10,7 +10,7 @@ Custom Claude Code slash commands for the Project A investment team.
 |---|---|
 | `/daily-dealflow` | Pulls new #deal-flow Slack messages, enriches them, routes by thesis, and posts back to Slack |
 | `/deal-flow-review` | Pulls deal flow for a specific team member + date range and sends a formatted DM to their Slack |
-| `/weekly-dealflow` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
+| `/investment-team-dealflow-meetings` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
 
 ---
 
@@ -40,7 +40,7 @@ ln -s ~/project-a-claude-commands/commands ~/.claude/commands
 mkdir -p ~/.claude/memory
 ```
 
-That's it. Open a new Claude Code session and `/daily-dealflow`, `/deal-flow-review`, and `/weekly-dealflow` will be available.
+That's it. Open a new Claude Code session and `/daily-dealflow`, `/deal-flow-review`, and `/investment-team-dealflow-meetings` will be available.
 
 ---
 
@@ -59,7 +59,7 @@ cd ~/project-a-claude-commands && git pull
 Each command learns from your feedback and stores corrections in `~/.claude/memory/`:
 
 - `daily-dealflow-corrections.md` — thesis routing overrides (e.g. "CompanyX should be Fintech")
-- `weekly-dealflow-corrections.md` — name, company, and HQ country fixes from Granola transcripts
+- `investment-team-dealflow-meetings-corrections.md` — name, company, and HQ country fixes from Granola transcripts
 
 These files live on **your machine only** — not in the repo. They're personal to each user and build up over time.
 
@@ -85,10 +85,10 @@ Given a team member's name and a date range, pulls all #deal-flow messages where
 
 ---
 
-### `/weekly-dealflow`
+### `/investment-team-dealflow-meetings`
 Paste a Granola meeting transcript and get back two ready-to-send email summaries — Version 1 (internal, full detail) and Version 2 (clean, compliance-facing). Output opens directly in your browser for copy-paste into Gmail.
 
-**Usage:** `/weekly-dealflow` then paste transcript when prompted
+**Usage:** `/investment-team-dealflow-meetings` then paste transcript when prompted
 
 **Requires:** Nothing beyond Claude Code
 
@@ -102,7 +102,7 @@ project-a-claude-commands/
 └── commands/
     ├── daily-dealflow.md
     ├── deal-flow-review.md
-    └── weekly-dealflow.md
+    └── investment-team-dealflow-meetings.md
 ```
 
 ---
