@@ -79,7 +79,7 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 | What they build | Thesis | Team |
 |---|---|---|
 | AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, cybersecurity | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
-| Fintech, payments, insurance, compliance, legal, payroll, tax | Fintech | Malin Posern, Marjorie Lengereau |
+| Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech | Malin Posern, Marjorie Lengereau |
 | Defense, hardware, chips, non-GNSS navigation, cloud infrastructure | European Resilience | Jack Wang, Miha Pavlovic |
 | Supply chain, logistics, manufacturing, materials, robotics | Global Supply Chain | Philipp Werner, Oskar Lingk |
 | Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture, sales tools, HR tools, productivity software | Surf and Turf | Ciara Gumsheimer |
@@ -93,6 +93,7 @@ Never default to Future of Autonomous Work without applying this test first.
 **Additional routing rules:**
 - Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work, not European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
+- Blockchain / crypto / web3 startups → Fintech, not Future of Autonomous Work (even if building observability or tooling for blockchain networks)
 
 ### 4c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.
@@ -116,9 +117,12 @@ Wait for the user to paste their confirmed found/not-found list from their Affin
 
 **Critical:** The scraper has a high false-negative rate. Only entries the user's manual check explicitly confirms as "not in Affinity" go into the Net New post. Do not rely on scraper output alone — if the user hasn't manually confirmed something as absent, do not include it in Net New.
 
-**LinkedIn profiles:** LinkedIn blocks all automated fetching (HTTP 999). For any Net New LinkedIn profiles, ask the user to provide a one-liner alongside their results:
+**LinkedIn profiles:** LinkedIn blocks all automated fetching (HTTP 999). Once the user confirms which profiles are Net New, output a clickable list of those LinkedIn URLs so the user can open them directly from the terminal without digging back through Slack:
 
-> "For any Net New LinkedIn profiles, please also paste a one-liner per person so I don't have to guess:
+> "Here are the Net New LinkedIn profiles — click through and paste a one-liner per person:
+> • https://www.linkedin.com/in/slug-one/
+> • https://www.linkedin.com/in/slug-two/
+>
 > e.g. `pierre-dorge → Co-founder Fileforge, building in stealth`"
 
 Use whatever the user provides as the profile description — do not attempt WebFetch on LinkedIn URLs.
