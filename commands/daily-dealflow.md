@@ -18,27 +18,20 @@ Used in section headers. These are exact Slack display names — look up user ID
 
 ---
 
-## Step 1 — Friday check
+## Step 1 — Check corrections delta
 
-Ask the user exactly:
+Read `~/.claude/projects/-Users-kvelasquez-Projects/memory/daily-dealflow-corrections.md` using the Read tool.
 
-> "Is this a Friday run requiring a Full Recap as well? (yes/no)"
+This file is a **staging area** for new corrections that haven't yet been baked into the skill. The default routing rules below already incorporate all previously confirmed corrections.
 
-Wait for the answer before proceeding. Store it as `FRIDAY_RUN`.
+- If the file is empty or has no entries: proceed — no delta to apply.
+- If the file has entries: load them into context as overrides. Note them briefly (e.g. "1 staged correction: CompanyX → Surf and Turf"). These take precedence over default routing for any matching company name.
 
----
-
-## Step 2 — Load corrections memory
-
-Read `~/.claude/memory/daily-dealflow-corrections.md` using the Read tool.
-
-If the file exists, load all thesis routing corrections into context. Note which corrections will be applied (e.g. "Loaded 3 routing corrections"). These corrections override default routing logic for any matching company name — they take precedence over everything.
-
-If the file doesn't exist, proceed without corrections.
+Do not re-read or re-explain the full routing table — just flag what's new.
 
 ---
 
-## Step 3 — Pull from Slack
+## Step 2 — Pull from Slack
 
 Ask the user: "What time was the last Daily Dealflow post sent? (e.g. '7:22 PM on March 16')" — or, if they already provided it, use that.
 
@@ -57,32 +50,32 @@ For each message retrieved:
 
 ---
 
-## Step 4 — Parse each entry (no enrichment yet)
+## Step 3 — Parse each entry (no enrichment yet)
 
 For every company or LinkedIn profile mentioned, do the following:
 
-### 4a. Identify type
+### 3a. Identify type
 Is this a company deal or a LinkedIn profile link?
 
-### 4b. Extract inline data only
+### 3b. Extract inline data only
 Pull directly from Slack — no WebFetch or WebSearch yet:
 - Company/person name
 - URL from Slack message
 - Inline description from Slack message (verbatim or lightly cleaned)
 - Funding info only if explicitly mentioned in Slack
-- Thesis routing — apply corrections memory first, then default routing table below
+- Thesis routing — apply staged corrections first, then default routing table below
 
-**First: apply corrections memory.** If the company name appears in `daily-dealflow-corrections.md`, use that thesis — do not apply default routing rules.
+**First: apply staged corrections.** If the company name appears in `daily-dealflow-corrections.md`, use that thesis — do not apply default routing rules.
 
 **Otherwise, use default routing:**
 
 | What they build | Thesis | Team |
 |---|---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, cybersecurity | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
 | Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech | Malin Posern, Marjorie Lengereau |
-| Defense, hardware, chips, non-GNSS navigation, cloud infrastructure | European Resilience | Jack Wang, Miha Pavlovic |
+| Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience | Jack Wang, Miha Pavlovic |
 | Supply chain, logistics, manufacturing, materials, robotics | Global Supply Chain | Philipp Werner, Oskar Lingk |
-| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture, sales tools, HR tools, productivity software | Surf and Turf | Ciara Gumsheimer |
+| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf | Ciara Gumsheimer |
 
 **Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
 - Building AI tools / infrastructure / agents → Future of Autonomous Work
@@ -90,17 +83,17 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 
 Never default to Future of Autonomous Work without applying this test first.
 
-**Additional routing rules:**
+**Hardcoded routing rules (confirmed corrections, already baked in):**
 - Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work, not European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
 - Blockchain / crypto / web3 startups → Fintech, not Future of Autonomous Work (even if building observability or tooling for blockchain networks)
 
-### 4c. Flag unknowns
+### 3c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.
 
 ---
 
-## Step 5 — Present raw list for Affinity check
+## Step 4 — Present raw list for Affinity check
 
 Output a minimal list — **company name + URL only** for companies, **LinkedIn profile name + URL only** for people. No descriptions, no funding, no thesis grouping. Just what the scraper needs.
 
@@ -111,7 +104,7 @@ Wait for the user's response before proceeding.
 
 ---
 
-## Step 6 — Affinity cross-reference (user-led)
+## Step 5 — Affinity cross-reference (user-led)
 
 Wait for the user to paste their confirmed found/not-found list from their Affinity scraper run.
 
@@ -129,7 +122,7 @@ Use whatever the user provides as the profile description — do not attempt Web
 
 ---
 
-## Step 6b — Enrich Net New entries only
+## Step 5b — Enrich Net New entries only
 
 For each entry the user confirmed as NOT in Affinity:
 
@@ -144,7 +137,8 @@ Include whatever is findable — amount, round type, lead investor, date. Format
 - `_Raised: $1.52M, Seed, EWOR_` — amount + round + lead investor
 - `_Raised: Pre-Seed_` — round only (amount unknown)
 - `_Raised: £4–5M Seed, raising Jun 2026_` — include upcoming raise info if confirmed
-- `_Raised: Unknown_` — nothing findable after searching
+
+If no funding info is findable, **omit the Raised field entirely** — do not write `_Raised: Unknown_`.
 
 Do not include approximate amounts without a `~` prefix (e.g. `_Raised: ~€1M, Pre-Seed_`).
 Do not include months/years unless confirmed.
@@ -167,15 +161,13 @@ Present the enriched Net New list, grouped by thesis, for a final review pass be
 
 ---
 
-## Step 7 — Resolve @mention user IDs
+## Step 6 — Resolve @mention user IDs
 
 Before composing posts, use `slack_search_users` to look up the Slack user ID for each team member whose thesis section appears in this run's output. Format pings as `<@USERID>` in the post body — this ensures the message actually pings them rather than rendering as plain text.
 
 ---
 
-## Step 8 — Compose posts
-
-### Net New to Affinity post (every run)
+## Step 7 — Compose Net New post
 
 Match this format exactly — based on real posts from #deal-flow:
 
@@ -188,10 +180,10 @@ _Entries not yet tracked in Affinity · [Month D, YYYY]_
 - <https://linkedin.com/in/handle|Full Name> — One-sentence bio/context.
 
 **Global Supply Chain** <@PHILIPP_ID> <@OSKAR_ID>
-- <https://company.com|CompanyName> — One-sentence description. | _Raised: Unknown_
+- <https://company.com|CompanyName> — One-sentence description.
 
 **Fintech** <@MALIN_ID> <@MARJORIE_ID>
-- <https://company.com|CompanyName> — One-sentence description. | _Raised: Unknown_
+- <https://company.com|CompanyName> — One-sentence description. | _Raised: Pre-Seed_
 
 **Surf and Turf** <@CIARA_ID>
 - <https://company.com|CompanyName> — One-sentence description. | _Raised: $XM, Seed, Lead Investor_
@@ -210,14 +202,8 @@ Rules:
 - Only include the "Flagged for Review" block if there are actual flags
 - One blank line between each thesis section
 - No lead investor unless confirmed — don't guess
+- Omit `| _Raised:_` entirely if no funding info is available — never write `_Raised: Unknown_`
 - Do NOT include `_Sent using Claude_` in the message — the Slack MCP appends it automatically; including it causes a duplicate
-
-### Full Recap post (only if `FRIDAY_RUN` = yes)
-
-Same structure, but:
-- Title: `**Daily Dealflow — [Month D, YYYY] | Full Recap**`
-- Subtitle: `_Pulled from #deal-flow · Screened by Claude · [Month D, YYYY]_`
-- Contains **all** entries from the week, not just Net New
 
 ### Formatting rules (CRITICAL — never deviate)
 
@@ -235,7 +221,7 @@ Same structure, but:
 
 ---
 
-## Step 9 — Post to #automation-tests
+## Step 8 — Post to #automation-tests
 
 Post to channel ID `C0AKKPK3J1K` using `slack_send_message`.
 
@@ -244,16 +230,16 @@ Then output:
 
 ---
 
-## Step 10 — Await approval
+## Step 9 — Await approval
 
 - If the user pastes corrections: revise and repost to #automation-tests. Repeat until approved.
-- If the user types 'post': proceed to Step 11.
+- If the user types 'post': proceed to Step 10.
 
 **Never post to #deal-flow before the user has approved the #automation-tests version.**
 
 ---
 
-## Step 11 — Post to #deal-flow
+## Step 10 — Post to #deal-flow
 
 Post to channel ID `C0AB6LUVCN4` using `slack_send_message`.
 
@@ -261,24 +247,27 @@ Post to channel ID `C0AB6LUVCN4` using `slack_send_message`.
 
 ---
 
-## Step 12 — Ask for routing corrections
+## Step 11 — Ask for routing corrections
 
 Ask:
 > "Were any thesis routings wrong? If yes, tell me: 'CompanyName should be [Thesis]' and I'll learn it. Type 'no' to finish."
 
 ---
 
-## Step 13 — Learn from corrections (only if user provides them)
+## Step 12 — Learn from corrections (only if user provides them)
 
 For each routing correction provided:
 
-1. Check if the company already exists in `~/.claude/memory/daily-dealflow-corrections.md`
-2. If the corrections file doesn't exist, create it with this header:
+1. Determine if this is **company-specific** (e.g. "AcmeCorp → Fintech") or **general** (e.g. "AI sales tools → Surf and Turf").
+   - **General rules** should be baked directly into the hardcoded routing rules in Step 3b of this skill — ask Kieran to confirm before editing.
+   - **Company-specific corrections** go into the staging file.
+
+2. For company-specific corrections, check if the company already exists in `~/.claude/projects/-Users-kvelasquez-Projects/memory/daily-dealflow-corrections.md`. If the file doesn't exist, create it with this header:
 
 ```markdown
 # Daily Dealflow — Corrections Memory
 
-## Thesis Routing Corrections
+## Staged Corrections (not yet baked into skill)
 <!-- Format: CompanyName → Thesis | added YYYY-MM-DD -->
 ```
 
@@ -288,4 +277,4 @@ For each routing correction provided:
 ```
 
 4. Tell the user:
-> "Learned [N] new routing correction(s): [list]. Applied automatically on future runs."
+> "Learned [N] new correction(s): [list]. Staged for future runs. Let me know if any should be baked into the skill as a permanent rule."
