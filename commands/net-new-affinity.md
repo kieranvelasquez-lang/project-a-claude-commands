@@ -5,7 +5,7 @@ allowed-tools: Read, Write, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_sen
 
 # Net New to Affinity
 
-Run this after `/daily-dealflow` has posted the Summary and raw Affinity list to #automation-tests, and after you have run your Affinity scraper against that list.
+Run this after `/morning-recap` has posted the Morning Recap and raw Affinity list to #automation-tests, and after you have run your Affinity scraper against that list.
 
 ## Team member Slack display names
 

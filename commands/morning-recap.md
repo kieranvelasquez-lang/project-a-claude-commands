@@ -1,5 +1,5 @@
 ---
-description: Pull today's #deal-flow Slack messages, enrich and route them, then publish the Daily Dealflow Summary to #automation-tests
+description: Pull yesterday's #deal-flow Slack messages, enrich and route them, then publish the Morning Recap to #automation-tests
 allowed-tools: Read, Write, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__slack_read_thread, mcp__claude_ai_Slack__slack_send_message, mcp__claude_ai_Slack__slack_search_users
 ---
 
@@ -134,13 +134,13 @@ Before composing the post, use `slack_search_users` to look up the Slack user ID
 
 ---
 
-## Step 6 — Compose Daily Dealflow Summary
+## Step 6 — Compose Morning Recap
 
 Match this format exactly:
 
 ```
-**Daily Dealflow — [Month D, YYYY]**
-_All deals from today's #deal-flow · [Month D, YYYY]_
+**Morning Recap — [Month D, YYYY]**
+_Review of yesterday's dealflow · [Month D, YYYY]_
 
 **Future of Autonomous Work** <@DARIA_ID> <@OMAR_ID>
 - <https://company.com|CompanyName> — One-sentence description.
@@ -170,7 +170,7 @@ Rules:
 - Only include thesis sections that have entries.
 - Only include "Flagged for Review" if there are actual flags.
 - One blank line between each thesis section.
-- Do **not** include `| _Raised:_` in the Summary — funding info belongs in `/net-new-affinity` only.
+- Do **not** include `| _Raised:_` in the Recap — funding info belongs in `/net-new-affinity` only.
 - Action item format: `| _Action: <@USERID>_` appended at end of line, only when a confirmed action item owner exists.
 - LinkedIn profiles with no Slack description: show link and name only (`- <https://linkedin.com/in/handle|Full Name>`), no description fragment.
 - Do NOT include `_Sent using Claude_` — the MCP appends it automatically.
@@ -191,14 +191,14 @@ Rules:
 
 ## Step 7 — Post to #automation-tests
 
-Post the Daily Dealflow Summary to channel ID `C0AKKPK3J1K` using `slack_send_message`.
+Post the Morning Recap to channel ID `C0AKKPK3J1K` using `slack_send_message`.
 
 Then, as a **second message** to the same channel, post the raw Affinity check list — company name + URL only, one per line, no descriptions or thesis grouping. Follow it with:
 
-> "Summary is live above. Run your Affinity scraper against this list, then run `/net-new-affinity` and paste your results to generate the Net New post."
+> "Morning Recap is live above. Run your Affinity scraper against this list, then run `/net-new-affinity` and paste your results to generate the Net New post."
 
 Then output to the terminal:
-> "Daily Dealflow Summary and Affinity list are live in #automation-tests. Copy the Summary to #deal-flow when ready, then run `/net-new-affinity` with your scraper results."
+> "Morning Recap and Affinity list are live in #automation-tests. Copy the Recap to #deal-flow when ready, then run `/net-new-affinity` with your scraper results."
 
 ---
 
