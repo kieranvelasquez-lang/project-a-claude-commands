@@ -17,42 +17,109 @@ Custom Claude Code slash commands for the Project A investment team.
 
 ---
 
-## Prerequisites
+## Setup guide
 
-Every team member needs:
-
-1. **Claude Code** — install at [claude.ai/download](https://claude.ai/download) and log in with your Anthropic account
-2. **Slack MCP** — the Slack integration that lets Claude read and post to Slack. Set this up via Claude Code's MCP settings (ask Kieran for the config)
+Follow these four steps in order. The whole process takes about 15 minutes.
 
 ---
 
-## Installation
+### Step 1 — Install Claude Code
 
-**5-minute setup — run these commands in Terminal:**
+1. Go to [claude.ai/download](https://claude.ai/download) and download the Mac desktop app
+2. Open it and sign in with your Anthropic account (create one at [claude.ai](https://claude.ai) if you don't have one yet — you need a paid Claude Pro or Team plan)
+3. Once you're in, open a terminal window inside Claude Code (or use your system Terminal — both work)
+
+---
+
+### Step 2 — Set up GitHub access (Personal Access Token)
+
+This repo is private, so you need to authenticate with GitHub before you can clone it. You do this once and it's saved.
+
+**Create a Personal Access Token (PAT):**
+
+1. Go to [github.com/settings/tokens](https://github.com/settings/tokens) (you must be logged into GitHub)
+2. Click **"Generate new token" → "Generate new token (classic)"**
+3. Give it a name (e.g. `project-a-claude-commands`)
+4. Set expiration to **90 days** (or "No expiration" if you prefer)
+5. Under **Scopes**, tick **`repo`** (this gives read access to private repos)
+6. Click **"Generate token"** at the bottom
+7. Copy the token — it starts with `ghp_...` — you won't see it again after you leave the page
+
+**Configure git to use your token:**
+
+Run this in Terminal, replacing `YOUR_GITHUB_USERNAME` and `YOUR_TOKEN`:
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/project-a/project-a-claude-commands.git ~/project-a-claude-commands
+git config --global credential.helper store
+echo "https://YOUR_GITHUB_USERNAME:YOUR_TOKEN@github.com" >> ~/.git-credentials
+```
 
-# 2. Symlink the commands into your Claude config
-#    (backs up any existing commands folder first)
-[ -d ~/.claude/commands ] && mv ~/.claude/commands ~/.claude/commands.bak
-ln -s ~/project-a-claude-commands/commands ~/.claude/commands
+---
 
-# 3. Create the memory directory (where corrections are stored)
+### Step 3 — Clone the repo and link the commands
+
+Run these commands in Terminal one at a time:
+
+```bash
+# 1. Clone the repo into your home directory
+git clone https://github.com/kieranvelasquez-lang/project-a-claude-commands.git ~/Projects/project-a-claude-commands
+```
+
+```bash
+# 2. Create the Claude commands directory if it doesn't exist
+mkdir -p ~/.claude/commands
+```
+
+```bash
+# 3. Copy the commands into your Claude config
+#    (or run this again any time you want to pull the latest versions)
+cp ~/Projects/project-a-claude-commands/commands/*.md ~/.claude/commands/
+```
+
+```bash
+# 4. Create the memory directory (where Claude stores your personal corrections)
 mkdir -p ~/.claude/memory
 ```
 
-That's it. Open a new Claude Code session and `/morning-recap`, `/net-new-affinity`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, `/evertrace-signals`, and `/dealflow-retro-newsletter` will be available.
+Open a new Claude Code session. You should now see `/morning-recap`, `/net-new-affinity`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, `/evertrace-signals`, and `/dealflow-retro-newsletter` in the slash command menu.
+
+---
+
+### Step 4 — Connect Claude to Slack (Slack MCP)
+
+Several commands read from and post to the Project A Slack workspace. To enable this, you need to connect **your own Slack account** to Claude — each person does this individually with their own credentials.
+
+**What you're setting up:** An MCP (Model Context Protocol) server that gives Claude permission to read channels and send messages in Slack on your behalf. Think of it like granting Claude the same access you have in Slack.
+
+**Steps:**
+
+1. Open Claude Code and go to **Settings → MCP Servers**
+2. Click **"Add MCP Server"**
+3. Select **Slack** from the list of available integrations (or add it manually — ask Kieran for the server config if it doesn't appear)
+4. Follow the OAuth flow to authorise with your Project A Slack account (`@yourname@project-a.vc`)
+5. When asked which permissions to grant, approve all that are requested — Claude needs read and write access to channels and DMs
+
+> **Note:** You are connecting your own Slack account. Claude will post and read messages as you — the same way you would if you were doing it manually. Kieran's Slack account is not involved.
+
+**Verify it's working:**
+
+Open a new Claude Code session and type:
+
+```
+/morning-recap
+```
+
+If Slack is connected, Claude will start pulling from #deal-flow. If it fails with a Slack authentication error, go back to Settings → MCP Servers and check that the Slack integration shows as "Connected".
 
 ---
 
 ## Getting updates
 
-When commands are updated, pull the latest and your symlink picks it up automatically:
+When commands are updated, pull the latest from GitHub and copy them across:
 
 ```bash
-cd ~/project-a-claude-commands && git pull
+cd ~/Projects/project-a-claude-commands && git pull
+cp commands/*.md ~/.claude/commands/
 ```
 
 ---
