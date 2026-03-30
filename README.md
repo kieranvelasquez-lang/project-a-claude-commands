@@ -8,7 +8,8 @@ Custom Claude Code slash commands for the Project A investment team.
 
 | Command | What it does |
 |---|---|
-| `/daily-dealflow` | Pulls new #deal-flow Slack messages, enriches them, routes by thesis, and posts back to Slack |
+| `/daily-dealflow` | Pulls new #deal-flow Slack messages, routes by thesis, and posts a Daily Dealflow Summary to #automation-tests |
+| `/net-new-affinity` | Takes Affinity scraper results and generates the Net New to Affinity post to #automation-tests |
 | `/deal-flow-review` | Pulls deal flow for a specific team member + date range and sends a formatted DM to their Slack |
 | `/investment-team-dealflow-meetings` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
 | `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by thesis, and posts a signal digest to Slack |
@@ -41,7 +42,7 @@ ln -s ~/project-a-claude-commands/commands ~/.claude/commands
 mkdir -p ~/.claude/memory
 ```
 
-That's it. Open a new Claude Code session and `/daily-dealflow`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, and `/evertrace-signals` will be available.
+That's it. Open a new Claude Code session and `/daily-dealflow`, `/net-new-affinity`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, and `/evertrace-signals` will be available.
 
 ---
 
@@ -70,9 +71,18 @@ These files live on **your machine only** — not in the repo. They're personal 
 ## Commands in detail
 
 ### `/daily-dealflow`
-Pulls every new message from #deal-flow since the last Daily Dealflow post, enriches companies via web search, routes them to the correct thesis owner, and posts a clean Net New to Affinity summary back to Slack.
+Pulls every new message from #deal-flow since the last Daily Dealflow post (auto-anchored), routes all deals to the correct thesis owner, captures any Slack-explicit action items, enriches entries missing a description, and posts a Daily Dealflow Summary + raw Affinity check list to #automation-tests. Can be run manually or scheduled to run automatically at 7pm Berlin time.
 
-**Flow:** Pull Slack → Parse entries → Present raw list for Affinity check → Enrich Net New only → Preview in #automation-tests → Approve → Post to #deal-flow
+**Flow:** Auto-anchor → Pull Slack → Parse + route entries → Capture action items → Enrich missing descriptions → Post Summary + Affinity list to #automation-tests
+
+**Requires:** Slack MCP
+
+---
+
+### `/net-new-affinity`
+Run this after your Affinity scraper. Paste your found/not-found results, confirm Net New entries, do the LinkedIn double-check, and get an enriched Net New to Affinity post (with descriptions and funding info) posted to #automation-tests.
+
+**Flow:** Paste scraper results → Confirm Net New → LinkedIn double-check → Enrich descriptions + funding → Post to #automation-tests
 
 **Requires:** Slack MCP
 
@@ -112,6 +122,7 @@ project-a-claude-commands/
 ├── README.md
 └── commands/
     ├── daily-dealflow.md
+    ├── net-new-affinity.md
     ├── deal-flow-review.md
     ├── evertrace-signals.md
     └── investment-team-dealflow-meetings.md
