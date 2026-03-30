@@ -1,5 +1,5 @@
 ---
-description: Pull today's #deal-flow Slack messages, enrich and route them, then publish clean posts back to Slack
+description: Pull today's #deal-flow Slack messages, enrich and route them, then publish the Daily Dealflow Summary to #automation-tests
 allowed-tools: Read, Write, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__slack_read_thread, mcp__claude_ai_Slack__slack_send_message, mcp__claude_ai_Slack__slack_search_users
 ---
 
@@ -31,22 +31,21 @@ Do not re-read or re-explain the full routing table — just flag what's new.
 
 ---
 
-## Step 2 — Pull from Slack
+## Step 2 — Pull from Slack (auto-anchor)
 
-Ask the user: "What time was the last Daily Dealflow post sent? (e.g. '7:22 PM on March 16')" — or, if they already provided it, use that.
+**Do not ask the user for a timestamp.** Anchor automatically:
 
-Convert the time to a Unix timestamp (remember: Project A is Berlin, CET = UTC+1, CEST = UTC+2 from late March). Use that timestamp as the `oldest` parameter when calling `slack_read_channel`.
+1. Call `slack_read_channel` on #deal-flow (channel ID: `C0AB6LUVCN4`) with `oldest` set to 48 hours ago (current Unix timestamp minus 172800).
+2. Scan the returned messages for the most recent one by Kieran Velasquez that begins with `**Daily Dealflow —`. Use that message's `ts` value as the anchor.
+3. If no such message is found in the 48-hour window, fall back and ask: "I couldn't find your last Daily Dealflow post. What time was it sent? (e.g. '7:22 PM on March 16')"
 
-**Never fetch the full channel history.** Always use `oldest` to fetch only messages posted after the last Daily Dealflow post sent by Kieran Velasquez.
+Once the anchor `ts` is established, call `slack_read_channel` again with `oldest` set to that `ts` to fetch only messages posted after the last Daily Dealflow post.
 
-Use `slack_read_channel` on #deal-flow (channel ID: `C0AB6LUVCN4`) with `oldest` set to the anchor timestamp.
-
-If the user hasn't provided a timestamp and none is available from context, ask:
-> "Please give me the time (and date if not today) of the last Daily Dealflow post so I can anchor from there."
+Remember: Project A is Berlin — CET = UTC+1, CEST = UTC+2 from late March.
 
 For each message retrieved:
-- Capture timestamp, full content, any names already assigned inline
-- If a message has thread replies, use `slack_read_thread` to capture additional context (additional links, descriptions, investor info, assignee notes)
+- Capture timestamp, full content, sender display name, any names already assigned inline
+- If a message has thread replies, use `slack_read_thread` to capture additional context (links, descriptions, investor info, assignee notes, action items)
 
 ---
 
@@ -91,105 +90,74 @@ Never default to Future of Autonomous Work without applying this test first.
 ### 3c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.
 
----
+### 3d. Capture inline assignments and action items
 
-## Step 4 — Present raw list for Affinity check
+After routing, check for explicit Slack-level assignments that override default routing:
 
-Output a minimal list — **company name + URL only** for companies, **LinkedIn profile name + URL only** for people. No descriptions, no funding, no thesis grouping. Just what the scraper needs.
+**In the original message:**
+- Is a specific team member @mentioned alongside the deal? If yes, route to that person's thesis.
 
-Then ask:
-> "Here's today's raw list. Run your Affinity scraper against these and paste back your confirmed found/not-found results."
+**In thread replies:**
+- Look for language like "tagging this to X", "passing to X", "X will reach out", "X is following up", "pinging X on this".
+- Track the full chain: if A assigns to B, and B reassigns to C, follow to C.
 
-Wait for the user's response before proceeding.
+**Routing override rules:**
+- If the final explicit assignee is on a different thesis than default routing → override the thesis to match the assignee.
+- If tagger and thread responder are on the **same thesis team**, no routing change needed (e.g. Marjorie sends + tags Miha, Jack also responds → still European Resilience).
+- If a cross-thesis reassignment exists (e.g. Miha tags Daria, Daria passes to Marjorie) → route to final assignee's thesis (Fintech), and flag the action item owner.
 
----
+**Action item flag:**
+Record who owns the action item (if anyone). This will be displayed inline in the Summary post as `| _Action: <@USERID>_`.
 
-## Step 5 — Affinity cross-reference (user-led)
-
-Wait for the user to paste their confirmed found/not-found list from their Affinity scraper run.
-
-**Critical:** The scraper has a high false-negative rate. Only entries the user's manual check explicitly confirms as "not in Affinity" go into the Net New post. Do not rely on scraper output alone — if the user hasn't manually confirmed something as absent, do not include it in Net New.
-
-**LinkedIn profiles:** LinkedIn blocks all automated fetching (HTTP 999). Once the user confirms which profiles are Net New, output a clickable list of those LinkedIn URLs so the user can open them directly from the terminal without digging back through Slack:
-
-> "Here are the Net New LinkedIn profiles — click through and paste a one-liner per person:
-> • https://www.linkedin.com/in/slug-one/
-> • https://www.linkedin.com/in/slug-two/
->
-> e.g. `pierre-dorge → Co-founder Fileforge, building in stealth`"
-
-Use whatever the user provides as the profile description — do not attempt WebFetch on LinkedIn URLs.
+If no explicit action item exists, leave this field blank — do not invent one.
 
 ---
 
-## Step 5b — Enrich Net New entries only
+## Step 4 — Enrich entries with no Slack description
 
-For each entry the user confirmed as NOT in Affinity:
+For any entry where the Slack message included **no description**, enrich before composing the Summary:
 
-### Verify description via website
-Use WebFetch on the company's actual website homepage. Do **not** use the Slack message description as final — always verify or replace with what the company actually says about itself. If the site is down or returns an error, use `_No confirmed build info available._` as the description and flag it.
+**Companies:**
+- Use WebFetch on the company's actual website homepage to pull a one-sentence description.
+- If WebFetch fails, try WebSearch (company name + "startup" or "what does it do").
+- If both fail, flag the entry — do not invent a description.
+- Do **not** research funding here — that belongs in `/net-new-affinity`.
 
-### Research funding
-Use WebSearch to find funding info (search: company name + "funding" or "raises" + site:crunchbase.com or site:techcrunch.com or press releases).
-
-Include whatever is findable — amount, round type, lead investor, date. Format flexibly based on what's available:
-- `_Raised: $1.5M, Pre-Seed_` — amount + round
-- `_Raised: $1.52M, Seed, EWOR_` — amount + round + lead investor
-- `_Raised: Pre-Seed_` — round only (amount unknown)
-- `_Raised: £4–5M Seed, raising Jun 2026_` — include upcoming raise info if confirmed
-
-If no funding info is findable, **omit the Raised field entirely** — do not write `_Raised: Unknown_`.
-
-Do not include approximate amounts without a `~` prefix (e.g. `_Raised: ~€1M, Pre-Seed_`).
-Do not include months/years unless confirmed.
-LinkedIn profiles do not get a Raised field.
-
-### Flag when needed
-Flag an entry only when genuinely needed:
-- Broken or dead links
-- Contradictory funding info (e.g. two sources disagree)
-- Site down (couldn't verify description) — try WebSearch for the company before giving up
-- Truly unresolvable routing (e.g. company is in stealth with zero public info AND no Slack context to infer from)
-
-**Do not flag for ambiguous routing** — make a best-guess thesis assignment based on the founder's background, Slack context, or who it was tagged to. Only move to Flagged if you genuinely cannot assign a thesis after using all available context.
-
-**Do not flag for missing descriptions** — try WebSearch (company name + "what does it do" or "startup") before giving up. Only flag if both WebFetch and WebSearch return nothing useful.
-
-**Never skip entries.** Flag missing info rather than omitting.
-
-Present the enriched Net New list, grouped by thesis, for a final review pass before composing the post.
+**LinkedIn profiles:**
+- LinkedIn blocks automated fetching. If no description was in Slack, omit the description in the Summary — do not attempt WebFetch.
 
 ---
 
-## Step 6 — Resolve @mention user IDs
+## Step 5 — Resolve @mention user IDs
 
-Before composing posts, use `slack_search_users` to look up the Slack user ID for each team member whose thesis section appears in this run's output. Format pings as `<@USERID>` in the post body — this ensures the message actually pings them rather than rendering as plain text.
+Before composing the post, use `slack_search_users` to look up the Slack user ID for each team member whose thesis section appears in this run's output. Format pings as `<@USERID>` in the post body — this ensures the message actually pings them rather than rendering as plain text.
 
 ---
 
-## Step 7 — Compose Net New post
+## Step 6 — Compose Daily Dealflow Summary
 
-Match this format exactly — based on real posts from #deal-flow:
+Match this format exactly:
 
 ```
-**Daily Dealflow — [Month D, YYYY] | Net New to Affinity**
-_Entries not yet tracked in Affinity · [Month D, YYYY]_
+**Daily Dealflow — [Month D, YYYY]**
+_All deals from today's #deal-flow · [Month D, YYYY]_
 
 **Future of Autonomous Work** <@DARIA_ID> <@OMAR_ID>
-- <https://company.com|CompanyName> — One-sentence description. | _Raised: $XM, Round Type_
+- <https://company.com|CompanyName> — One-sentence description.
+- <https://company.com|CompanyName2> — One-sentence description. | _Action: <@USERID>_
 - <https://linkedin.com/in/handle|Full Name> — One-sentence bio/context.
 
 **Global Supply Chain** <@PHILIPP_ID> <@OSKAR_ID>
 - <https://company.com|CompanyName> — One-sentence description.
 
 **Fintech** <@MALIN_ID> <@MARJORIE_ID>
-- <https://company.com|CompanyName> — One-sentence description. | _Raised: Pre-Seed_
+- <https://company.com|CompanyName> — One-sentence description. | _Action: <@MARJORIE_ID>_
 
 **Surf and Turf** <@CIARA_ID>
-- <https://company.com|CompanyName> — One-sentence description. | _Raised: $XM, Seed, Lead Investor_
+- <https://company.com|CompanyName> — One-sentence description.
 
 **European Resilience** <@JACK_ID> <@MIHA_ID>
-- <https://company.com|CompanyName> — One-sentence description. | _Raised: Pre-Seed_
+- <https://company.com|CompanyName> — One-sentence description.
 
 ---
 
@@ -198,63 +166,50 @@ _Entries not yet tracked in Affinity · [Month D, YYYY]_
 ```
 
 Rules:
-- Only include thesis sections that have entries
-- Only include the "Flagged for Review" block if there are actual flags
-- One blank line between each thesis section
-- No lead investor unless confirmed — don't guess
-- Omit `| _Raised:_` entirely if no funding info is available — never write `_Raised: Unknown_`
-- Do NOT include `_Sent using Claude_` in the message — the Slack MCP appends it automatically; including it causes a duplicate
+- Include **all** entries from the day — not just Net New. Companies already in Affinity belong here too.
+- Only include thesis sections that have entries.
+- Only include "Flagged for Review" if there are actual flags.
+- One blank line between each thesis section.
+- Do **not** include `| _Raised:_` in the Summary — funding info belongs in `/net-new-affinity` only.
+- Action item format: `| _Action: <@USERID>_` appended at end of line, only when a confirmed action item owner exists.
+- LinkedIn profiles with no Slack description: show link and name only (`- <https://linkedin.com/in/handle|Full Name>`), no description fragment.
+- Do NOT include `_Sent using Claude_` — the MCP appends it automatically.
+- If post exceeds ~4000 characters, split into Part 1 / Part 2.
 
 ### Formatting rules (CRITICAL — never deviate)
 
-- Bold: `**double asterisk**` — the Slack MCP uses standard markdown where `**` = bold and `*` = italic. Never use single asterisk for bold or it will render as italic.
+- Bold: `**double asterisk**`
 - Italic: `_underscore_`
 - Links: `<https://url|display text>` — never markdown `[text](url)` format
-- @mentions: `<@USERID>` — never plain `@name` (won't ping)
+- @mentions: `<@USERID>` — never plain `@name`
 - Ampersands: raw `&` — never `&amp;`
-- Descriptions end with `.` before ` | _Raised:_`
 - No internal commentary in entries (who's keen, who's following up, investor opinions)
 - No "sourced by" attribution
-- No sentence fragments — if description can't be verified, use `_No confirmed build info available._`
-- Do NOT append `_Sent using Claude_` — the MCP adds this automatically; including it creates a duplicate line
-- If post exceeds ~4000 characters, split into Part 1 / Part 2
+- Do NOT append `_Sent using Claude_`
 
 ---
 
-## Step 8 — Post to #automation-tests
+## Step 7 — Post to #automation-tests
 
-Post to channel ID `C0AKKPK3J1K` using `slack_send_message`.
+Post the Daily Dealflow Summary to channel ID `C0AKKPK3J1K` using `slack_send_message`.
 
-Then output:
-> "Posts are live in #automation-tests for review. Type 'post' to publish to #deal-flow, or give me corrections and I'll revise."
+Then, as a **second message** to the same channel, post the raw Affinity check list — company name + URL only, one per line, no descriptions or thesis grouping. Follow it with:
 
----
+> "Summary is live above. Run your Affinity scraper against this list, then run `/net-new-affinity` and paste your results to generate the Net New post."
 
-## Step 9 — Await approval
-
-- If the user pastes corrections: revise and repost to #automation-tests. Repeat until approved.
-- If the user types 'post': proceed to Step 10.
-
-**Never post to #deal-flow before the user has approved the #automation-tests version.**
+Then output to the terminal:
+> "Daily Dealflow Summary and Affinity list are live in #automation-tests. Copy the Summary to #deal-flow when ready, then run `/net-new-affinity` with your scraper results."
 
 ---
 
-## Step 10 — Post to #deal-flow
-
-Post to channel ID `C0AB6LUVCN4` using `slack_send_message`.
-
-> **Note:** The Affinity emoji reaction step (marking processed messages in Slack) remains manual — the Slack MCP does not expose a reaction tool.
-
----
-
-## Step 11 — Ask for routing corrections
+## Step 8 — Ask for routing corrections
 
 Ask:
 > "Were any thesis routings wrong? If yes, tell me: 'CompanyName should be [Thesis]' and I'll learn it. Type 'no' to finish."
 
 ---
 
-## Step 12 — Learn from corrections (only if user provides them)
+## Step 9 — Learn from corrections (only if user provides them)
 
 For each routing correction provided:
 
