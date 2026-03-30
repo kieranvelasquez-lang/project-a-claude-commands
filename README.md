@@ -127,8 +127,14 @@ project-a-claude-commands/
 │   ├── evertrace-signals.md
 │   └── investment-team-dealflow-meetings.md
 └── memory/
-    └── morning-recap/        ← corrections + feedback for the Morning Recap skill
+    ├── morning-recap/                       ← corrections + feedback for /morning-recap
+    ├── net-new-affinity/                    ← (created when first correction is learned)
+    ├── deal-flow-review/                    ← (created when first correction is learned)
+    ├── evertrace-signals/                   ← (created when first correction is learned)
+    └── investment-team-dealflow-meetings/   ← (created when first correction is learned)
 ```
+
+Each skill gets its own subfolder under `memory/` as it accumulates corrections and feedback over time. Only `morning-recap/` is populated today — the others are created automatically the first time a correction is learned for that skill.
 
 ---
 
