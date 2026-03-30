@@ -13,6 +13,7 @@ Custom Claude Code slash commands for the Project A investment team.
 | `/deal-flow-review` | Pulls deal flow for a specific team member + date range and sends a formatted DM to their Slack |
 | `/investment-team-dealflow-meetings` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
 | `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by thesis, and posts a signal digest to Slack |
+| `/dealflow-retro-newsletter` | Bi-weekly European funding round retro — imports Crunchbase Pro CSV, cross-references Affinity, captures pass reasons, outputs a formatted HTML email |
 
 ---
 
@@ -42,7 +43,7 @@ ln -s ~/project-a-claude-commands/commands ~/.claude/commands
 mkdir -p ~/.claude/memory
 ```
 
-That's it. Open a new Claude Code session and `/morning-recap`, `/net-new-affinity`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, and `/evertrace-signals` will be available.
+That's it. Open a new Claude Code session and `/morning-recap`, `/net-new-affinity`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, `/evertrace-signals`, and `/dealflow-retro-newsletter` will be available.
 
 ---
 
@@ -115,6 +116,15 @@ Export a CSV from Evertrace, run this command, answer three questions (CSV path,
 
 ---
 
+### `/dealflow-retro-newsletter`
+Bi-weekly digest of all European tech funding rounds. Import a Crunchbase Pro CSV export (filtered to Europe + date range), Claude supplements with EU-Startups WebFetch, you paste Affinity cross-reference results and any pass reasons, and Claude generates a formatted HTML email table — ready to copy into Gmail and send to the investment team and all partners.
+
+**Usage:** `/dealflow-retro-newsletter` then follow prompts (confirm date range → export Crunchbase CSV → Affinity check → pass reasons → email opens in browser)
+
+**Requires:** Crunchbase Pro subscription (for CSV export). Dealroom CSV can be provided alongside for better coverage if access is available.
+
+---
+
 ## Repo structure
 
 ```
@@ -125,13 +135,15 @@ project-a-claude-commands/
 │   ├── net-new-affinity.md
 │   ├── deal-flow-review.md
 │   ├── evertrace-signals.md
-│   └── investment-team-dealflow-meetings.md
+│   ├── investment-team-dealflow-meetings.md
+│   └── dealflow-retro-newsletter.md
 └── memory/
     ├── morning-recap/                       ← corrections + feedback for /morning-recap
     ├── net-new-affinity/                    ← (created when first correction is learned)
     ├── deal-flow-review/                    ← (created when first correction is learned)
     ├── evertrace-signals/                   ← (created when first correction is learned)
-    └── investment-team-dealflow-meetings/   ← (created when first correction is learned)
+    ├── investment-team-dealflow-meetings/   ← (created when first correction is learned)
+    └── dealflow-retro-newsletter/           ← (created when first correction is learned)
 ```
 
 Each skill gets its own subfolder under `memory/` as it accumulates corrections and feedback over time. Only `morning-recap/` is populated today — the others are created automatically the first time a correction is learned for that skill.
