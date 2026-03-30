@@ -120,12 +120,14 @@ Export a CSV from Evertrace, run this command, answer three questions (CSV path,
 ```
 project-a-claude-commands/
 ├── README.md
-└── commands/
-    ├── morning-recap.md
-    ├── net-new-affinity.md
-    ├── deal-flow-review.md
-    ├── evertrace-signals.md
-    └── investment-team-dealflow-meetings.md
+├── commands/
+│   ├── morning-recap.md
+│   ├── net-new-affinity.md
+│   ├── deal-flow-review.md
+│   ├── evertrace-signals.md
+│   └── investment-team-dealflow-meetings.md
+└── memory/
+    └── morning-recap/        ← corrections + feedback for the Morning Recap skill
 ```
 
 ---
