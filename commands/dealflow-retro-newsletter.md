@@ -1,11 +1,11 @@
 ---
-description: Bi-weekly European funding round retro — source, cross-reference Affinity, capture pass reasons, output email
+description: Bi-weekly European funding round retro — source, cross-reference Affinity, output email
 allowed-tools: Read, Write, WebFetch, WebSearch, Bash(open:*)
 ---
 
 # Deal Flow Retro Newsletter
 
-Bi-weekly digest of all European tech funding rounds — cross-referenced against Affinity, with pass reasons captured — formatted as a ready-to-send email to the investment team and all partners.
+Bi-weekly digest of all European tech funding rounds — cross-referenced against Affinity — formatted as a ready-to-send email to the investment team and all partners.
 
 ---
 
@@ -114,52 +114,37 @@ https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations
 [N]. Last Company — https://...
 
 Paste results back as a simple list:
-  1: seen
+  1: seen | https://projecta.affinity.co/lists/.../organizations/12345
   2: not seen
+  3: seen | https://projecta.affinity.co/lists/.../organizations/67890
   ...
 ```
 
-Wait for the user to paste their results before continuing. "Not seen" requires no action. For "seen" companies, pass reasons will be collected in Step 8.
+For seen companies, paste the Affinity organisation URL after the `|`. Not seen companies need no URL.
+
+Wait for the user to paste their results before continuing.
 
 ---
 
 ## Step 7 — Parse Affinity results
 
-Parse each line from the user's response. Build a lookup:
+Parse each line from the user's response. Extract the Affinity URL from lines in the format `N: seen | URL`. Build a lookup:
 
-| Company | Seen? | Affinity Link | Passed? |
-|---------|-------|---------------|---------|
-| Acme AI | Yes | https://... | No → "In Consideration" |
-| Beta Labs | No | — | — |
-| Gamma Systems | Yes | https://... | Yes → needs pass reason |
-
----
-
-## Step 8 — Collect pass reasons
-
-For every company marked `seen | ... | passed`, ask:
-
-> "Pass reasons needed for [N] companies:
-> - Gamma Systems
-> - Delta Corp
-> - ...
->
-> Paste one per line in the format: `[Company Name]: [reason]`
-> Type 'skip' to leave pass reasons blank."
-
-Map each reason back to the corresponding company. Accept free text as-is — do not rephrase or summarise.
-
-If the user types 'skip', leave the Pass Reason column blank (render as "—") for all passed companies.
+| Company | Seen? | Affinity URL |
+|---------|-------|--------------|
+| Acme AI | Yes | https://projecta.affinity.co/... |
+| Beta Labs | No | — |
+| Gamma Systems | Yes | https://projecta.affinity.co/... |
 
 ---
 
-## Step 9 — Generate HTML email file
+## Step 8 — Generate HTML email file
 
 Write the file to `/Users/kvelasquez/Desktop/dealflow-retro-newsletter.html` using the Write tool.
 
 Calculate:
 - **CW number**: ISO week number of the end date of the period
-- **Summary line**: "[N] rounds tracked. We saw [X] of them ([Y] passed, [Z] in consideration)."
+- **Summary line**: "[N] rounds tracked. We saw [X] of them."
 
 Use this HTML structure:
 
@@ -203,7 +188,7 @@ Use this HTML structure:
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Amount Raised</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Lead Investors</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Did We See?</th>
-    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Pass Reason</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Affinity Entry Link</th>
   </tr>
   <!-- INSERT ROWS HERE — one <tr> per company, all styles inline -->
 </table>
@@ -229,7 +214,7 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Amount or —]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Lead Investors]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:[bold if Yes];color:[#1a7a1a if Yes, #888888 if No];">[Yes or No]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;color:#555;font-style:[italic if pass reason];">[Pass Reason or In Consideration or —]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;text-align:center;">[if seen AND has Affinity URL: <a href="[affinity_url]" style="color:#1a7a1a;text-decoration:underline;">Affinity Entry</a> | otherwise: <span style="color:#888;">—</span>]</td>
 </tr>
 ```
 
@@ -239,7 +224,7 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
 - **Amount**: format as "€12M" / "$5M" / "£8M" — omit the cell content (render as "—") if unknown; never write "Unknown"
 - **Lead Investors**: list up to 3 names; if more, append `+ N more`
 - **Did We See?**: "Yes" in green (`#1a7a1a`, bold) / "No" in grey (`#888888`)
-- **Pass Reason**: pass reason text if passed; "In Consideration" (plain) if seen but not passed; "—" if not seen
+- **Affinity Entry Link**: if seen and Affinity URL was provided, render as `<a>Affinity Entry</a>` linked to that URL (green, underlined); otherwise "—"
 
 ### Sort order
 
@@ -247,7 +232,7 @@ Sort the table: companies we've seen (Yes) first, sorted alphabetically by compa
 
 ---
 
-## Step 10 — Open in browser
+## Step 9 — Open in browser
 
 ```bash
 open /Users/kvelasquez/Desktop/dealflow-retro-newsletter.html
@@ -255,12 +240,12 @@ open /Users/kvelasquez/Desktop/dealflow-retro-newsletter.html
 
 ---
 
-## Step 11 — Done message
+## Step 10 — Done message
 
 Output:
 
 ```
-Done. [N] companies in this retro — [X] seen ([Y] passed, [Z] in consideration), [W] not seen.
+Done. [N] companies in this retro — [X] seen, [W] not seen.
 
 To copy the email body into Gmail:
 1. Select all body text in the browser (manually, from "Hi everyone" to "Kieran")
@@ -283,3 +268,4 @@ Recipients and subject are shown above the body — copy those separately into t
 - If Dealroom CSV is provided, its data takes precedence over Crunchbase on conflicting fields
 - EU-Startups source flag is for internal tracking during the session only — do not include a "Source" column in the final email
 - Affinity Master Deals List: https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations
+- Affinity Entry Link column: render as `<a>Affinity Entry</a>` hyperlink for seen companies that provided a URL; render as "—" for all others

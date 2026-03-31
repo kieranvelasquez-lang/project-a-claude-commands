@@ -13,7 +13,7 @@ Custom Claude Code slash commands for the Project A investment team.
 | `/deal-flow-review` | Pulls deal flow for a specific team member + date range and sends a formatted DM to their Slack |
 | `/investment-team-dealflow-meetings` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
 | `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by thesis, and posts a signal digest to Slack |
-| `/dealflow-retro-newsletter` | Bi-weekly European funding round retro — imports Crunchbase Pro CSV, cross-references Affinity, captures pass reasons, outputs a formatted HTML email |
+| `/dealflow-retro-newsletter` | Bi-weekly European funding round retro — imports Crunchbase Pro CSV, cross-references Affinity, outputs a formatted HTML email with direct Affinity entry links |
 
 ---
 
@@ -188,15 +188,15 @@ Export a CSV from Evertrace, run this command, answer three questions (CSV path,
 ---
 
 ### `/dealflow-retro-newsletter`
-Bi-weekly digest of all European tech funding rounds. Import a Crunchbase Pro CSV export (filtered to Europe + date range), Claude supplements with EU-Startups WebFetch, you paste Affinity cross-reference results and any pass reasons, and Claude generates a formatted HTML email table — ready to copy into Gmail and send to the investment team.
+Bi-weekly digest of all European tech funding rounds. Import a Crunchbase Pro CSV export (filtered to Europe + date range), Claude supplements with EU-Startups WebFetch, you paste Affinity cross-reference results, and Claude generates a formatted HTML email table — ready to copy into Gmail and send to the investment team.
 
 **Stage filter:** Only Pre-Seed, Seed, and Series A rounds are included. Series B and beyond, fund closes, and growth rounds are automatically excluded.
 
-**Affinity checklist:** Each company is listed with its website URL (for the Affinity scraper). Response format is simple — `1: seen` or `1: not seen`. Pass reasons are collected separately for seen companies.
+**Affinity checklist:** Each company is listed with its website URL (for the Affinity scraper). For seen companies, paste the Affinity organisation URL inline — `1: seen | https://projecta.affinity.co/...`. The email table includes a clickable "Affinity Entry" link for each seen company so readers can self-serve.
 
 **Recipients:** Investment Team, Anton Waitz, Uwe Horstmann, Florian Heinemann, Thies Sander, Philipp Werner, Malin Posern, Jack Wang.
 
-**Usage:** `/dealflow-retro-newsletter` then follow prompts (confirm date range → export Crunchbase CSV → Affinity check → pass reasons → email opens in browser)
+**Usage:** `/dealflow-retro-newsletter` then follow prompts (confirm date range → export Crunchbase CSV → Affinity check → email opens in browser)
 
 **Requires:** Crunchbase Pro subscription (for CSV export). EU-Startups is fetched automatically as a supplementary source. Dealroom CSV can be provided alongside for better coverage if access is available.
 
