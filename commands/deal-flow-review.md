@@ -22,29 +22,33 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 | AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS | Future of Autonomous Work |
 | Fintech, payments, insurance, compliance, legal, payroll, tax | Fintech |
 | Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience |
-| Supply chain, logistics, manufacturing, materials, robotics, construction, agriculture | Global Supply Chain |
-| Health, biotech, edtech, consumer, gaming, fitness, energy, creator | Surf and Turf |
+| Supply chain, logistics, manufacturing, materials, robotics | Global Supply Chain |
+| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf |
 
 **Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
 - Building AI tools / infrastructure / agents → Future of Autonomous Work
 - Using AI to solve a domain problem → route to that domain's thesis
 
-**Energy sub-rule:** Energy companies → Surf and Turf. Note inline action tag when classifying:
-- Software-only energy (SaaS, platform, software, data, app, digital) → Surf and Turf + Action: Oskar Lingk
-- Hardware-only energy (physical infrastructure, hardware, devices, equipment) → Surf and Turf + Action: Miha Pavlovic
-- Mixed or unclear → Surf and Turf, no action tag
-
 ---
 
 ## Step 1 — Gather inputs
 
-If not already provided in the arguments, ask:
-1. **Who to pull for** — full name (e.g. "First Last")
-2. **Date range** — start date and end date (e.g. "March 2 to March 13, 2026")
+If not already provided in the arguments, ask the following two questions **separately and in order**:
 
-Once you have the name, use `slack_search_users` to look up the person's Slack user ID. You'll need this to detect `<@USERID>` mentions in messages.
+**Question 1 — Name:**
+Ask: "Who should I pull deal flow for?" — accept any free-text response (first name, full name, or nickname). Do not suggest or list any team member names. Once provided, use `slack_search_users` to resolve the full name and Slack user ID. Note their first name (for output headers) and look up which thesis they belong to using the team member → thesis mapping table above.
 
-Also note their first name (for output headers) and look up which thesis they belong to using the team member → thesis mapping table above.
+**Question 2 — Date range:**
+After confirming the name, present exactly these three options:
+
+```
+Which date range?
+  1. This week (Monday to today)
+  2. Last 2 weeks (last Monday to today)
+  3. Custom — enter your own dates
+```
+
+If they pick 1 or 2, calculate the range automatically based on today's date (Berlin/CET timezone). If they pick 3, ask them to type the start and end dates freely.
 
 ---
 
