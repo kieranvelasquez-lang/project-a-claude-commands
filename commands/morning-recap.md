@@ -41,6 +41,8 @@ Do not re-read or re-explain the full routing table — just flag what's new.
 
 Once the anchor `ts` is established, call `slack_read_channel` again with `oldest` set to that `ts` to fetch only messages posted after the last Daily Dealflow post.
 
+**Exclusion rule:** The anchor message is a boundary marker only — do not parse its text for company or LinkedIn entries. Do not read or process its thread replies (these will contain the Net New to Affinity post going forward and should be ignored). Only process messages with `ts` strictly greater than the anchor `ts`.
+
 Remember: Project A is Berlin — CET = UTC+1, CEST = UTC+2 from late March.
 
 For each message retrieved:
@@ -193,7 +195,14 @@ Rules:
 
 Post the Morning Recap to channel ID `C0AKKPK3J1K` using `slack_send_message`.
 
-Then, as a **second message** to the same channel, post the raw Affinity check list — company name + URL only, one per line, no descriptions or thesis grouping. Follow it with:
+Then, as a **second message** to the same channel, post the Affinity Check List. Include **every** entry from the Morning Recap (all thesis sections, including LinkedIn profiles) — not a partial subset. Format each entry on its own line:
+
+```
+CompanyName — https://url.com
+FullName (LinkedIn) — https://linkedin.com/in/handle
+```
+
+Use plain URLs — **not** Slack `<url|text>` link syntax. Separate each entry with a real newline. Do not group by thesis. Do not include descriptions. Follow the list with one blank line, then:
 
 > "Morning Recap is live above. Run your Affinity scraper against this list, then run `/net-new-affinity` and paste your results to generate the Net New post."
 
