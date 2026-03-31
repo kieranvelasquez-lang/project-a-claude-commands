@@ -139,9 +139,13 @@ These files live on **your machine only** — not in the repo. They're personal 
 ## Commands in detail
 
 ### `/morning-recap`
-Pulls every new message from #deal-flow since the last Morning Recap (auto-anchored), routes all deals to the correct thesis owner, captures any Slack-explicit action items, enriches entries missing a description, and posts a Morning Recap + raw Affinity check list to #automation-tests. Runs automatically every weekday at 8am Berlin time.
+Pulls every new message from #deal-flow since the last Morning Recap (auto-anchored), routes all deals to the correct thesis owner, captures any Slack-explicit action items, enriches entries missing a description, and posts a Morning Recap + Affinity Check List to #automation-tests. Runs automatically every weekday at 8am Berlin time.
 
-**Flow:** Auto-anchor → Pull Slack → Parse + route entries → Capture action items → Enrich missing descriptions → Post Morning Recap + Affinity list to #automation-tests
+**Flow:** Auto-anchor → Pull Slack → Parse + route entries → Capture action items → Enrich missing descriptions → Post Morning Recap + Affinity Check List to #automation-tests
+
+**Anchor exclusion rule:** The last Morning Recap / Daily Dealflow post by Kieran is used as the time boundary only — its text is never parsed for company or LinkedIn entries, and its thread replies are also skipped entirely. Thread replies on that anchor message are where the Net New to Affinity post now lives, so they must not be processed here.
+
+**Affinity Check List format:** The second message posted to #automation-tests contains every entry from the Morning Recap — all thesis sections, including LinkedIn profiles — one per line, as plain URLs (not Slack `<url|text>` link syntax). Entries are not grouped by thesis and descriptions are omitted.
 
 **Requires:** Slack MCP
 
