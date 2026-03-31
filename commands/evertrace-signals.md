@@ -60,11 +60,16 @@ Then for rows without an override, search `Industries` + `Company Description` +
 |---|---|---|
 | `autonomous` | Future of Autonomous Work | `\bai\b`, `artificial intelligence`, `machine learning`, `saas`, `automation`, `developer tools`, `software`, `data analytics`, `no.?code`, `low.?code`, `cybersecurity`, `security`, `api`, `devops`, `cloud` |
 | `fintech` | Fintech | `payment`, `banking`, `neobank`, `crypto`, `blockchain`, `insurance`, `insurtech`, `regtech`, `accounting`, `legaltech`, `compliance`, `fintech`, `wealth`, `lending`, `invoice` |
-| `resilience` | European Resilience | `defence`, `defense`, `military`, `hardware`, `robotics`, `aerospace`, `materials`, `semiconductor`, `deep.?tech`, `energy`, `cleantech`, `climate`, `medtech`, `biotech`, `life.?science` |
-| `supplychain` | Global Supply Chain | `logistics`, `freight`, `warehousing`, `warehouse`, `procurement`, `shipping`, `e.?commerce`, `supply.?chain`, `retail`, `last.?mile`, `fulfilment`, `fulfillment` |
+| `resilience` | European Resilience | `defence`, `defense`, `military`, `hardware`, `robotics`, `aerospace`, `materials`, `semiconductor`, `deep.?tech`, `cleantech`, `climate`, `medtech`, `biotech`, `life.?science` |
+| `supplychain` | Global Supply Chain | `logistics`, `freight`, `warehousing`, `warehouse`, `procurement`, `shipping`, `e.?commerce`, `supply.?chain`, `retail`, `last.?mile`, `fulfilment`, `fulfillment`, `construction`, `agriculture` |
 | `other` | Surf and Turf | (catch-all — everything that matches none of the above) |
 
 Match in table order (first match wins). Apply name corrections from corrections memory to `First Name` and `Last Name` fields. Apply company name corrections to `Company Name` field.
+
+**Energy sub-routing (apply after theme is assigned):** If the concatenated field text contains `energy` AND the assigned theme is `other` (Surf and Turf), flag the entry for an inline action tag:
+- Software-only signals (`saas`, `software`, `platform`, `data`, `app`, `digital`) → action tag: Oskar Lingk
+- Hardware-only signals (`hardware`, `device`, `infrastructure`, `equipment`, `physical`) → action tag: Miha Pavlovic
+- Mixed or unclear → no action tag (default @Ciara Gumsheimer)
 
 ---
 
@@ -110,6 +115,7 @@ Rules for building each part:
 - Assemble as: `• [company] — [description] [ex-field] | _Founder: [founder] | [location]_`
 - If description is omitted, write: `• [company] [ex-field] | _Founder: [founder] | [location]_`
 - If ex-field is omitted, skip that part.
+- **Energy entries in Surf and Turf** with an action tag: append `| _Action: @Oskar Lingk_` or `| _Action: @Miha Pavlovic_` at the end of the line (after the founder/location field).
 
 ### Part B — Stealth section (only if user said yes and there are stealth entries)
 

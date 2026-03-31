@@ -138,6 +138,11 @@ Rules:
 - Omit `| _Raised:_` entirely if no funding info is available — never write `_Raised: Unknown_`
 - Do NOT include `_Sent using Claude_`
 - If post exceeds ~4000 characters, split into Part 1 / Part 2
+- **Energy entries in Surf and Turf:** append an inline action tag based on software vs hardware:
+  - Software-only energy → `| _Action: <@OSKAR_ID>_`
+  - Hardware-only energy → `| _Action: <@MIHA_ID>_`
+  - Mixed or unclear → no action tag
+- **Construction & agriculture** → Global Supply Chain section (Philipp Werner, Oskar Lingk)
 
 ### Formatting rules (CRITICAL — never deviate)
 

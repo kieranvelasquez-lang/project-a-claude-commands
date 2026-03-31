@@ -75,8 +75,8 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 | AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
 | Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech | Malin Posern, Marjorie Lengereau |
 | Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience | Jack Wang, Miha Pavlovic |
-| Supply chain, logistics, manufacturing, materials, robotics | Global Supply Chain | Philipp Werner, Oskar Lingk |
-| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf | Ciara Gumsheimer |
+| Supply chain, logistics, manufacturing, materials, robotics, construction, agriculture | Global Supply Chain | Philipp Werner, Oskar Lingk |
+| Health, biotech, edtech, consumer, gaming, fitness, energy, creator | Surf and Turf | Ciara Gumsheimer |
 
 **Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
 - Building AI tools / infrastructure / agents → Future of Autonomous Work
@@ -88,6 +88,10 @@ Never default to Future of Autonomous Work without applying this test first.
 - Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work, not European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
 - Blockchain / crypto / web3 startups → Fintech, not Future of Autonomous Work (even if building observability or tooling for blockchain networks)
+- Energy companies → Surf and Turf. Then apply inline action tag based on whether they are software or hardware:
+  - Software-only (SaaS, platform, software, data, app, digital) → append `| _Action: <@OSKAR_ID>_`
+  - Hardware-only (physical infrastructure, hardware, devices, equipment) → append `| _Action: <@MIHA_ID>_`
+  - Mixed or unclear → no action tag (default to @Ciara)
 
 ### 3c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.
@@ -157,6 +161,8 @@ _Review of yesterday's dealflow · [Month D, YYYY]_
 
 **Surf and Turf** <@CIARA_ID>
 - <https://company.com|CompanyName> — One-sentence description.
+- <https://company.com|EnergySaaSCo> — One-sentence description. | _Action: <@OSKAR_ID>_
+- <https://company.com|EnergyHardwareCo> — One-sentence description. | _Action: <@MIHA_ID>_
 
 **European Resilience** <@JACK_ID> <@MIHA_ID>
 - <https://company.com|CompanyName> — One-sentence description.

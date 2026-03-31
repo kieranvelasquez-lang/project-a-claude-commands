@@ -22,12 +22,17 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 | AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS | Future of Autonomous Work |
 | Fintech, payments, insurance, compliance, legal, payroll, tax | Fintech |
 | Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience |
-| Supply chain, logistics, manufacturing, materials, robotics | Global Supply Chain |
-| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf |
+| Supply chain, logistics, manufacturing, materials, robotics, construction, agriculture | Global Supply Chain |
+| Health, biotech, edtech, consumer, gaming, fitness, energy, creator | Surf and Turf |
 
 **Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
 - Building AI tools / infrastructure / agents → Future of Autonomous Work
 - Using AI to solve a domain problem → route to that domain's thesis
+
+**Energy sub-rule:** Energy companies → Surf and Turf. Note inline action tag when classifying:
+- Software-only energy (SaaS, platform, software, data, app, digital) → Surf and Turf + Action: Oskar Lingk
+- Hardware-only energy (physical infrastructure, hardware, devices, equipment) → Surf and Turf + Action: Miha Pavlovic
+- Mixed or unclear → Surf and Turf, no action tag
 
 ---
 
