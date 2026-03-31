@@ -163,7 +163,7 @@ Run this after your Affinity scraper. Paste your found/not-found results, confir
 ### `/deal-flow-review`
 Given a team member's name and a date range, pulls all #deal-flow messages where they were tagged (action items) or where entries match their thesis (thesis matches). Formats a clean summary and sends it as a Slack DM to that person.
 
-**Usage:** `/deal-flow-review Malin Posern` then follow prompts for date range
+**Usage:** `/deal-flow-review` then enter a name when prompted and select a date range (this week / last 2 weeks / custom)
 
 **Requires:** Slack MCP
 
@@ -192,7 +192,7 @@ Bi-weekly digest of all European tech funding rounds. Import a Crunchbase Pro CS
 
 **Usage:** `/dealflow-retro-newsletter` then follow prompts (confirm date range → export Crunchbase CSV → Affinity check → pass reasons → email opens in browser)
 
-**Requires:** Crunchbase Pro subscription (for CSV export). Dealroom CSV can be provided alongside for better coverage if access is available.
+**Requires:** Crunchbase Pro subscription (for CSV export). EU-Startups is fetched automatically as a supplementary source. Dealroom CSV can be provided alongside for better coverage if access is available.
 
 ---
 
