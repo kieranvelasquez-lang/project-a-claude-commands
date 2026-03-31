@@ -188,7 +188,13 @@ Export a CSV from Evertrace, run this command, answer three questions (CSV path,
 ---
 
 ### `/dealflow-retro-newsletter`
-Bi-weekly digest of all European tech funding rounds. Import a Crunchbase Pro CSV export (filtered to Europe + date range), Claude supplements with EU-Startups WebFetch, you paste Affinity cross-reference results and any pass reasons, and Claude generates a formatted HTML email table — ready to copy into Gmail and send to the investment team and all partners.
+Bi-weekly digest of all European tech funding rounds. Import a Crunchbase Pro CSV export (filtered to Europe + date range), Claude supplements with EU-Startups WebFetch, you paste Affinity cross-reference results and any pass reasons, and Claude generates a formatted HTML email table — ready to copy into Gmail and send to the investment team.
+
+**Stage filter:** Only Pre-Seed, Seed, and Series A rounds are included. Series B and beyond, fund closes, and growth rounds are automatically excluded.
+
+**Affinity checklist:** Each company is listed with its website URL (for the Affinity scraper). Response format is simple — `1: seen` or `1: not seen`. Pass reasons are collected separately for seen companies.
+
+**Recipients:** Investment Team, Anton Waitz, Uwe Horstmann, Florian Heinemann, Thies Sander, Philipp Werner, Malin Posern, Jack Wang.
 
 **Usage:** `/dealflow-retro-newsletter` then follow prompts (confirm date range → export Crunchbase CSV → Affinity check → pass reasons → email opens in browser)
 

@@ -31,7 +31,7 @@ Ask the user to export data from Crunchbase Pro:
 > 2. Set filters:
 >    - **Headquarters Location:** Europe (or select specific countries)
 >    - **Announced Date:** [Start Date] to [End Date]
->    - **Funding Type:** Seed, Series A, Series B, Series C (or leave open for all stages)
+>    - **Funding Type:** Pre-Seed, Seed, Series A
 > 3. Export to CSV
 > 4. Paste the file path here (e.g. ~/Downloads/crunchbase-export.csv)"
 
@@ -62,6 +62,8 @@ WebFetch the EU-Startups weekly funding round-up articles covering the same peri
 4. Add any companies NOT already present as supplementary entries — mark their source as "EU-Startups"
 
 If the user also provides a Dealroom CSV path, read it and merge using the same deduplication logic. Dealroom data takes precedence over Crunchbase on conflicting fields.
+
+**Stage filter:** After merging all sources, remove any company whose stage is Series B, Series C, Series D, Growth Equity, or any round beyond Series A. Keep: Pre-Seed, Seed, Series A, Series A+, Undisclosed. Also remove VC fund closes (Fund, Fund Close) — these are not relevant. Do not include a "Source" column in the preview or the final email.
 
 ---
 
@@ -99,27 +101,25 @@ Apply any corrections the user provides, then confirm the final count before mov
 
 ## Step 6 — Affinity checklist
 
-Output a numbered list of all company names for manual Affinity cross-reference:
+Before outputting the checklist, look up the official website for each company (WebSearch if not already known from earlier steps). Then output a numbered list with company name and website for manual Affinity cross-reference:
 
 ```
-Affinity check — please verify each company below using your Affinity Chrome shortcut or the Master Deals List:
+Affinity check — please verify each company below:
 https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations
 
- 1. Acme AI
- 2. Beta Labs
- 3. Gamma Systems
+ 1. Acme AI — https://acme.ai
+ 2. Beta Labs — https://betalabs.com
+ 3. Gamma Systems — https://gammasystems.io
  ...
-[N]. Last Company
+[N]. Last Company — https://...
 
-Paste results back in this format (one per line):
-  1: seen | https://projecta.affinity.co/organizations/12345
+Paste results back as a simple list:
+  1: seen
   2: not seen
-  3: seen | https://projecta.affinity.co/organizations/67890 | passed
-
-For each number: 'seen | [affinity link]' if we've engaged with them (append '| passed' if we passed), or 'not seen' if they're new to us.
+  ...
 ```
 
-Wait for the user to paste their results before continuing.
+Wait for the user to paste their results before continuing. "Not seen" requires no action. For "seen" companies, pass reasons will be collected in Step 8.
 
 ---
 
@@ -182,7 +182,7 @@ Use this HTML structure:
 <h2>Deal Flow Retro — CW [X] | [Start Date] – [End Date]</h2>
 
 <div class="section-label">RECIPIENTS — paste into To: field</div>
-<div class="field-box">Investment Team &lt;investmentteam@project-a.vc&gt;, Anton Waitz &lt;anton.waitz@project-a.vc&gt;, Uwe Horstmann &lt;uwe.horstmann@project-a.vc&gt;, Florian Heinemann &lt;florian.heinemann@project-a.vc&gt;, Thies Sander &lt;thies.sander@project-a.vc&gt;, Philipp Werner &lt;philipp.werner@project-a.vc&gt;, Malin Posern &lt;malin.posern@project-a.vc&gt;, Jack Wang &lt;jack.wang@project-a.vc&gt;, Vincent Synde &lt;vincent.synde@project-a.vc&gt;, Miriam Ayasse &lt;miriam.ayasse@project-a.vc&gt;, Martin Laudien &lt;martin.laudien@project-a.vc&gt;, Christian Kurz &lt;christian.kurz@project-a.vc&gt;, Andreas Kühnke &lt;andreas.kuehnke@project-a.vc&gt;, Anton Grabovski &lt;anton.grabovski@project-a.vc&gt;, Jan-Willem Jensen &lt;jan-willem.jensen@project-a.vc&gt;, Elias Wahl &lt;elias.wahl@project-a.vc&gt;</div>
+<div class="field-box">Investment Team &lt;investmentteam@project-a.vc&gt;, Anton Waitz &lt;anton.waitz@project-a.vc&gt;, Uwe Horstmann &lt;uwe.horstmann@project-a.vc&gt;, Florian Heinemann &lt;florian.heinemann@project-a.vc&gt;, Thies Sander &lt;thies.sander@project-a.vc&gt;, Philipp Werner &lt;philipp.werner@project-a.vc&gt;, Malin Posern &lt;malin.posern@project-a.vc&gt;, Jack Wang &lt;jack.wang@project-a.vc&gt;</div>
 
 <div class="section-label">SUBJECT</div>
 <div class="field-box">Deal Flow Retro — CW [X] | [DD Mon] – [DD Mon YYYY]</div>
