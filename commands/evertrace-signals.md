@@ -66,10 +66,10 @@ Then for rows without an override, search `Industries` + `Company Description` +
 
 Match in table order (first match wins). Apply name corrections from corrections memory to `First Name` and `Last Name` fields. Apply company name corrections to `Company Name` field.
 
-**Energy sub-routing (apply after theme is assigned):** If the concatenated field text contains `energy` AND the assigned theme is `other` (Surf and Turf), flag the entry for an inline action tag:
-- Software-only signals (`saas`, `software`, `platform`, `data`, `app`, `digital`) → action tag: Oskar Lingk
-- Hardware-only signals (`hardware`, `device`, `infrastructure`, `equipment`, `physical`) → action tag: Miha Pavlovic
-- Mixed or unclear → no action tag (default @Ciara Gumsheimer)
+**Energy sub-routing (apply after theme is assigned):** Energy companies match no explicit keyword row and fall to `other` → **Surf and Turf**. After theme assignment, if the concatenated field text contains `energy`, flag the entry for an inline action tag:
+- Software-only signals (`saas`, `software`, `platform`, `data`, `app`, `digital`) → Surf and Turf + action tag: Oskar Lingk
+- Hardware-only signals (`hardware`, `device`, `infrastructure`, `equipment`, `physical`) → Surf and Turf + action tag: Miha Pavlovic
+- Mixed or unclear → Surf and Turf, no action tag (default @Ciara Gumsheimer)
 
 ---
 
