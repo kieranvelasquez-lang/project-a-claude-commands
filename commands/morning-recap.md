@@ -3,7 +3,7 @@ description: Pull yesterday's #deal-flow Slack messages, enrich and route them, 
 allowed-tools: Read, Write, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__slack_read_thread, mcp__claude_ai_Slack__slack_send_message, mcp__claude_ai_Slack__slack_search_users
 ---
 
-# Daily Dealflow Automation
+# Morning Recap
 
 ## Team member Slack display names
 Used in section headers. These are exact Slack display names — look up user IDs via `slack_search_users` before composing posts so @mentions actually ping people.
@@ -36,10 +36,10 @@ Do not re-read or re-explain the full routing table — just flag what's new.
 **Do not ask the user for a timestamp.** Anchor automatically:
 
 1. Call `slack_read_channel` on #deal-flow (channel ID: `C0AB6LUVCN4`) with `oldest` set to 48 hours ago (current Unix timestamp minus 172800).
-2. Scan the returned messages for the most recent one by Kieran Velasquez that begins with `**Daily Dealflow —`. Use that message's `ts` value as the anchor.
-3. If no such message is found in the 48-hour window, fall back and ask: "I couldn't find your last Daily Dealflow post. What time was it sent? (e.g. '7:22 PM on March 16')"
+2. Scan the returned messages for the most recent one by Kieran Velasquez that begins with `**Morning Recap —`. Use that message's `ts` value as the anchor.
+3. If no such message is found in the 48-hour window, fall back and ask: "I couldn't find your last Morning Recap post. What time was it sent? (e.g. '7:22 PM on March 16')"
 
-Once the anchor `ts` is established, call `slack_read_channel` again with `oldest` set to that `ts` to fetch only messages posted after the last Daily Dealflow post.
+Once the anchor `ts` is established, call `slack_read_channel` again with `oldest` set to that `ts` to fetch only messages posted after the last Morning Recap.
 
 **Exclusion rule:** The anchor message is a boundary marker only — do not parse its text for company or LinkedIn entries. Do not read or process its thread replies (these will contain the Net New to Affinity post going forward and should be ignored). Only process messages with `ts` strictly greater than the anchor `ts`.
 
@@ -109,7 +109,7 @@ After routing, check for explicit Slack-level assignments that override default 
 - If a cross-thesis reassignment exists (e.g. Miha tags Daria, Daria passes to Marjorie) → route to final assignee's thesis (Fintech), and flag the action item owner.
 
 **Action item flag:**
-Record who owns the action item (if anyone). This will be displayed inline in the Summary post as `| _Action: <@USERID>_`.
+Record who owns the action item (if anyone). This will be displayed inline in the Morning Recap as `| _Action: <@USERID>_`.
 
 If no explicit action item exists, leave this field blank — do not invent one.
 
@@ -117,7 +117,7 @@ If no explicit action item exists, leave this field blank — do not invent one.
 
 ## Step 4 — Enrich entries with no Slack description
 
-For any entry where the Slack message included **no description**, enrich before composing the Summary:
+For any entry where the Slack message included **no description**, enrich before composing the Morning Recap:
 
 **Companies:**
 - Use WebFetch on the company's actual website homepage to pull a one-sentence description.
@@ -198,11 +198,11 @@ Post the Morning Recap to channel ID `C0AKKPK3J1K` using `slack_send_message`.
 Then, as a **second message** to the same channel, post the Affinity Check List. Include **every** entry from the Morning Recap (all thesis sections, including LinkedIn profiles) — not a partial subset. Format each entry on its own line:
 
 ```
-CompanyName — https://url.com
-FullName (LinkedIn) — https://linkedin.com/in/handle
+• CompanyName — https://url.com
+• FullName (LinkedIn) — https://linkedin.com/in/handle
 ```
 
-Use plain URLs — **not** Slack `<url|text>` link syntax. Format each entry as a bullet point (`•`). Do not group by thesis. Do not include descriptions. Follow the list with one blank line, then:
+Use plain URLs — **not** Slack `<url|text>` link syntax. Use `•` bullet prefix for every entry. Do not group by thesis. Do not include descriptions. Follow the list with one blank line, then:
 
 > "Morning Recap is live above. Run your Affinity scraper against this list, then run `/net-new-affinity` and paste your results to generate the Net New post."
 
