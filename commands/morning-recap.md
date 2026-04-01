@@ -20,7 +20,7 @@ Used in section headers. These are exact Slack display names — look up user ID
 
 ## Step 1 — Check corrections delta
 
-Read `~/.claude/projects/-Users-kvelasquez-Projects/memory/daily-dealflow-corrections.md` using the Read tool.
+Read `~/.claude/projects/-Users-kvelasquez-Projects/memory/morning-recap-corrections.md` using the Read tool.
 
 This file is a **staging area** for new corrections that haven't yet been baked into the skill. The default routing rules below already incorporate all previously confirmed corrections.
 
@@ -66,7 +66,7 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 - Funding info only if explicitly mentioned in Slack
 - Thesis routing — apply staged corrections first, then default routing table below
 
-**First: apply staged corrections.** If the company name appears in `daily-dealflow-corrections.md`, use that thesis — do not apply default routing rules.
+**First: apply staged corrections.** If the company name appears in `morning-recap-corrections.md`, use that thesis — do not apply default routing rules.
 
 **Otherwise, use default routing:**
 
@@ -226,10 +226,10 @@ For each routing correction provided:
    - **General rules** should be baked directly into the hardcoded routing rules in Step 3b of this skill — ask Kieran to confirm before editing.
    - **Company-specific corrections** go into the staging file.
 
-2. For company-specific corrections, check if the company already exists in `~/.claude/projects/-Users-kvelasquez-Projects/memory/daily-dealflow-corrections.md`. If the file doesn't exist, create it with this header:
+2. For company-specific corrections, check if the company already exists in `~/.claude/projects/-Users-kvelasquez-Projects/memory/morning-recap-corrections.md`. If the file doesn't exist, create it with this header:
 
 ```markdown
-# Daily Dealflow — Corrections Memory
+# Morning Recap — Corrections Memory
 
 ## Staged Corrections (not yet baked into skill)
 <!-- Format: CompanyName → Thesis | added YYYY-MM-DD -->
