@@ -19,15 +19,21 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 ## Thesis routing table
 | What they build | Thesis |
 |---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS | Future of Autonomous Work |
-| Fintech, payments, insurance, compliance, legal, payroll, tax | Fintech |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics | Future of Autonomous Work |
+| Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech |
 | Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience |
-| Supply chain, logistics, manufacturing, materials, robotics | Global Supply Chain |
+| Supply chain, logistics, manufacturing, materials | Global Supply Chain |
 | Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf |
 
 **Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
 - Building AI tools / infrastructure / agents → Future of Autonomous Work
 - Using AI to solve a domain problem → route to that domain's thesis
+
+**Hardcoded routing rules:**
+- Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work, not European Resilience
+- AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
+- Blockchain / crypto / web3 → Fintech, not Future of Autonomous Work
+- Energy companies → Surf and Turf by default. If software-based → action item for Oskar Lingk. If hardware-based → action item for Miha Pavlovic.
 
 ---
 

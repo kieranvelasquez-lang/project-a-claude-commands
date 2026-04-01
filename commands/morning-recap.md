@@ -72,10 +72,10 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 
 | What they build | Thesis | Team |
 |---|---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
 | Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech | Malin Posern, Marjorie Lengereau |
 | Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience | Jack Wang, Miha Pavlovic |
-| Supply chain, logistics, manufacturing, materials, robotics | Global Supply Chain | Philipp Werner, Oskar Lingk |
+| Supply chain, logistics, manufacturing, materials | Global Supply Chain | Philipp Werner, Oskar Lingk |
 | Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf | Ciara Gumsheimer |
 
 **Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
@@ -88,6 +88,7 @@ Never default to Future of Autonomous Work without applying this test first.
 - Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work, not European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
 - Blockchain / crypto / web3 startups → Fintech, not Future of Autonomous Work (even if building observability or tooling for blockchain networks)
+- Energy companies → Surf and Turf by default. If software-based energy → add `| _Action: Oskar Lingk_`. If hardware-based energy → add `| _Action: Miha Pavlovic_`. (Resolve to `<@USERID>` in Step 5.)
 
 ### 3c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.

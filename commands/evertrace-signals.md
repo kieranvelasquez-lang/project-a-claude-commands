@@ -58,18 +58,13 @@ Then for rows without an override, search `Industries` + `Company Description` +
 
 | Theme key | Short label | Keywords (case-insensitive regex) |
 |---|---|---|
-| `autonomous` | Future of Autonomous Work | `\bai\b`, `artificial intelligence`, `machine learning`, `saas`, `automation`, `developer tools`, `software`, `data analytics`, `no.?code`, `low.?code`, `cybersecurity`, `security`, `api`, `devops`, `cloud` |
+| `autonomous` | Future of Autonomous Work | `\bai\b`, `artificial intelligence`, `machine learning`, `saas`, `automation`, `developer tools`, `software`, `data analytics`, `no.?code`, `low.?code`, `cybersecurity`, `security`, `api`, `devops`, `cloud`, `robotics` |
 | `fintech` | Fintech | `payment`, `banking`, `neobank`, `crypto`, `blockchain`, `insurance`, `insurtech`, `regtech`, `accounting`, `legaltech`, `compliance`, `fintech`, `wealth`, `lending`, `invoice` |
-| `resilience` | European Resilience | `defence`, `defense`, `military`, `hardware`, `robotics`, `aerospace`, `materials`, `semiconductor`, `deep.?tech`, `cleantech`, `climate`, `medtech`, `biotech`, `life.?science` |
-| `supplychain` | Global Supply Chain | `logistics`, `freight`, `warehousing`, `warehouse`, `procurement`, `shipping`, `e.?commerce`, `supply.?chain`, `retail`, `last.?mile`, `fulfilment`, `fulfillment`, `construction`, `agriculture` |
-| `other` | Surf and Turf | (catch-all — everything that matches none of the above) |
+| `resilience` | European Resilience | `defence`, `defense`, `military`, `hardware`, `aerospace`, `materials`, `semiconductor`, `deep.?tech` |
+| `supplychain` | Global Supply Chain | `logistics`, `freight`, `warehousing`, `warehouse`, `procurement`, `shipping`, `e.?commerce`, `supply.?chain`, `retail`, `last.?mile`, `fulfilment`, `fulfillment`, `manufacturing` |
+| `other` | Surf and Turf | (catch-all — everything that matches none of the above, including energy, cleantech, climate, biotech, medtech, life science) |
 
 Match in table order (first match wins). Apply name corrections from corrections memory to `First Name` and `Last Name` fields. Apply company name corrections to `Company Name` field.
-
-**Energy sub-routing (apply after theme is assigned):** Energy companies match no explicit keyword row and fall to `other` → **Surf and Turf**. After theme assignment, if the concatenated field text contains `energy`, flag the entry for an inline action tag:
-- Software-only signals (`saas`, `software`, `platform`, `data`, `app`, `digital`) → Surf and Turf + action tag: Oskar Lingk
-- Hardware-only signals (`hardware`, `device`, `infrastructure`, `equipment`, `physical`) → Surf and Turf + action tag: Miha Pavlovic
-- Mixed or unclear → Surf and Turf, no action tag (default @Ciara Gumsheimer)
 
 ---
 
@@ -115,7 +110,6 @@ Rules for building each part:
 - Assemble as: `• [company] — [description] [ex-field] | _Founder: [founder] | [location]_`
 - If description is omitted, write: `• [company] [ex-field] | _Founder: [founder] | [location]_`
 - If ex-field is omitted, skip that part.
-- **Energy entries in Surf and Turf** with an action tag: append `| _Action: @Oskar Lingk_` or `| _Action: @Miha Pavlovic_` at the end of the line (after the founder/location field).
 
 ### Part B — Stealth section (only if user said yes and there are stealth entries)
 

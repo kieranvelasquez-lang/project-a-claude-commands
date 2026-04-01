@@ -21,7 +21,7 @@ Run this after `/morning-recap` has posted the Morning Recap and raw Affinity li
 
 ## Step 1 — Load corrections
 
-Read `~/.claude/projects/-Users-kvelasquez-Projects/memory/daily-dealflow-corrections.md`. Load any staged corrections as overrides for thesis routing. Note briefly if any exist.
+Read `~/.claude/projects/-Users-kvelasquez-Projects/memory/morning-recap-corrections.md`. Load any staged corrections as overrides for thesis routing. Note briefly if any exist.
 
 ---
 
@@ -138,11 +138,6 @@ Rules:
 - Omit `| _Raised:_` entirely if no funding info is available — never write `_Raised: Unknown_`
 - Do NOT include `_Sent using Claude_`
 - If post exceeds ~4000 characters, split into Part 1 / Part 2
-- **Energy entries in Surf and Turf:** append an inline action tag based on software vs hardware:
-  - Software-only energy → `| _Action: <@OSKAR_ID>_`
-  - Hardware-only energy → `| _Action: <@MIHA_ID>_`
-  - Mixed or unclear → no action tag
-- **Construction & agriculture** → Global Supply Chain section (Philipp Werner, Oskar Lingk)
 
 ### Formatting rules (CRITICAL — never deviate)
 
@@ -182,7 +177,7 @@ For each routing correction provided:
    - **General rules** → ask Kieran to confirm before baking into either skill's hardcoded routing.
    - **Company-specific corrections** → staging file.
 
-2. Check if company already exists in `~/.claude/projects/-Users-kvelasquez-Projects/memory/daily-dealflow-corrections.md`. If file doesn't exist, create it with:
+2. Check if company already exists in `~/.claude/projects/-Users-kvelasquez-Projects/memory/morning-recap-corrections.md`. If file doesn't exist, create it with:
 
 ```markdown
 # Daily Dealflow — Corrections Memory
