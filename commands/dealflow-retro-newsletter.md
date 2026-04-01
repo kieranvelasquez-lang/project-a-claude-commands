@@ -1,21 +1,21 @@
 ---
-description: Bi-weekly European funding round retro — source, cross-reference Affinity, output email
+description: Monthly European funding round retro — source, cross-reference Affinity, output email
 allowed-tools: Read, Write, WebFetch, WebSearch, Bash(open:*)
 ---
 
 # Deal Flow Retro Newsletter
 
-Bi-weekly digest of all European tech funding rounds — cross-referenced against Affinity — formatted as a ready-to-send email to the investment team and all partners.
+Monthly digest of all European tech funding rounds — cross-referenced against Affinity — formatted as a ready-to-send email to the investment team and all partners.
 
 ---
 
 ## Step 1 — Confirm date range
 
-Based on today's date, suggest the most recent completed two-week window (e.g. if today is 30 Mar 2026, suggest "17 Mar – 30 Mar 2026").
+Based on today's date, suggest the most recently completed calendar month (e.g. if today is 1 Apr 2026, suggest "1 Mar – 31 Mar 2026").
 
 Ask the user:
 
-> "What two-week period should this retro cover? Suggested: **[suggested range]**. Confirm or provide a different range."
+> "What month should this retro cover? Suggested: **[suggested range]**. Confirm or provide a different range."
 
 Wait for confirmation before proceeding.
 
@@ -29,7 +29,7 @@ Ask the user to export data from Crunchbase Pro:
 >
 > 1. Go to **Crunchbase Pro → Search → Funding Rounds**
 > 2. Set filters:
->    - **Headquarters Location:** Europe (or select specific countries)
+>    - **Headquarters Location:** Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, United Kingdom, Switzerland, Norway
 >    - **Announced Date:** [Start Date] to [End Date]
 >    - **Funding Type:** Pre-Seed, Seed, Series A
 > 3. Export to CSV
@@ -65,15 +65,20 @@ If the user also provides a Dealroom CSV path, read it and merge using the same 
 
 **Stage filter:** After merging all sources, remove any company whose stage is Series B, Series C, Series D, Growth Equity, or any round beyond Series A. Keep: Pre-Seed, Seed, Series A, Series A+, Undisclosed. Also remove VC fund closes (Fund, Fund Close) — these are not relevant. Do not include a "Source" column in the preview or the final email.
 
+**Country filter:** After applying the stage filter, remove any company whose headquarters is **not** in the following list: Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, United Kingdom, Switzerland, Norway. This explicitly excludes Turkey and any other non-listed country.
+
 ---
 
 ## Step 4 — Enrich missing fields
 
 For any row missing a website URL or a description:
-- WebSearch `[Company Name] startup [Country]` to find the official website
-- WebFetch the homepage to extract a 1-sentence description
+1. WebSearch `[Company Name] startup [Country]` to identify the likely official website
+2. **Verify the URL before using it**: WebFetch the homepage to confirm it resolves and the content matches the company
+   - If the fetch succeeds and content matches → use the URL and extract a 1-sentence description
+   - If the fetch returns an error (403, 404, timeout, domain-for-sale page, or unrelated content) → do **not** embed the URL; mark the website field as `[needs review]`
+3. Never embed a URL that has not been successfully verified via WebFetch
 
-**Cap at 10 enrichments** to keep runtime manageable. Flag remaining unenriched rows with `[needs review]` in the Description column.
+Enrich all companies. If a website or description cannot be found or verified after searching, flag that specific row with `[needs review]` in the relevant field.
 
 ---
 
@@ -84,12 +89,14 @@ Print the full structured table in the terminal:
 ```
 [N] companies — [Start Date] – [End Date]
 
-# | Company            | Country   | Stage    | Amount | Lead Investors        | Source
---|--------------------|-----------|---------:|--------|----------------------|----------
-1 | Acme AI            | Germany   | Series A | €12M   | Sequoia, Index       | Crunchbase
-2 | Beta Labs          | France    | Seed     | €3M    | Kima Ventures        | EU-Startups
+# | Company            | Country   | Stage    | Amount | Lead Investors        | Description                   | Did We See? | Affinity Entry
+--|--------------------|-----------|---------:|--------|----------------------|-------------------------------|-------------|---------------
+1 | Acme AI            | Germany   | Series A | €12M   | Sequoia, Index       | AI-powered logistics platform | (TBD)       | (TBD)
+2 | Beta Labs          | France    | Seed     | €3M    | Kima Ventures        | [needs review]                | (TBD)       | (TBD)
 ...
 ```
+
+Note: "Did We See?" and "Affinity Entry" are shown as (TBD) at preview time — they will be filled in during Steps 6–7.
 
 Then ask:
 
@@ -113,14 +120,12 @@ https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations
  ...
 [N]. Last Company — https://...
 
-Paste results back as a simple list:
-  1: seen | https://projecta.affinity.co/lists/.../organizations/12345
+Paste results back as a simple list. For seen companies, include the Affinity link:
+  1: seen | https://projecta.affinity.co/companies/[id]
   2: not seen
-  3: seen | https://projecta.affinity.co/lists/.../organizations/67890
+  3: seen | https://projecta.affinity.co/companies/[id]
   ...
 ```
-
-For seen companies, paste the Affinity organisation URL after the `|`. Not seen companies need no URL.
 
 Wait for the user to paste their results before continuing.
 
@@ -128,17 +133,32 @@ Wait for the user to paste their results before continuing.
 
 ## Step 7 — Parse Affinity results
 
-Parse each line from the user's response. Extract the Affinity URL from lines in the format `N: seen | URL`. Build a lookup:
+Parse each line from the user's response. Build a lookup:
 
-| Company | Seen? | Affinity URL |
-|---------|-------|--------------|
-| Acme AI | Yes | https://projecta.affinity.co/... |
+| Company | Seen? | Affinity Link |
+|---------|-------|---------------|
+| Acme AI | Yes | https://projecta.affinity.co/companies/123 |
 | Beta Labs | No | — |
-| Gamma Systems | Yes | https://projecta.affinity.co/... |
+| Gamma Systems | Yes | https://projecta.affinity.co/companies/456 |
 
 ---
 
-## Step 8 — Generate HTML email file
+## Step 8 — Pre-HTML missing info check
+
+Before generating the HTML, scan all companies for missing data. If any row is still missing a website URL, lead investors, or description (including any flagged `[needs review]`), pause and output:
+
+> "The following companies are missing information — please provide corrections before I generate the HTML:
+> - [Company]: missing [website / lead investors / description]
+> - ...
+>
+> Paste corrections in the format: `[Company Name]: website=[url], investors=[names], description=[text]`
+> Type 'skip' to generate with blanks (rendered as '—')."
+
+Wait for the user's response and apply any corrections before proceeding.
+
+---
+
+## Step 9 — Generate HTML email file
 
 Write the file to `/Users/kvelasquez/Desktop/dealflow-retro-newsletter.html` using the Write tool.
 
@@ -177,7 +197,7 @@ Use this HTML structure:
 
 <p>Hi everyone,</p>
 
-<p>Please find below this fortnight's European funding round retro covering <strong>[Start Date] – [End Date]</strong>. [Summary line]</p>
+<p>Please find below this month's European funding round retro covering <strong>[Start Date] – [End Date]</strong>. [Summary line]</p>
 
 <table style="border-collapse:collapse;width:100%;font-family:Arial,sans-serif;font-size:12px;">
   <tr>
@@ -187,8 +207,10 @@ Use this HTML structure:
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Stage</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Amount Raised</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Lead Investors</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Description</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Did We See?</th>
-    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Affinity Entry Link</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Affinity Entry</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Source</th>
   </tr>
   <!-- INSERT ROWS HERE — one <tr> per company, all styles inline -->
 </table>
@@ -212,9 +234,11 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Country]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Stage]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Amount or —]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Lead Investors]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:[bold if Yes];color:[#1a7a1a if Yes, #888888 if No];">[Yes or No]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;text-align:center;">[if seen AND has Affinity URL: <a href="[affinity_url]" style="color:#1a7a1a;text-decoration:underline;">Affinity Entry</a> | otherwise: <span style="color:#888;">—</span>]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Lead Investors or —]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;color:#555;">[Description or —]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:bold;color:[#1a7a1a if Yes, #c0392b if No];">[Yes or No]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[<a href="[affinity link]" style="color:#1a5fa8;">View in Affinity</a> if seen, — if not seen]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;color:#888;">[Crunchbase / EU-Startups / Dealroom]</td>
 </tr>
 ```
 
@@ -222,17 +246,18 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
 
 - **Company**: always linked inline to website — `<a href="..." style="color:#000;text-decoration:underline;">Name</a>`; if no website available, plain text
 - **Amount**: format as "€12M" / "$5M" / "£8M" — omit the cell content (render as "—") if unknown; never write "Unknown"
-- **Lead Investors**: list up to 3 names; if more, append `+ N more`
-- **Did We See?**: "Yes" in green (`#1a7a1a`, bold) / "No" in grey (`#888888`)
-- **Affinity Entry Link**: if seen and Affinity URL was provided, render as `<a>Affinity Entry</a>` linked to that URL (green, underlined); otherwise "—"
+- **Lead Investors**: list up to 3 names; if more, append `+ N more`; render as "—" if unknown
+- **Description**: 1–2 sentence company description from enrichment; render as "—" if unavailable
+- **Did We See?**: "Yes" in green (`#1a7a1a`, bold) / "No" in light red (`#c0392b`, bold)
+- **Affinity Entry**: `<a href="[link]" style="color:#1a5fa8;">View in Affinity</a>` for seen companies; "—" for not seen
 
 ### Sort order
 
-Sort the table: companies we've seen (Yes) first, sorted alphabetically by company name within each group; then companies we haven't seen (No), also alphabetical.
+Sort the table: companies **not seen** (No) first, alphabetically by company name; then companies seen (Yes), also alphabetical. This puts new/unseen deals at the top for the team's attention.
 
 ---
 
-## Step 9 — Open in browser
+## Step 10 — Open in browser
 
 ```bash
 open /Users/kvelasquez/Desktop/dealflow-retro-newsletter.html
@@ -240,7 +265,7 @@ open /Users/kvelasquez/Desktop/dealflow-retro-newsletter.html
 
 ---
 
-## Step 10 — Done message
+## Step 11 — Done message
 
 Output:
 
@@ -264,8 +289,11 @@ Recipients and subject are shown above the body — copy those separately into t
 - Subject format: `Deal Flow Retro — CW [X] | [DD Mon] – [DD Mon YYYY]`
 - CW number = ISO week number of the period's **end date**
 - Country = country only, never city (strip city names from Crunchbase location strings)
-- Enrichment via WebFetch/WebSearch is capped at 10 companies — flag the rest as `[needs review]`
+- Enrich all companies — only flag `[needs review]` if a specific field genuinely cannot be found or verified after searching
+- Website URLs must be verified via WebFetch before embedding — never use an unverified URL in the checklist or HTML output
 - If Dealroom CSV is provided, its data takes precedence over Crunchbase on conflicting fields
-- EU-Startups source flag is for internal tracking during the session only — do not include a "Source" column in the final email
+- Country whitelist: EU 27 + UK + Switzerland + Norway only — Turkey and all other countries are excluded at the filter stage
+- Sort order: not-seen companies first (alphabetical), then seen companies (alphabetical)
+- **Did We See?** styling: "Yes" bold green (`#1a7a1a`) / "No" bold light red (`#c0392b`)
+- **Affinity Entry**: "View in Affinity" hyperlink (`color:#1a5fa8`) for seen companies; "—" for not seen
 - Affinity Master Deals List: https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations
-- Affinity Entry Link column: render as `<a>Affinity Entry</a>` hyperlink for seen companies that provided a URL; render as "—" for all others
