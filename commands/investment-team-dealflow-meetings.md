@@ -7,15 +7,12 @@ allowed-tools: Write, Read, Bash(open:*)
 
 The user has pasted a Granola meeting transcript. Format it into ready-to-copy email blocks for Gmail.
 
-## Step 1: Ask two questions
+## Step 1: Ask one question
 
 Ask the user exactly this, then wait for their full answer before proceeding:
 
-"Two quick questions:
-1. Is this a meeting requiring Version 2 as well? (yes/no)
-2. Do you have website URLs to embed for any companies? If yes, paste them below (one per line):
-   CompanyName: https://company.com
-   (Leave blank if none)"
+"One quick question:
+1. Is this a meeting requiring Version 2 as well? (yes/no)"
 
 ## Step 2: Extract from the transcript
 
@@ -35,7 +32,7 @@ Then extract:
   - Partner Calls
   - Omit any section with no companies.
 
-Also parse the URL map from the user's Step 1 answer. Build a lookup: company name → URL.
+Also extract the URL map directly from the transcript (company name → URL). The Granola transcript includes website URLs inline with each company entry.
 
 ## Step 3: Company entry format (both versions)
 
@@ -216,6 +213,6 @@ If the user pastes a corrected version:
 - Section order: Legal & Financial DD → Due Diligence → Partner Calls
 - Omit any section (including its bold header) that has no companies
 - Date format: DD.MM.YYYY — no slashes, no day name
-- HQ is always country, never city
+- HQ is always country, never city — if HQ cannot be determined from the transcript or corrections memory, leave it blank (e.g. `Company Name () -`) for the user to fill in
 - Each company entry is its own `<p>` tag in the HTML — no wrapping or indentation issues
 - Company links use inline `style` attributes (not CSS classes) — Gmail strips `<style>` block rules on copy-paste; inline styles survive
