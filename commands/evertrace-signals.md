@@ -8,14 +8,15 @@ You are processing a CSV export from Evertrace and posting a formatted signal di
 
 ---
 
-## Step 1 — Ask three questions upfront. Wait for a single combined response before proceeding.
+## Step 1 — Ask four questions upfront. Wait for a single combined response before proceeding.
 
 ```
-Three quick questions:
+Four quick questions:
 
 1. CSV file path? (drag the file into the terminal or paste the path)
 2. Week label? (auto-detected as "w/c [MONDAY_OF_CURRENT_ISO_WEEK]" — confirm or correct)
 3. Include stealth profiles? (yes/no)
+4. Theme mapping? Paste profile names grouped by theme — e.g. "autonomous: Cord, Robin Bilgil / fintech: Josep Nolla / other: Jakub". Use company name or founder name (partial is fine). Leave blank to use auto-detection as fallback.
 ```
 
 To compute the auto-detected week label: find today's date, determine which day of the week it is (Monday=1 … Sunday=7 in ISO week), subtract (dayOfWeek - 1) days to get Monday, format as "w/c D Mon YYYY" (e.g. "w/c 23 Mar 2026"). Show this in the question so Kieran can confirm or override.
@@ -52,9 +53,11 @@ If the same key appears more than once:
 
 ## Step 5 — Detect theme per row
 
-Apply any theme routing overrides from the corrections memory first (exact company name match, case-insensitive).
+Apply theme assignments in this priority order:
 
-Then for rows without an override, search `Industries` + `Company Description` + `Past Companies` + `Company Name` (all concatenated, case-insensitive) against these patterns in order:
+1. **Manual mapping from Question 4** — if Kieran provided a theme mapping, match each profile by fuzzy-matching company name or founder first/last name (case-insensitive, partial match is fine). These take highest priority.
+2. **Corrections memory overrides** — exact company name match, case-insensitive.
+3. **Auto-detection** — for rows with no manual or corrections assignment, search `Industries` + `Company Description` + `Past Companies` + `Company Name` (all concatenated, case-insensitive) against these patterns in order:
 
 | Theme key | Short label | Keywords (case-insensitive regex) |
 |---|---|---|
@@ -162,22 +165,11 @@ Use `mcp__claude_ai_Slack__slack_send_message` with channel `C0AKKPK3J1K`.
 
 If there are two parts, post them sequentially (Part 1 first, then Part 2).
 
-Then ask:
-```
-Posted to #automation-tests. Type 'approve' to post to #deal-flow, or 'cancel' to stop.
-```
-
----
-
-## Step 9 — Post to #deal-flow
-
-If approved: use `mcp__claude_ai_Slack__slack_send_message` with channel `C0AB6LUVCN4`. Post both parts if split.
-
 Confirm with the Slack message permalink URL(s).
 
 ---
 
-## Step 10 — Corrections
+## Step 9 — Corrections
 
 Ask:
 ```
