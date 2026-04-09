@@ -1,5 +1,5 @@
 ---
-description: Screen an ad-hoc deal flow list pasted by the user — enrich entries where possible, route to theses, and post to #automation-tests
+description: Screen an ad-hoc deal flow list — enriches and routes companies (Part 1), then routes LinkedIn profiles with a user context step (Part 2), posting both to #automation-tests
 allowed-tools: Read, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_send_message, mcp__claude_ai_Slack__slack_search_users
 ---
 
@@ -23,52 +23,53 @@ If the user has not already pasted the list in their prompt, ask:
 
 > "Paste the deal flow list — one entry per line. Include any URLs, LinkedIn links, or descriptions if you have them."
 
-Accept any format: bare names, names with URLs, LinkedIn profile links, company names with descriptions, mixed formats. Do not require structure.
+Accept any format. Do not require structure.
 
 ---
 
-## Step 2 — Parse each entry
+## Step 2 — Parse and separate entries
 
-The list may contain section headers like "Pipeline", "Declined Q1", "Portfolio - Closed", "Market Radar", or similar. **Ignore these labels entirely** — process every company and person entry the same way regardless of which section it appears in. Never skip entries based on a section label.
+The list may contain section headers (e.g. "Pipeline", "Declined Q1", "Portfolio - Closed", "Market Radar", "Tracking"). **Ignore these labels entirely** — process every entry the same way regardless of which section it appears in. Never skip entries based on section labels.
 
-For each item in the list, extract:
+Separate all entries into two buckets:
 
-- **Name** — company or person name
-- **URL** — company website or LinkedIn profile URL, if provided
-- **Description** — any inline text following the name/URL (keep verbatim — use this even if no URL is found during enrichment)
-- **Type** — `company` or `person` (LinkedIn)
+**Companies** — has a company website URL, or is clearly a company/product name (not a person's name).
+
+**Profiles** — has a LinkedIn URL, or is clearly a person's name (with or without a title/background note).
+
+For each entry in both buckets, capture:
+- **Name**
+- **URL** (company website or LinkedIn URL, if provided)
+- **Description/context** — any inline text following the name or URL (keep verbatim)
 
 ---
 
-## Step 3 — Enrich entries
+## Step 3 — Enrich companies
 
-For each entry, follow this enrichment path:
+For each company entry:
 
 ### URL was provided
-
-- **Company URL**: WebFetch the homepage. Extract a one-sentence description of what the company does. If WebFetch fails, fall back to WebSearch with the company name + "startup".
-- **LinkedIn URL**: LinkedIn blocks automated fetching — skip enrichment. Name only.
+- **Company URL**: WebFetch the homepage for a one-sentence description. If WebFetch fails, try WebSearch with company name + "startup".
+- If the original list included an inline description, use that even if enrichment fails.
 
 ### No URL provided
-
-- **Company name only**: Run WebSearch for "[company name] startup" or "[company name] what does it do". Only use a result if the company name in the result is an **exact match** to the name in the list — no partial matches, no assumed synonyms, no "this might be the same as" logic.
-  - Exact match found → WebFetch the company homepage for a one-sentence description.
+- Run WebSearch for "[company name] startup". Only use a result if the company name is an **exact match** — no partial matches, no assumed synonyms.
+  - Exact match found → WebFetch for a one-sentence description.
   - No exact match found → **flag the entry**.
-- **Person name only (no LinkedIn URL)** → **flag the entry** — do not guess which profile it is.
 
-### Flagged entries — pause before composing
+### Flagged companies — pause before composing Part 1
 
-After processing all entries, if any are flagged (no URL found, ambiguous match), stop and ask:
+After processing all companies, if any are flagged, stop and ask:
 
-> "I couldn't find exact matches for the following. Provide a URL for each, or type 'skip' to leave them unlinked:
-> - [Entry 1]
-> - [Entry 2]"
+> "I couldn't find exact matches for the following companies. Provide a URL for each, or type 'skip' to leave them unlinked:
+> - [Company 1]
+> - [Company 2]"
 
-Accept user-provided URLs and re-run enrichment for those entries. If user says 'skip' for an entry, include the name only — no URL, no description — in the output. Only proceed to Step 4 once all flags are resolved.
+If user provides URLs, re-run enrichment. If 'skip', include name only — no link, no description. Only proceed once all flags are resolved.
 
 ---
 
-## Step 4 — Route each entry
+## Step 4 — Route companies
 
 First, load staged corrections: read `~/.claude/projects/-Users-kvelasquez-Projects/memory/morning-recap-corrections.md`. Any company listed there overrides default routing.
 
@@ -84,7 +85,7 @@ First, load staged corrections: read `~/.claude/projects/-Users-kvelasquez-Proje
 
 **Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
 - Building AI tools / infrastructure / agents → Future of Autonomous Work
-- Using AI to solve a domain problem (e.g. AI for insurance, AI for logistics) → route to that domain's thesis
+- Using AI to solve a domain problem → route to that domain's thesis
 
 Never default to Future of Autonomous Work without applying this test first.
 
@@ -92,24 +93,49 @@ Never default to Future of Autonomous Work without applying this test first.
 - Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work, not European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
 - Blockchain / crypto / web3 → Fintech, not Future of Autonomous Work
-- Energy companies → Surf and Turf by default. If software-based → add `| _Action: Oskar Lingk_`. If hardware-based → add `| _Action: Miha Pavlovic_`. (Resolve to `<@USERID>` in Step 6.)
+- Energy companies → Surf and Turf by default. If software-based → add `| _Action: Oskar Lingk_`. If hardware-based → add `| _Action: Miha Pavlovic_`. (Resolve to `<@USERID>` in Step 7.)
 
-If a company still has no description after enrichment + user input and cannot be routed with confidence, place it in **⚠️ Flagged for Review**.
-
----
-
-## Step 5 — Resolve @mention user IDs
-
-Use `slack_search_users` to look up the Slack user ID for each team member whose thesis section will appear in the post. Format as `<@USERID>`.
+If a company still cannot be routed with confidence, place it in **⚠️ Flagged for Review**.
 
 ---
 
-## Step 6 — Compose the post
+## Step 5 — Handle profiles
 
-Use this format exactly:
+Sort all profile entries into two groups:
+
+**Has context** — the entry includes an inline description, background note, or enough information to route confidently (e.g. "Lars Rehfeldt — Aegiron", "Andrei Ciobotar — background in AI/IoT"). Route these directly using the same thesis routing table. The inline text becomes the description shown in Part 2.
+
+**No context** — a LinkedIn URL or bare name with no inline description. Cannot route without more information.
+
+If any profiles have no context, pause and output to the terminal:
+
+> "Here are [N] profiles I couldn't route — no context available. Click through each and reply with a brief note (background, what they're working on, which thesis you think):
+> 1. [Name — linkedin.com/in/slug] (or just [Name] if no URL)
+> 2. ...
+
+Wait for the user's response. Accept notes in any format (e.g. "1. robotics, ex-Palantir", "3. crypto, skip"). Once received, route all profiles using the notes provided. If the user provides a thesis directly, use it. If they say 'skip' for an entry, omit it from Part 2 entirely.
+
+If all profiles already have context, skip this pause and proceed directly.
+
+**Profile routing** uses the same thesis table as companies — route based on domain expertise and background:
+- AI/ML engineers, AI researchers, AI infra → Future of Autonomous Work
+- Fintech, crypto, compliance professionals → Fintech
+- Supply chain, manufacturing, logistics → Global Supply Chain
+- Defense, aerospace, hardware, robotics (defense context) → European Resilience
+- Health, consumer, construction, energy, real estate → Surf and Turf
+
+---
+
+## Step 6 — Resolve @mention user IDs
+
+Use `slack_search_users` to look up the Slack user ID for each team member whose thesis section appears in either part. Format as `<@USERID>`.
+
+---
+
+## Step 7 — Compose Part 1 (Companies)
 
 ```
-**Ad-hoc Deal Flow Screen — [Month D, YYYY]**
+**Ad-hoc Deal Flow Screen — [Month D, YYYY] (Part 1 of 2 — Companies)**
 
 **Future of Autonomous Work** <@DARIA_ID> <@OMAR_ID>
 - <https://company.com|CompanyName> — One-sentence description.
@@ -126,8 +152,6 @@ Use this format exactly:
 **Surf and Turf** <@CIARA_ID>
 - <https://company.com|CompanyName> — One-sentence description.
 
----
-
 **⚠️ Flagged for Review**
 - CompanyName — reason
 ```
@@ -139,8 +163,6 @@ Use this format exactly:
 4. European Resilience
 5. Surf and Turf
 
-Only include sections that have entries. Only include Flagged for Review if there are flags.
-
 **Formatting rules:**
 - Bold: `**double asterisk**`
 - Italic: `_underscore_`
@@ -148,32 +170,63 @@ Only include sections that have entries. Only include Flagged for Review if ther
 - @mentions: `<@USERID>` — never plain `@name`
 - Ampersands: raw `&` — never `&amp;`
 - One blank line between thesis sections
-- Do not include `| _Raised:_` — no funding info in this post
+- Do not include `| _Raised:_`
 - Do not append `_Sent using Claude_`
-- LinkedIn profiles with no description: show link and name only — no description fragment
-- Entries with no URL after all enrichment attempts + user input: show plain name only, no link, no description
-- Action item format (energy routing): `| _Action: <@USERID>_` appended at end of line
-- If post exceeds ~4000 characters, split into Part 1 / Part 2 with title repeated and _(continued)_ on the second
+- Entries with no URL: plain name only, no link; use description if provided in the original list
+- Action item format: `| _Action: <@USERID>_` appended at end of line
+- Only include sections that have entries; only include Flagged if there are flags
+- If Part 1 exceeds ~4000 characters, split further: Part 1a / Part 1b with _(continued)_ on second
 
 ---
 
-## Step 7 — Post to #automation-tests
+## Step 8 — Compose Part 2 (Profiles)
 
-Post to channel ID `C0AKKPK3J1K` using `slack_send_message`.
+```
+**Ad-hoc Deal Flow Screen — [Month D, YYYY] (Part 2 of 2 — Profiles)**
+
+**Future of Autonomous Work** <@DARIA_ID> <@OMAR_ID>
+- <https://linkedin.com/in/slug|Full Name> — background context note.
+
+**Fintech** <@MALIN_ID> <@MARJORIE_ID>
+- <https://linkedin.com/in/slug|Full Name> — background context note.
+
+**Global Supply Chain** <@PHILIPP_ID> <@OSKAR_ID>
+- <https://linkedin.com/in/slug|Full Name> — background context note.
+
+**European Resilience** <@JACK_ID> <@MIHA_ID>
+- <https://linkedin.com/in/slug|Full Name> — background context note.
+
+**Surf and Turf** <@CIARA_ID>
+- <https://linkedin.com/in/slug|Full Name> — background context note.
+```
+
+**Formatting rules:**
+- Same section order and formatting rules as Part 1
+- If a LinkedIn URL is available: `<https://linkedin.com/in/slug|Full Name>`
+- If no LinkedIn URL: plain `Full Name` only
+- Description is the background/context note from the original list or from the user's notes — keep concise, one line
+- No `| _Raised:_`, no Flagged section (profiles that couldn't be routed are omitted)
+- If Part 2 exceeds ~4000 characters, split further: Part 2a / Part 2b with _(continued)_ on second
+
+---
+
+## Step 9 — Post to #automation-tests
+
+Post Part 1 first, then Part 2, to channel ID `C0AKKPK3J1K` using `slack_send_message`.
 
 Then output to terminal:
-> "Screened [N] entries → posted to #automation-tests."
+> "Screened [N] companies (Part 1) + [M] profiles (Part 2) → posted to #automation-tests."
 
 ---
 
-## Step 8 — Ask for routing corrections
+## Step 10 — Ask for routing corrections
 
 Ask:
 > "Were any thesis routings wrong? If yes, tell me: 'CompanyName should be [Thesis]' and I'll learn it. Type 'no' to finish."
 
 ---
 
-## Step 9 — Learn from corrections (only if user provides them)
+## Step 11 — Learn from corrections (only if user provides them)
 
 For each routing correction:
 

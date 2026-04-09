@@ -14,7 +14,7 @@ Custom Claude Code slash commands for the Project A investment team.
 | `/investment-team-dealflow-meetings` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
 | `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by thesis, and posts a signal digest to Slack |
 | `/dealflow-retro-newsletter` | Bi-weekly European funding round retro — imports Crunchbase Pro CSV, cross-references Affinity, outputs a formatted HTML email with direct Affinity entry links |
-| `/dealflow-screener` | Paste any ad-hoc deal flow list (any format), Claude enriches, routes to theses, and posts a screened digest to #automation-tests |
+| `/dealflow-screener` | Paste any ad-hoc deal flow list — Claude enriches and routes companies (Part 1), then handles LinkedIn profiles with a user context step before routing (Part 2), posting both to #automation-tests |
 
 ---
 
@@ -189,11 +189,17 @@ Export a CSV from Evertrace, run this command, answer three questions (CSV path,
 ---
 
 ### `/dealflow-screener`
-Paste any ad-hoc deal flow list — from an email, WhatsApp, DM, or any source. Claude parses every entry regardless of section labels (Pipeline, Declined, Portfolio, etc.), enriches companies with a one-sentence description (WebFetch if a URL is provided, WebSearch for exact-name matches only), routes all entries to the correct thesis owners, and posts a screened digest to #automation-tests. Flags any entries where no exact match could be found and asks for a URL before composing.
+Paste any ad-hoc deal flow list (from an email, WhatsApp, DM, etc.) and get back two separate posts to #automation-tests.
+
+**Part 1 — Companies:** Claude enriches every company entry (WebFetch if a URL is provided, WebSearch for exact-name matches only), routes to the correct thesis owners, and composes a clean digest. Flags entries with no exact match and asks for a URL before composing.
+
+**Part 2 — Profiles:** LinkedIn profiles are handled separately. Profiles that already have context (inline background note) are routed directly. For profiles with no context, Claude pauses and surfaces a numbered list — you click through, write a brief note on each person, and Claude routes and composes Part 2 from your notes.
+
+**Enrichment rule:** Only uses web results where the company name is an exact match — never assumes or guesses. If the original list includes a description, that is kept even if no URL is found.
+
+**Section labels ignored:** All entries are screened regardless of labels like "Declined", "Portfolio - Closed", "Pipeline", etc.
 
 **Usage:** `/dealflow-screener` then paste your list (or paste it directly in the prompt)
-
-**Enrichment rule:** Only uses web results where the company name is an exact match — never assumes or guesses. If the original list includes a description, that description is kept even if no URL is found.
 
 **Requires:** Slack MCP
 
