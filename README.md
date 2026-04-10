@@ -15,7 +15,7 @@ Custom Claude Code slash commands for the Project A investment team.
 | `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by thesis, and posts a signal digest to Slack |
 | `/dealflow-retro-newsletter` | Bi-weekly European funding round retro — imports Crunchbase Pro CSV, cross-references Affinity, outputs a formatted HTML email with direct Affinity entry links |
 | `/dealflow-screener` | Paste any ad-hoc deal flow list — Claude enriches and routes companies (Part 1), then handles LinkedIn profiles with a user context step before routing (Part 2), posting both to #automation-tests |
-| `/call-prep` | Give Claude a company name, website, and/or pitch deck — get back a full VC investment brief (market, tech, team, traction, key questions) sent to your Slack DM before the call |
+| `/call-prep` | Give Claude a company name, website, and/or pitch deck/memo — get back a concise VC investment brief (tech, team, traction, key questions) that opens as an HTML page in your browser |
 
 ---
 
@@ -207,17 +207,17 @@ Paste any ad-hoc deal flow list (from an email, WhatsApp, DM, etc.) and get back
 ---
 
 ### `/call-prep`
-Give Claude a company name plus any available materials (website URL, pitch deck PDF path, or pasted text, plus an optional context note on stage or sector) and get back a structured investment brief — ready to read in 2–5 minutes before the call.
+Give Claude a company name plus any available materials (website URL, pitch deck PDF path, DOCX memo, or pasted text) and get back a concise VC investment brief that opens as an HTML page in your browser — ready to read before the call.
 
-**What the brief covers:** Company Snapshot · Problem & Solution · Product & Technology (includes plain-language explainer of the underlying science/engineering for deeptech and hardware) · Traction & Metrics · Team Overview · Market Background · Business Importance & Investment Framing · Comparable Companies / Recent Funding · Key Questions for the First Call · Quick Readout · Sources
+**What the brief covers:** Snapshot · Problem & Solution · Product & Technology (plain-language explainer of underlying science/engineering for deeptech/hardware) · Traction & Metrics · Team · Market & Timing · Investment Framing · Key Questions (5 max)
 
-**Research:** Fetches key website pages, reads the full deck, and does independent web research on the market, comps, founders, and — crucially — the core technology itself, so you can discuss the science intelligently on the call.
+**Research approach:** Reads documents first (highest signal), fetches homepage only, then runs 5 targeted web searches — optimised for low token spend.
 
-**Output:** Full brief printed to the terminal + sent as a Slack DM to you in 3 messages.
+**Output:** HTML file opened in browser (`/tmp/call-prep-[Company].html`).
 
 **Usage:** `/call-prep` then provide company name + materials, or paste them directly in the prompt
 
-**Requires:** Slack MCP
+**Requires:** Nothing beyond Claude Code
 
 ---
 
