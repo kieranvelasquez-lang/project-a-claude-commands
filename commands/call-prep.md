@@ -67,6 +67,7 @@ Extract **everything** — treat the deck as the primary source of truth that wa
 
 Use `WebSearch` and `WebFetch` to verify and enrich the picture:
 
+- **Core technology primer**: If the company uses a specific technology, scientific principle, or engineering approach (e.g. directed energy, MEMS sensors, synthetic aperture radar, transformer-based models, solid-state batteries, RF/EW systems, hypersonics, etc.), research it independently. The goal is to give Kieran enough conceptual understanding to ask intelligent questions on the call — how it works, why it's hard, what the known limitations are, and what makes a particular implementation credible or not. This is especially important for deeptech, hardware, and defence companies.
 - **Market context**: size, growth rate, key tailwinds or headwinds
 - **Competitors**: 3–5 direct or adjacent companies; note stage and funding
 - **Recent funding rounds**: comparable companies' rounds with year, stage, and amount
