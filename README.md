@@ -15,6 +15,7 @@ Custom Claude Code slash commands for the Project A investment team.
 | `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by thesis, and posts a signal digest to Slack |
 | `/dealflow-retro-newsletter` | Bi-weekly European funding round retro — imports Crunchbase Pro CSV, cross-references Affinity, outputs a formatted HTML email with direct Affinity entry links |
 | `/dealflow-screener` | Paste any ad-hoc deal flow list — Claude enriches and routes companies (Part 1), then handles LinkedIn profiles with a user context step before routing (Part 2), posting both to #automation-tests |
+| `/call-prep` | Give Claude a company name, website, and/or pitch deck — get back a full VC investment brief (market, tech, team, traction, key questions) sent to your Slack DM before the call |
 
 ---
 
@@ -82,7 +83,7 @@ cp ~/Projects/project-a-claude-commands/commands/*.md ~/.claude/commands/
 mkdir -p ~/.claude/memory
 ```
 
-Open a new Claude Code session. You should now see `/morning-recap`, `/net-new-affinity`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, `/evertrace-signals`, `/dealflow-retro-newsletter`, and `/dealflow-screener` in the slash command menu.
+Open a new Claude Code session. You should now see `/morning-recap`, `/net-new-affinity`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, `/evertrace-signals`, `/dealflow-retro-newsletter`, `/dealflow-screener`, and `/call-prep` in the slash command menu.
 
 ---
 
@@ -205,6 +206,21 @@ Paste any ad-hoc deal flow list (from an email, WhatsApp, DM, etc.) and get back
 
 ---
 
+### `/call-prep`
+Give Claude a company name plus any available materials (website URL, pitch deck PDF path, or pasted text, plus an optional context note on stage or sector) and get back a structured investment brief — ready to read in 2–5 minutes before the call.
+
+**What the brief covers:** Company Snapshot · Problem & Solution · Product & Technology (includes plain-language explainer of the underlying science/engineering for deeptech and hardware) · Traction & Metrics · Team Overview · Market Background · Business Importance & Investment Framing · Comparable Companies / Recent Funding · Key Questions for the First Call · Quick Readout · Sources
+
+**Research:** Fetches key website pages, reads the full deck, and does independent web research on the market, comps, founders, and — crucially — the core technology itself, so you can discuss the science intelligently on the call.
+
+**Output:** Full brief printed to the terminal + sent as a Slack DM to you in 3 messages.
+
+**Usage:** `/call-prep` then provide company name + materials, or paste them directly in the prompt
+
+**Requires:** Slack MCP
+
+---
+
 ### `/dealflow-retro-newsletter`
 Bi-weekly digest of all European tech funding rounds. Import a Crunchbase Pro CSV export (filtered to Europe + date range), Claude supplements with EU-Startups WebFetch, you paste Affinity cross-reference results, and Claude generates a formatted HTML email table — ready to copy into Gmail and send to the investment team.
 
@@ -232,7 +248,8 @@ project-a-claude-commands/
 │   ├── evertrace-signals.md
 │   ├── investment-team-dealflow-meetings.md
 │   ├── dealflow-retro-newsletter.md
-│   └── dealflow-screener.md
+│   ├── dealflow-screener.md
+│   └── call-prep.md
 └── memory/
     ├── morning-recap/                       ← corrections + feedback for /morning-recap
     ├── net-new-affinity/                    ← (created when first correction is learned)
