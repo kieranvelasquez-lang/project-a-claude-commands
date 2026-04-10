@@ -33,15 +33,18 @@ Do not re-read or re-explain the full routing table — just flag what's new.
 
 ## Step 2 — Pull from Slack (auto-anchor)
 
-**Do not ask the user for a timestamp.** Anchor automatically:
+Anchor automatically:
 
 1. Call `slack_read_channel` on #deal-flow (channel ID: `C0AB6LUVCN4`) with `oldest` set to 48 hours ago (current Unix timestamp minus 172800).
 2. Scan the returned messages for the most recent one by Kieran Velasquez that begins with `**Morning Recap —`. Use that message's `ts` value as the anchor.
-3. If no such message is found in the 48-hour window, fall back and ask: "I couldn't find your last Morning Recap post. What time was it sent? (e.g. '7:22 PM on March 16')"
+3. **If no such message is found in the 48-hour window**, stop and ask:
+   > "I couldn't find a Morning Recap to anchor from. Which message should I start at? Please give me the sender name, date, and time (e.g. 'Philipp Werner, April 2, 9:15 AM') and I'll pull that message plus everything after it."
+   - Wait for the user's response before proceeding.
+   - Once they provide a start message, use `slack_read_channel` with `oldest` set to just before that message's timestamp to retrieve it, then process **that message and all messages after it** (inclusive — the start message itself is not a recap boundary, it's the first entry to process).
 
-Once the anchor `ts` is established, call `slack_read_channel` again with `oldest` set to that `ts` to fetch only messages posted after the last Morning Recap.
+Once the anchor `ts` is established from a found Morning Recap, call `slack_read_channel` again with `oldest` set to that `ts` to fetch only messages posted after the last Morning Recap.
 
-**Exclusion rule:** The anchor message is a boundary marker only — do not parse its text for company or LinkedIn entries. Do not read or process its thread replies (these will contain the Net New to Affinity post going forward and should be ignored). Only process messages with `ts` strictly greater than the anchor `ts`.
+**Exclusion rule (Morning Recap anchor only):** When anchoring from a found Morning Recap, that message is a boundary marker only — do not parse its text for company or LinkedIn entries. Do not read or process its thread replies (these will contain the Net New to Affinity post going forward and should be ignored). Only process messages with `ts` strictly greater than the anchor `ts`. This exclusion does NOT apply when using a user-specified start message.
 
 Remember: Project A is Berlin — CET = UTC+1, CEST = UTC+2 from late March.
 
