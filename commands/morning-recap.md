@@ -75,7 +75,7 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 
 | What they build | Thesis | Team |
 |---|---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics (software/AI-architecture-first only — see hardcoded rules below) | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
 | Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech | Malin Posern, Marjorie Lengereau |
 | Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience | Jack Wang, Miha Pavlovic |
 | Supply chain, logistics, manufacturing, materials | Global Supply Chain | Philipp Werner, Oskar Lingk |
@@ -92,6 +92,8 @@ Never default to Future of Autonomous Work without applying this test first.
 - AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
 - Blockchain / crypto / web3 startups → Fintech, not Future of Autonomous Work (even if building observability or tooling for blockchain networks)
 - Energy companies → Surf and Turf by default. If software-based energy → add `| _Action: Oskar Lingk_`. If hardware-based energy → add `| _Action: Miha Pavlovic_`. (Resolve to `<@USERID>` in Step 5.)
+- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Future of Autonomous Work
+- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Global Supply Chain | Action: Miha Pavlovic (defense robotics remains European Resilience — the existing defense rule takes precedence)
 
 ### 3c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.

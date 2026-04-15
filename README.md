@@ -126,6 +126,22 @@ cp commands/*.md ~/.claude/commands/
 
 ---
 
+## Routing rules
+
+All commands use the same thesis routing table. A few hardcoded rules override the defaults:
+
+- **Cybersecurity** → Future of Autonomous Work (not European Resilience)
+- **AI sales tools** (commissions, revenue ops) → Surf and Turf (not Fintech)
+- **Blockchain / crypto / web3** → Fintech (not Future of Autonomous Work)
+- **Energy companies** → Surf and Turf by default; software-based energy tags Oskar Lingk, hardware-based energy tags Miha Pavlovic
+- **Robotics — software/AI-first** (foundation models, physical intelligence, robot OS, AI frameworks) → Future of Autonomous Work
+- **Robotics — hardware/industrial/applied** (robot hardware, manufacturing automation, applied robotics) → Global Supply Chain, tags Miha Pavlovic as action item
+- **Defense** (including defense robotics) → European Resilience — nothing defense-related routes to Global Supply Chain
+
+These rules are baked into every skill. Company-specific overrides live in your local corrections memory (see below).
+
+---
+
 ## How corrections memory works
 
 Each command learns from your feedback and stores corrections in `~/.claude/memory/`:

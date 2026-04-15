@@ -61,10 +61,10 @@ Apply theme assignments in this priority order:
 
 | Theme key | Short label | Keywords (case-insensitive regex) |
 |---|---|---|
-| `autonomous` | Future of Autonomous Work | `\bai\b`, `artificial intelligence`, `machine learning`, `saas`, `automation`, `developer tools`, `software`, `data analytics`, `no.?code`, `low.?code`, `cybersecurity`, `security`, `api`, `devops`, `cloud`, `robotics` |
+| `autonomous` | Future of Autonomous Work | `\bai\b`, `artificial intelligence`, `machine learning`, `saas`, `automation`, `developer tools`, `software`, `data analytics`, `no.?code`, `low.?code`, `cybersecurity`, `security`, `api`, `devops`, `cloud` |
 | `fintech` | Fintech | `payment`, `banking`, `neobank`, `crypto`, `blockchain`, `insurance`, `insurtech`, `regtech`, `accounting`, `legaltech`, `compliance`, `fintech`, `wealth`, `lending`, `invoice` |
 | `resilience` | European Resilience | `defence`, `defense`, `military`, `hardware`, `aerospace`, `materials`, `semiconductor`, `deep.?tech` |
-| `supplychain` | Global Supply Chain | `logistics`, `freight`, `warehousing`, `warehouse`, `procurement`, `shipping`, `e.?commerce`, `supply.?chain`, `retail`, `last.?mile`, `fulfilment`, `fulfillment`, `manufacturing` |
+| `supplychain` | Global Supply Chain | `logistics`, `freight`, `warehousing`, `warehouse`, `procurement`, `shipping`, `e.?commerce`, `supply.?chain`, `retail`, `last.?mile`, `fulfilment`, `fulfillment`, `manufacturing`, `robotics` |
 | `other` | Surf and Turf | (catch-all — everything that matches none of the above, including energy, cleantech, climate, biotech, medtech, life science) |
 
 Match in table order (first match wins). Apply name corrections from corrections memory to `First Name` and `Last Name` fields. Apply company name corrections to `Company Name` field.

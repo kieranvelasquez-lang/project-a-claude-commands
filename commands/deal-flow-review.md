@@ -19,7 +19,7 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 ## Thesis routing table
 | What they build | Thesis |
 |---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics | Future of Autonomous Work |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics (software/AI-architecture-first only — see hardcoded rules below) | Future of Autonomous Work |
 | Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech |
 | Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience |
 | Supply chain, logistics, manufacturing, materials | Global Supply Chain |
@@ -34,6 +34,8 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 - AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
 - Blockchain / crypto / web3 → Fintech, not Future of Autonomous Work
 - Energy companies → Surf and Turf by default. If software-based → action item for Oskar Lingk. If hardware-based → action item for Miha Pavlovic.
+- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Future of Autonomous Work
+- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Global Supply Chain | action item for Miha Pavlovic (defense robotics remains European Resilience — the existing defense rule takes precedence)
 
 ---
 

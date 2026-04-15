@@ -11,16 +11,18 @@ Run this after `/morning-recap` has posted the Morning Recap and Affinity list t
 
 | What they build | Thesis |
 |---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics | Future of Autonomous Work |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics (software/AI-architecture-first only — see hardcoded rules below) | Future of Autonomous Work |
 | Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech |
 | Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience |
-| Supply chain, logistics, manufacturing, materials | Global Supply Chain |
+| Supply chain, logistics, manufacturing, materials, robotics (hardware/industrial/applied) | Global Supply Chain |
 | Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf |
 
 **Hardcoded routing rules:**
 - Cybersecurity → Future of Autonomous Work, not European Resilience
 - AI sales tools → Surf and Turf, not Fintech
 - Blockchain / crypto / web3 → Fintech, not Future of Autonomous Work
+- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Future of Autonomous Work
+- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Global Supply Chain (defense robotics remains European Resilience — the existing defense rule takes precedence)
 
 ---
 

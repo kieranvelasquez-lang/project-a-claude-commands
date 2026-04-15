@@ -77,7 +77,7 @@ First, load staged corrections: read `~/.claude/projects/-Users-kvelasquez-Proje
 
 | What they build | Thesis |
 |---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics | Future of Autonomous Work |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics (software/AI-architecture-first only — see hardcoded rules below) | Future of Autonomous Work |
 | Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech |
 | Supply chain, logistics, manufacturing, materials | Global Supply Chain |
 | Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience |
@@ -94,6 +94,8 @@ Never default to Future of Autonomous Work without applying this test first.
 - AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
 - Blockchain / crypto / web3 → Fintech, not Future of Autonomous Work
 - Energy companies → Surf and Turf by default. If software-based → add `| _Action: Oskar Lingk_`. If hardware-based → add `| _Action: Miha Pavlovic_`. (Resolve to `<@USERID>` in Step 7.)
+- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Future of Autonomous Work
+- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Global Supply Chain | Action: Miha Pavlovic (defense robotics remains European Resilience — the existing defense rule takes precedence)
 
 If a company still cannot be routed with confidence, place it in **⚠️ Flagged for Review**.
 
@@ -121,7 +123,9 @@ If all profiles already have context, skip this pause and proceed directly.
 - AI/ML engineers, AI researchers, AI infra → Future of Autonomous Work
 - Fintech, crypto, compliance professionals → Fintech
 - Supply chain, manufacturing, logistics → Global Supply Chain
-- Defense, aerospace, hardware, robotics (defense context) → European Resilience
+- Defense, aerospace, hardware → European Resilience
+- Robotics (software/AI/research focus — foundation models, physical intelligence, robot OS) → Future of Autonomous Work
+- Robotics (hardware/industrial/applied, non-defense) → Global Supply Chain | Action: Miha Pavlovic
 - Health, consumer, construction, energy, real estate → Surf and Turf
 
 ---
