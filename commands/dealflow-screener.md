@@ -7,13 +7,17 @@ allowed-tools: Read, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_send_messa
 
 ## Team member → thesis mapping
 
-| Thesis | Members |
-|---|---|
-| Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
-| Fintech | Malin Posern, Marjorie Lengereau |
-| Global Supply Chain | Philipp Werner, Oskar Lingk |
-| European Resilience | Jack Wang, Miha Pavlovic |
-| Surf and Turf | Ciara Gumsheimer |
+| Thesis | Member | User ID |
+|---|---|---|
+| Future of Autonomous Work | Daria Gneusheva | `U0AA0044W1K` |
+| Future of Autonomous Work | Omar Hedeya | `U0A9MUM30AK` |
+| Fintech | Malin Posern | `U0A9MUWM77Z` |
+| Fintech | Marjorie Lengereau | `U0AAGADJCQ1` |
+| Global Supply Chain | Philipp Werner | `U0A9MUWK50X` |
+| Global Supply Chain | Oskar Lingk | `U0AA1BDG7D4` |
+| European Resilience | Jack Wang | `U0A9X1FNV19` |
+| European Resilience | Miha Pavlovic | `U0A9X1DAVTM` |
+| Surf and Turf | Ciara Gumsheimer | `U0AA004TEQ5` |
 
 ---
 
@@ -132,7 +136,7 @@ If all profiles already have context, skip this pause and proceed directly.
 
 ## Step 6 — Resolve @mention user IDs
 
-Use `slack_search_users` to look up the Slack user ID for each team member whose thesis section appears in either part. Format as `<@USERID>`.
+All core team member IDs are hardcoded in the table above — use them directly. Only call `slack_search_users` for non-team members (e.g. action item owners outside the core team). Format as `<@USERID>`.
 
 ---
 

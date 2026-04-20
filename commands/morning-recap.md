@@ -6,15 +6,19 @@ allowed-tools: Read, Write, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_rea
 # Morning Recap
 
 ## Team member Slack display names
-Used in section headers. These are exact Slack display names — look up user IDs via `slack_search_users` before composing posts so @mentions actually ping people.
+User IDs are hardcoded below — do not call `slack_search_users` for core team members.
 
-| Thesis | Members |
-|---|---|
-| Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
-| Fintech | Malin Posern, Marjorie Lengereau |
-| European Resilience | Jack Wang, Miha Pavlovic |
-| Global Supply Chain | Philipp Werner, Oskar Lingk |
-| Surf and Turf | Ciara Gumsheimer |
+| Thesis | Member | User ID |
+|---|---|---|
+| Future of Autonomous Work | Daria Gneusheva | `U0AA0044W1K` |
+| Future of Autonomous Work | Omar Hedeya | `U0A9MUM30AK` |
+| Fintech | Malin Posern | `U0A9MUWM77Z` |
+| Fintech | Marjorie Lengereau | `U0AAGADJCQ1` |
+| European Resilience | Jack Wang | `U0A9X1FNV19` |
+| European Resilience | Miha Pavlovic | `U0A9X1DAVTM` |
+| Global Supply Chain | Philipp Werner | `U0A9MUWK50X` |
+| Global Supply Chain | Oskar Lingk | `U0AA1BDG7D4` |
+| Surf and Turf | Ciara Gumsheimer | `U0AA004TEQ5` |
 
 ---
 
@@ -138,7 +142,7 @@ For any entry where the Slack message included **no description**, enrich before
 
 ## Step 5 — Resolve @mention user IDs
 
-Before composing the post, use `slack_search_users` to look up the Slack user ID for each team member whose thesis section appears in this run's output. Format pings as `<@USERID>` in the post body — this ensures the message actually pings them rather than rendering as plain text.
+All core team member IDs are hardcoded in the table above — use them directly. Only call `slack_search_users` for non-team members who appear as action item owners (e.g. a founder, an angel, or a guest collaborator). Format all pings as `<@USERID>` in the post body.
 
 ---
 

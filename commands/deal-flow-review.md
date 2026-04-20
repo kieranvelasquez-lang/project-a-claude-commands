@@ -6,13 +6,17 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 # Deal Flow Review
 
 ## Team member → thesis mapping
-| Thesis | Members |
-|---|---|
-| Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
-| Fintech | Malin Posern, Marjorie Lengereau |
-| European Resilience | Jack Wang, Miha Pavlovic |
-| Global Supply Chain | Philipp Werner, Oskar Lingk |
-| Surf and Turf | Ciara Gumsheimer |
+| Thesis | Member | User ID |
+|---|---|---|
+| Future of Autonomous Work | Daria Gneusheva | `U0AA0044W1K` |
+| Future of Autonomous Work | Omar Hedeya | `U0A9MUM30AK` |
+| Fintech | Malin Posern | `U0A9MUWM77Z` |
+| Fintech | Marjorie Lengereau | `U0AAGADJCQ1` |
+| European Resilience | Jack Wang | `U0A9X1FNV19` |
+| European Resilience | Miha Pavlovic | `U0A9X1DAVTM` |
+| Global Supply Chain | Philipp Werner | `U0A9MUWK50X` |
+| Global Supply Chain | Oskar Lingk | `U0AA1BDG7D4` |
+| Surf and Turf | Ciara Gumsheimer | `U0AA004TEQ5` |
 
 ---
 

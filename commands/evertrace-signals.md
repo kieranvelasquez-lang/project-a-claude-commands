@@ -75,13 +75,13 @@ Match in table order (first match wins). Apply name corrections from corrections
 
 ### Theme → team member tags
 
-| Theme key | Tags |
-|---|---|
-| `autonomous` | @Daria Gneusheva  @Omar Hedeya |
-| `fintech` | @Malin Posern  @Marjorie Lengereau |
-| `resilience` | @Jack Wang  @Miha Pavlovic |
-| `supplychain` | @Philipp Werner  @Oskar Lingk |
-| `other` | @Ciara Gumsheimer |
+| Theme key | Members | Slack pings |
+|---|---|---|
+| `autonomous` | Daria Gneusheva, Omar Hedeya | `<@U0AA0044W1K> <@U0A9MUM30AK>` |
+| `fintech` | Malin Posern, Marjorie Lengereau | `<@U0A9MUWM77Z> <@U0AAGADJCQ1>` |
+| `resilience` | Jack Wang, Miha Pavlovic | `<@U0A9X1FNV19> <@U0A9X1DAVTM>` |
+| `supplychain` | Philipp Werner, Oskar Lingk | `<@U0A9MUWK50X> <@U0AA1BDG7D4>` |
+| `other` | Ciara Gumsheimer | `<@U0AA004TEQ5>` |
 
 ### Theme order (always): autonomous → fintech → resilience → supplychain → other
 
