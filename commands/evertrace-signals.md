@@ -65,7 +65,8 @@ Apply theme assignments in this priority order:
 | `fintech` | Fintech | `payment`, `banking`, `neobank`, `crypto`, `blockchain`, `insurance`, `insurtech`, `regtech`, `accounting`, `legaltech`, `compliance`, `fintech`, `wealth`, `lending`, `invoice` |
 | `resilience` | European Resilience | `defence`, `defense`, `military`, `hardware`, `aerospace`, `materials`, `semiconductor`, `deep.?tech` |
 | `supplychain` | Global Supply Chain | `logistics`, `freight`, `warehousing`, `warehouse`, `procurement`, `shipping`, `e.?commerce`, `supply.?chain`, `retail`, `last.?mile`, `fulfilment`, `fulfillment`, `manufacturing`, `robotics` |
-| `other` | Surf and Turf | (catch-all — everything that matches none of the above, including energy, cleantech, climate, biotech, medtech, life science) |
+| `biotech` | Biotech / Life Sciences | `biotech`, `life.?science`, `chemistry`, `pharma`, `medtech`, `genomics`, `synbio`, `synthetic.?biology`, `drug.?discovery`, `molecular`, `materials.?science` |
+| `other` | Surf and Turf | (catch-all — everything that matches none of the above, including energy, cleantech, climate) |
 
 Match in table order (first match wins). Apply name corrections from corrections memory to `First Name` and `Last Name` fields. Apply company name corrections to `Company Name` field.
 
@@ -81,9 +82,10 @@ Match in table order (first match wins). Apply name corrections from corrections
 | `fintech` | Malin Posern, Marjorie Lengereau | `<@U0A9MUWM77Z> <@U0AAGADJCQ1>` |
 | `resilience` | Jack Wang, Miha Pavlovic | `<@U0A9X1FNV19> <@U0A9X1DAVTM>` |
 | `supplychain` | Philipp Werner, Oskar Lingk | `<@U0A9MUWK50X> <@U0AA1BDG7D4>` |
+| `biotech` | Malin Posern, Ciara Gumsheimer | `<@U0A9MUWM77Z> <@U0AA004TEQ5>` |
 | `other` | Ciara Gumsheimer | `<@U0AA004TEQ5>` |
 
-### Theme order (always): autonomous → fintech → resilience → supplychain → other
+### Theme order (always): autonomous → fintech → resilience → supplychain → biotech → other
 
 ### Part A — New Company entries, grouped by theme
 

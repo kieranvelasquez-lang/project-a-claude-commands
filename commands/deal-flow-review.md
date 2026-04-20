@@ -40,6 +40,7 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 - Energy companies → Surf and Turf by default. If software-based → action item for Oskar Lingk. If hardware-based → action item for Miha Pavlovic.
 - Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Future of Autonomous Work
 - Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Global Supply Chain | action item for Miha Pavlovic (defense robotics remains European Resilience — the existing defense rule takes precedence)
+- Biotech, chemistry, life sciences, physical sciences — pharma, medtech, synthetic biology, genomics, drug discovery, materials science → Surf and Turf by default. Add action item for Malin Posern (`<@U0A9MUWM77Z>`).
 
 ---
 

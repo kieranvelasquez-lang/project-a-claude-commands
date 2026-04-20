@@ -23,6 +23,7 @@ Run this after `/morning-recap` has posted the Morning Recap and Affinity list t
 - Blockchain / crypto / web3 → Fintech, not Future of Autonomous Work
 - Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Future of Autonomous Work
 - Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Global Supply Chain (defense robotics remains European Resilience — the existing defense rule takes precedence)
+- Biotech, chemistry, life sciences, physical sciences — pharma, medtech, synthetic biology, genomics, drug discovery, materials science → Surf and Turf. Add `| _Action: Malin Posern_` (`<@U0A9MUWM77Z>`).
 
 ---
 

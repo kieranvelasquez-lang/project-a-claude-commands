@@ -100,6 +100,7 @@ Never default to Future of Autonomous Work without applying this test first.
 - Energy companies → Surf and Turf by default. If software-based → add `| _Action: Oskar Lingk_`. If hardware-based → add `| _Action: Miha Pavlovic_`. (Resolve to `<@USERID>` in Step 7.)
 - Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Future of Autonomous Work
 - Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Global Supply Chain | Action: Miha Pavlovic (defense robotics remains European Resilience — the existing defense rule takes precedence)
+- Biotech, chemistry, life sciences, physical sciences — pharma, medtech, synthetic biology, genomics, drug discovery, materials science → Surf and Turf by default. Add `| _Action: Malin Posern_` regardless of subtype. (Resolve to `<@U0A9MUWM77Z>` in Step 7.)
 
 If a company still cannot be routed with confidence, place it in **⚠️ Flagged for Review**.
 
