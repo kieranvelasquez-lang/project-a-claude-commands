@@ -1,5 +1,5 @@
 ---
-description: Screen an ad-hoc deal flow list — enriches and routes companies (Part 1), then routes LinkedIn profiles with a user context step (Part 2), posting both to #automation-tests
+description: Screen an ad-hoc deal flow list — enriches and routes companies and profiles into one unified list, posting to #automation-tests
 allowed-tools: Read, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_send_message, mcp__claude_ai_Slack__slack_search_users
 ---
 
@@ -81,7 +81,7 @@ First, load staged corrections: read `~/.claude/projects/-Users-kvelasquez-Proje
 
 | What they build | Thesis |
 |---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics (software/AI-architecture-first only — see hardcoded rules below) | Future of Autonomous Work |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics | Future of Autonomous Work |
 | Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech |
 | Supply chain, logistics, manufacturing, materials | Global Supply Chain |
 | Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience |
@@ -98,9 +98,6 @@ Never default to Future of Autonomous Work without applying this test first.
 - AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
 - Blockchain / crypto / web3 → Fintech, not Future of Autonomous Work
 - Energy companies → Surf and Turf by default. If software-based → add `| _Action: Oskar Lingk_`. If hardware-based → add `| _Action: Miha Pavlovic_`. (Resolve to `<@USERID>` in Step 7.)
-- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Future of Autonomous Work
-- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Global Supply Chain | Action: Miha Pavlovic (defense robotics remains European Resilience — the existing defense rule takes precedence)
-- Biotech, chemistry, life sciences, physical sciences — pharma, medtech, synthetic biology, genomics, drug discovery, materials science → Surf and Turf by default. Add `| _Action: Malin Posern_` regardless of subtype. (Resolve to `<@U0A9MUWM77Z>` in Step 7.)
 
 If a company still cannot be routed with confidence, place it in **⚠️ Flagged for Review**.
 
@@ -128,9 +125,7 @@ If all profiles already have context, skip this pause and proceed directly.
 - AI/ML engineers, AI researchers, AI infra → Future of Autonomous Work
 - Fintech, crypto, compliance professionals → Fintech
 - Supply chain, manufacturing, logistics → Global Supply Chain
-- Defense, aerospace, hardware → European Resilience
-- Robotics (software/AI/research focus — foundation models, physical intelligence, robot OS) → Future of Autonomous Work
-- Robotics (hardware/industrial/applied, non-defense) → Global Supply Chain | Action: Miha Pavlovic
+- Defense, aerospace, hardware, robotics (defense context) → European Resilience
 - Health, consumer, construction, energy, real estate → Surf and Turf
 
 ---
@@ -141,25 +136,32 @@ All core team member IDs are hardcoded in the table above — use them directly.
 
 ---
 
-## Step 7 — Compose Part 1 (Companies)
+## Step 7 — Compose unified list
+
+Companies and profiles go into one single message, merged by thesis. Within each thesis section, list companies first, then profiles — but both use the same bullet format.
 
 ```
-**Ad-hoc Deal Flow Screen — [Month D, YYYY] (Part 1 of 2 — Companies)**
+**Ad-hoc Deal Flow Screen — [Month D, YYYY]**
 
 **Future of Autonomous Work** <@DARIA_ID> <@OMAR_ID>
 - <https://company.com|CompanyName> — One-sentence description.
+- <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
 **Fintech** <@MALIN_ID> <@MARJORIE_ID>
 - <https://company.com|CompanyName> — One-sentence description.
+- <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
 **Global Supply Chain** <@PHILIPP_ID> <@OSKAR_ID>
 - <https://company.com|CompanyName> — One-sentence description.
+- <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
 **European Resilience** <@JACK_ID> <@MIHA_ID>
 - <https://company.com|CompanyName> — One-sentence description.
+- <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
 **Surf and Turf** <@CIARA_ID>
 - <https://company.com|CompanyName> — One-sentence description.
+- <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
 **⚠️ Flagged for Review**
 - CompanyName — reason
@@ -181,61 +183,31 @@ All core team member IDs are hardcoded in the table above — use them directly.
 - One blank line between thesis sections
 - Do not include `| _Raised:_`
 - Do not append `_Sent using Claude_`
-- Entries with no URL: plain name only, no link; use description if provided in the original list
+- Company entries with no URL: plain name only, no link; use description if provided in the original list
+- Profile entries with no LinkedIn URL: plain `Full Name` only
 - Action item format: `| _Action: <@USERID>_` appended at end of line
 - Only include sections that have entries; only include Flagged if there are flags
-- If Part 1 exceeds ~4000 characters, split further: Part 1a / Part 1b with _(continued)_ on second
+- If the message exceeds ~4000 characters, split into Part 1 / Part 2 with _(continued)_ on the second
 
 ---
 
-## Step 8 — Compose Part 2 (Profiles)
+## Step 8 — Post to #automation-tests
 
-```
-**Ad-hoc Deal Flow Screen — [Month D, YYYY] (Part 2 of 2 — Profiles)**
-
-**Future of Autonomous Work** <@DARIA_ID> <@OMAR_ID>
-- <https://linkedin.com/in/slug|Full Name> — background context note.
-
-**Fintech** <@MALIN_ID> <@MARJORIE_ID>
-- <https://linkedin.com/in/slug|Full Name> — background context note.
-
-**Global Supply Chain** <@PHILIPP_ID> <@OSKAR_ID>
-- <https://linkedin.com/in/slug|Full Name> — background context note.
-
-**European Resilience** <@JACK_ID> <@MIHA_ID>
-- <https://linkedin.com/in/slug|Full Name> — background context note.
-
-**Surf and Turf** <@CIARA_ID>
-- <https://linkedin.com/in/slug|Full Name> — background context note.
-```
-
-**Formatting rules:**
-- Same section order and formatting rules as Part 1
-- If a LinkedIn URL is available: `<https://linkedin.com/in/slug|Full Name>`
-- If no LinkedIn URL: plain `Full Name` only
-- Description is the background/context note from the original list or from the user's notes — keep concise, one line
-- No `| _Raised:_`, no Flagged section (profiles that couldn't be routed are omitted)
-- If Part 2 exceeds ~4000 characters, split further: Part 2a / Part 2b with _(continued)_ on second
-
----
-
-## Step 9 — Post to #automation-tests
-
-Post Part 1 first, then Part 2, to channel ID `C0AKKPK3J1K` using `slack_send_message`.
+Post the unified message to channel ID `C0AKKPK3J1K` using `slack_send_message`.
 
 Then output to terminal:
-> "Screened [N] companies (Part 1) + [M] profiles (Part 2) → posted to #automation-tests."
+> "Screened [N] companies + [M] profiles → posted to #automation-tests."
 
 ---
 
-## Step 10 — Ask for routing corrections
+## Step 9 — Ask for routing corrections
 
 Ask:
 > "Were any thesis routings wrong? If yes, tell me: 'CompanyName should be [Thesis]' and I'll learn it. Type 'no' to finish."
 
 ---
 
-## Step 11 — Learn from corrections (only if user provides them)
+## Step 10 — Learn from corrections (only if user provides them)
 
 For each routing correction:
 
