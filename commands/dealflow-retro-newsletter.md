@@ -67,6 +67,8 @@ If the user also provides a Dealroom CSV path, read it and merge using the same 
 
 **Country filter:** After applying the stage filter, remove any company whose headquarters is **not** in the following list: Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, United Kingdom, Switzerland, Norway. This explicitly excludes Turkey and any other non-listed country.
 
+**Minimum raise filter:** After applying the country filter, remove any company where the Money Raised is a **known value below €1,000,000** (or the equivalent in GBP, USD, SEK, or any other currency). If the amount is blank, "Undisclosed", or not provided, **keep** the company — do not penalize for non-disclosure.
+
 ---
 
 ## Step 4 — Enrich missing fields
@@ -82,21 +84,54 @@ Enrich all companies. If a website or description cannot be found or verified af
 
 ---
 
-## Step 5 — Preview structured table
+## Step 4.5 — Route by thesis
 
-Print the full structured table in the terminal:
+Route every company to one of the 5 theses using the description and company domain. Apply the routing test: is this company *building* AI/software infrastructure, or *using* it for a specific domain? Route to the domain if the latter.
+
+| What they build | Thesis |
+|---|---|
+| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, software/AI-first robotics | Future of Autonomous Work |
+| Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech |
+| Supply chain, logistics, manufacturing, materials, hardware/industrial robotics | Global Supply Chain |
+| Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infra | European Resilience |
+| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf |
+
+**Hardcoded routing rules:**
+- Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work
+- Robotics (software/AI-first: foundation models, robot OS, physical intelligence) → Future of Autonomous Work
+- Robotics (hardware/industrial/applied) → Global Supply Chain
+- Defense (including defense robotics) → European Resilience — overrides all other routing
+- Blockchain / crypto / web3 → Fintech
+
+If a company cannot be confidently routed after applying the table, pause and ask the user before proceeding. Do not place uncertain entries in a catch-all; flag them explicitly.
+
+---
+
+## Step 5 — Apply cap and preview structured table
+
+**50-company cap:** If more than 50 companies remain after all filters, sort by amount raised descending (largest first) and keep the top 50. Companies with unknown/undisclosed amounts rank last in this sort (keep them only if there is still room within 50). Print a note before the preview:
+
+> "[N] companies after filtering → capped to top 50 by raise amount."
+
+Print the structured preview grouped by thesis in the fixed section order:
 
 ```
 [N] companies — [Start Date] – [End Date]
 
+=== Future of Autonomous Work ===
 # | Company            | Country   | Stage    | Amount | Lead Investors        | Description                   | Did We See? | Affinity Entry
 --|--------------------|-----------|---------:|--------|----------------------|-------------------------------|-------------|---------------
-1 | Acme AI            | Germany   | Series A | €12M   | Sequoia, Index       | AI-powered logistics platform | (TBD)       | (TBD)
-2 | Beta Labs          | France    | Seed     | €3M    | Kima Ventures        | [needs review]                | (TBD)       | (TBD)
+1 | Acme AI            | Germany   | Seed     | €5M    | Sequoia              | AI-powered dev tool           | (TBD)       | (TBD)
+
+=== Fintech ===
+# | Company            | Country   | Stage    | Amount | Lead Investors        | Description                   | Did We See? | Affinity Entry
+2 | Beta Labs          | France    | Series A | €12M   | Kima Ventures        | Payments infra                | (TBD)       | (TBD)
 ...
 ```
 
-Note: "Did We See?" and "Affinity Entry" are shown as (TBD) at preview time — they will be filled in during Steps 6–7.
+Companies are numbered sequentially across all sections. Within each section, order is Pre-Seed → Seed → Series A. "Did We See?" and "Affinity Entry" are shown as (TBD) at preview time — filled in during Steps 6–7.
+
+Only include sections that have entries. Use the fixed order: Future of Autonomous Work → Fintech → Global Supply Chain → European Resilience → Surf and Turf.
 
 Then ask:
 
@@ -164,7 +199,7 @@ Write the file to `/Users/kvelasquez/Desktop/dealflow-retro-newsletter.html` usi
 
 Calculate:
 - **CW number**: ISO week number of the end date of the period
-- **Summary line**: "[N] rounds tracked. We saw [X] of them."
+- **Summary line**: "[N] rounds tracked across [X] thesis areas. We saw [Y] of them."
 
 Use this HTML structure:
 
@@ -199,6 +234,10 @@ Use this HTML structure:
 
 <p>Please find below this month's European funding round retro covering <strong>[Start Date] – [End Date]</strong>. [Summary line]</p>
 
+<!-- REPEAT THIS BLOCK FOR EACH THESIS SECTION THAT HAS ENTRIES — fixed order: Future of Autonomous Work, Fintech, Global Supply Chain, European Resilience, Surf and Turf -->
+
+<h3 style="font-family:Arial,sans-serif;font-size:13px;font-weight:bold;margin:28px 0 8px 0;padding-bottom:4px;border-bottom:2px solid #ddd;">[Thesis Name]</h3>
+
 <table style="border-collapse:collapse;width:100%;font-family:Arial,sans-serif;font-size:12px;">
   <tr>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">#</th>
@@ -210,10 +249,11 @@ Use this HTML structure:
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Description</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Did We See?</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Affinity Entry</th>
-    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Source</th>
   </tr>
-  <!-- INSERT ROWS HERE — one <tr> per company, all styles inline -->
+  <!-- INSERT ROWS FOR THIS THESIS SECTION — sort: not-seen first, then seen; within each group: Pre-Seed → Seed → Series A, then alphabetical -->
 </table>
+
+<!-- END REPEAT -->
 
 <p>Best,<br>Kieran</p>
 
@@ -238,7 +278,6 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;color:#555;">[Description or —]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:bold;color:[#1a7a1a if Yes, #c0392b if No];">[Yes or No]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[<a href="[affinity link]" style="color:#1a5fa8;">View in Affinity</a> if seen, — if not seen]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;color:#888;">[Crunchbase / EU-Startups / Dealroom]</td>
 </tr>
 ```
 
@@ -251,9 +290,9 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
 - **Did We See?**: "Yes" in green (`#1a7a1a`, bold) / "No" in light red (`#c0392b`, bold)
 - **Affinity Entry**: `<a href="[link]" style="color:#1a5fa8;">View in Affinity</a>` for seen companies; "—" for not seen
 
-### Sort order
+### Sort order (within each thesis section)
 
-Sort the table: companies **not seen** (No) first, alphabetically by company name; then companies seen (Yes), also alphabetical. This puts new/unseen deals at the top for the team's attention.
+Sort within each thesis section: companies **not seen** (No) first, then companies seen (Yes). Within each seen/not-seen group: Pre-Seed → Seed → Series A, then alphabetical by company name. Row numbers (#) are sequential across all sections.
 
 ---
 
@@ -271,6 +310,13 @@ Output:
 
 ```
 Done. [N] companies in this retro — [X] seen, [W] not seen.
+
+Breakdown:
+  Future of Autonomous Work: [N]
+  Fintech: [N]
+  Global Supply Chain: [N]
+  European Resilience: [N]
+  Surf and Turf: [N]
 
 To copy the email body into Gmail:
 1. Select all body text in the browser (manually, from "Hi everyone" to "Kieran")
@@ -293,7 +339,11 @@ Recipients and subject are shown above the body — copy those separately into t
 - Website URLs must be verified via WebFetch before embedding — never use an unverified URL in the checklist or HTML output
 - If Dealroom CSV is provided, its data takes precedence over Crunchbase on conflicting fields
 - Country whitelist: EU 27 + UK + Switzerland + Norway only — Turkey and all other countries are excluded at the filter stage
-- Sort order: not-seen companies first (alphabetical), then seen companies (alphabetical)
+- **Minimum raise filter:** Remove companies with a known raise below €1M equivalent. Keep undisclosed/blank amounts.
+- **50-company cap:** After all filters, if >50 remain, keep the 50 largest raises. Unknown amounts rank last in selection.
+- **Thesis routing:** Route every company using the routing table in Step 4.5. Ambiguous entries pause for user confirmation before proceeding.
+- **Thesis section order (fixed):** Future of Autonomous Work → Fintech → Global Supply Chain → European Resilience → Surf and Turf. Only include sections with entries.
+- **Sort order within each thesis section:** Not-seen (No) first, then seen (Yes). Within each group: Pre-Seed → Seed → Series A, then alphabetical by company name.
 - **Did We See?** styling: "Yes" bold green (`#1a7a1a`) / "No" bold light red (`#c0392b`)
 - **Affinity Entry**: "View in Affinity" hyperlink (`color:#1a5fa8`) for seen companies; "—" for not seen
 - Affinity Master Deals List: https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations
