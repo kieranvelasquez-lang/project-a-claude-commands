@@ -1,6 +1,6 @@
 ---
 description: Monthly European funding round retro — source, cross-reference Affinity, output email
-allowed-tools: Read, Write, WebFetch, WebSearch, Bash(open:*)
+allowed-tools: Read, Write, WebFetch, WebSearch, Bash(open:*), mcp__claude_ai_Affinity__search_companies, mcp__claude_ai_Affinity__get_company_list_entries
 ---
 
 # Deal Flow Retro Newsletter
@@ -141,42 +141,71 @@ Apply any corrections the user provides, then confirm the final count before mov
 
 ---
 
-## Step 6 — Affinity checklist
+## Step 6 — Automated Affinity check (MCP)
 
-Before outputting the checklist, look up the official website for each company (WebSearch if not already known from earlier steps). Then output a numbered list with company name and website for manual Affinity cross-reference:
+For each company in the list, run a two-call MCP lookup to determine master deals list membership and communication recency. Process all companies sequentially — no user input required.
+
+### Per-company logic
+
+**Call 1 — Search for the company:**
+
+Use `search_companies(term="[Company Name]", with_interaction_dates=true)`.
+
+- Pick the best match from results: exact name match first, then domain match. Use the company's verified website domain (from Step 4) to disambiguate if multiple results share a name.
+- If no results: retry with the company domain as the search term (e.g. `search_companies(term="solidroad.com", with_interaction_dates=true)`)
+- If still no results: mark as `[not found in Affinity]` — do NOT default to `no`
+
+**Call 2 — Check master deals list membership:**
+
+Use `get_company_list_entries(company_id=[id from Call 1])`.
+
+- If any entry has `listId: 99030` → company is on the master deals list
+- If no entry has `listId: 99030` → not on master deals list
+
+**Status decision:**
+
+| Condition | Status |
+|-----------|--------|
+| On list 99030 AND `last_interaction_date` ≥ today − 365 days | `active` |
+| On list 99030 AND `last_interaction_date` is null or > 365 days ago | `no` |
+| Found in Affinity but NOT on list 99030 | `no` |
+| Not found in Affinity (both search attempts failed) | `[not found in Affinity]` |
+
+The 12-month cutoff = today's date minus 365 days. Use `last_interaction_date` from the `search_companies` response.
+
+### Output after completing all lookups
 
 ```
-Affinity check — please verify each company below:
-https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations
+Affinity check complete — [N] companies processed.
 
- 1. Acme AI — https://acme.ai
- 2. Beta Labs — https://betalabs.com
- 3. Gamma Systems — https://gammasystems.io
- ...
-[N]. Last Company — https://...
+Active (in comms 12mo): [X]
+Not seen / inactive: [Y]
+Not found in Affinity: [Z]
+  → [company names]
 
-Paste results back as a simple list. For companies actively in communication within the last 12 months, include the master deals link:
-  1: active | https://projecta.affinity.co/companies/[id]
-  2: no
-  3: active | https://projecta.affinity.co/companies/[id]
+Active companies:
+  [Company] | last contact: [YYYY-MM-DD] | https://projecta.affinity.co/companies/[id]
   ...
 ```
 
-Wait for the user to paste their results before continuing.
+Then ask:
+> "Does this look correct? Any manual corrections before I generate the HTML? Type 'ok' to continue."
+
+Wait for the user's response before continuing.
 
 ---
 
-## Step 7 — Parse Affinity results
+## Step 7 — Apply Affinity results
 
-Parse each line from the user's response. Build a lookup:
+Apply any manual corrections the user provides from Step 6. Then build the internal lookup used for HTML generation:
 
-| Company | Active? | Master Deals Link |
-|---------|---------|-------------------|
-| Acme AI | Yes | https://projecta.affinity.co/companies/123 |
-| Beta Labs | No | — |
-| Gamma Systems | Yes | https://projecta.affinity.co/companies/456 |
+| Company | Active? | Affinity ID | Master Deals Link |
+|---------|---------|-------------|-------------------|
+| Acme AI | Yes | 289372786 | https://projecta.affinity.co/companies/289372786 |
+| Beta Labs | No | — | — |
+| Gamma Systems | [not found] | — | — |
 
-`active` = company is in the master deals list and there has been communication within the last 12 months. `no` = not in master deals list, or in it but no communication within 12 months.
+For `[not found in Affinity]` entries: render "Did We See?" as "No" (red) and "Master Deals Entry" as "—" in the HTML.
 
 ---
 
@@ -338,7 +367,7 @@ Recipients and subject are shown above the body — copy those separately into t
 - CW number = ISO week number of the period's **end date**
 - Country = country only, never city (strip city names from Crunchbase location strings)
 - Enrich all companies — only flag `[needs review]` if a specific field genuinely cannot be found or verified after searching. Descriptions must be 2–5 word category labels, never full sentences.
-- Website URLs must be verified via WebFetch before embedding — never use an unverified URL in the checklist or HTML output
+- Website URLs must be verified via WebFetch before embedding — never use an unverified URL in the HTML output
 - If Dealroom CSV is provided, its data takes precedence over Crunchbase on conflicting fields
 - Country whitelist: EU 27 + UK + Switzerland + Norway only — Turkey and all other countries are excluded at the filter stage
 - **Minimum raise filter:** Remove companies with a known raise below €1M equivalent. Keep undisclosed/blank amounts.
@@ -346,6 +375,7 @@ Recipients and subject are shown above the body — copy those separately into t
 - **Thesis routing:** Route every company using the routing table in Step 4.5. Ambiguous entries pause for user confirmation before proceeding.
 - **Thesis section order (fixed):** Future of Autonomous Work → Fintech → Global Supply Chain → European Resilience → Surf and Turf. Only include sections with entries.
 - **Sort order within each thesis section:** No first, then active (In Comms 12mo). Within each group: Pre-Seed → Seed → Series A, then alphabetical by company name.
-- **Did We See?** styling: "In Comms (12mo)" bold green (`#1a7a1a`) / "No" bold light red (`#c0392b`). Active = in master deals list + communication within last 12 months.
-- **Master Deals Entry**: "View in Affinity" hyperlink (`color:#1a5fa8`) for active companies; "—" for no
-- Affinity Master Deals List: https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations
+- **Did We See?** styling: "In Comms (12mo)" bold green (`#1a7a1a`) / "No" bold light red (`#c0392b`). Active = on master deals list (99030) + `last_interaction_date` within 365 days. `[not found in Affinity]` renders as "No".
+- **Master Deals Entry**: "View in Affinity" hyperlink (`color:#1a5fa8`) for active companies; "—" for no or not found
+- **Affinity MCP — Step 6 lookup:** `search_companies(with_interaction_dates=true)` → `get_company_list_entries` → check `listId: 99030`. Fallback: retry with domain. If both fail: mark `[not found in Affinity]`, never default to `no`.
+- Affinity Master Deals List ID: `99030` (URL: https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations)
