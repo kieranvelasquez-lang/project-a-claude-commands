@@ -76,11 +76,11 @@ If the user also provides a Dealroom CSV path, read it and merge using the same 
 For any row missing a website URL or a description:
 1. WebSearch `[Company Name] startup [Country]` to identify the likely official website
 2. **Verify the URL before using it**: WebFetch the homepage to confirm it resolves and the content matches the company
-   - If the fetch succeeds and content matches → use the URL and extract a 1-sentence description
+   - If the fetch succeeds and content matches → use the URL and extract a **2–5 word category label** describing what the company does (e.g., `Autonomous driving technology`, `B2B payments infrastructure`, `AI-native HR software`). Do not write full sentences or include founding context, university affiliations, or marketing language.
    - If the fetch returns an error (403, 404, timeout, domain-for-sale page, or unrelated content) → do **not** embed the URL; mark the website field as `[needs review]`
 3. Never embed a URL that has not been successfully verified via WebFetch
 
-Enrich all companies. If a website or description cannot be found or verified after searching, flag that specific row with `[needs review]` in the relevant field.
+Enrich all companies. If a website or description cannot be found or verified after searching, flag that specific row with `[needs review]` in the relevant field. Descriptions must always be 2–5 word category labels — never full sentences.
 
 ---
 
@@ -155,10 +155,10 @@ https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations
  ...
 [N]. Last Company — https://...
 
-Paste results back as a simple list. For seen companies, include the Affinity link:
-  1: seen | https://projecta.affinity.co/companies/[id]
-  2: not seen
-  3: seen | https://projecta.affinity.co/companies/[id]
+Paste results back as a simple list. For companies actively in communication within the last 12 months, include the master deals link:
+  1: active | https://projecta.affinity.co/companies/[id]
+  2: no
+  3: active | https://projecta.affinity.co/companies/[id]
   ...
 ```
 
@@ -170,11 +170,13 @@ Wait for the user to paste their results before continuing.
 
 Parse each line from the user's response. Build a lookup:
 
-| Company | Seen? | Affinity Link |
-|---------|-------|---------------|
+| Company | Active? | Master Deals Link |
+|---------|---------|-------------------|
 | Acme AI | Yes | https://projecta.affinity.co/companies/123 |
 | Beta Labs | No | — |
 | Gamma Systems | Yes | https://projecta.affinity.co/companies/456 |
+
+`active` = company is in the master deals list and there has been communication within the last 12 months. `no` = not in master deals list, or in it but no communication within 12 months.
 
 ---
 
@@ -248,9 +250,9 @@ Use this HTML structure:
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Lead Investors</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Description</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Did We See?</th>
-    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Affinity Entry</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Master Deals Entry</th>
   </tr>
-  <!-- INSERT ROWS FOR THIS THESIS SECTION — sort: not-seen first, then seen; within each group: Pre-Seed → Seed → Series A, then alphabetical -->
+  <!-- INSERT ROWS FOR THIS THESIS SECTION — sort: no first, then active; within each group: Pre-Seed → Seed → Series A, then alphabetical -->
 </table>
 
 <!-- END REPEAT -->
@@ -276,8 +278,8 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Amount or —]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Lead Investors or —]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;color:#555;">[Description or —]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:bold;color:[#1a7a1a if Yes, #c0392b if No];">[Yes or No]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[<a href="[affinity link]" style="color:#1a5fa8;">View in Affinity</a> if seen, — if not seen]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:bold;color:[#1a7a1a if active, #c0392b if no];">[In Comms (12mo) or No]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[<a href="[master deals link]" style="color:#1a5fa8;">View in Affinity</a> if active, — if no]</td>
 </tr>
 ```
 
@@ -286,9 +288,9 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
 - **Company**: always linked inline to website — `<a href="..." style="color:#000;text-decoration:underline;">Name</a>`; if no website available, plain text
 - **Amount**: format as "€12M" / "$5M" / "£8M" — omit the cell content (render as "—") if unknown; never write "Unknown"
 - **Lead Investors**: list up to 3 names; if more, append `+ N more`; render as "—" if unknown
-- **Description**: 1–2 sentence company description from enrichment; render as "—" if unavailable
-- **Did We See?**: "Yes" in green (`#1a7a1a`, bold) / "No" in light red (`#c0392b`, bold)
-- **Affinity Entry**: `<a href="[link]" style="color:#1a5fa8;">View in Affinity</a>` for seen companies; "—" for not seen
+- **Description**: 2–5 word category label from enrichment (e.g., `Autonomous driving technology`); render as "—" if unavailable
+- **Did We See?**: "In Comms (12mo)" in green (`#1a7a1a`, bold) / "No" in light red (`#c0392b`, bold)
+- **Master Deals Entry**: `<a href="[link]" style="color:#1a5fa8;">View in Affinity</a>` for active companies; "—" for no
 
 ### Sort order (within each thesis section)
 
@@ -309,7 +311,7 @@ open /Users/kvelasquez/Desktop/dealflow-retro-newsletter.html
 Output:
 
 ```
-Done. [N] companies in this retro — [X] seen, [W] not seen.
+Done. [N] companies in this retro — [X] active (in comms 12mo), [W] not seen.
 
 Breakdown:
   Future of Autonomous Work: [N]
@@ -335,7 +337,7 @@ Recipients and subject are shown above the body — copy those separately into t
 - Subject format: `Deal Flow Retro — CW [X] | [DD Mon] – [DD Mon YYYY]`
 - CW number = ISO week number of the period's **end date**
 - Country = country only, never city (strip city names from Crunchbase location strings)
-- Enrich all companies — only flag `[needs review]` if a specific field genuinely cannot be found or verified after searching
+- Enrich all companies — only flag `[needs review]` if a specific field genuinely cannot be found or verified after searching. Descriptions must be 2–5 word category labels, never full sentences.
 - Website URLs must be verified via WebFetch before embedding — never use an unverified URL in the checklist or HTML output
 - If Dealroom CSV is provided, its data takes precedence over Crunchbase on conflicting fields
 - Country whitelist: EU 27 + UK + Switzerland + Norway only — Turkey and all other countries are excluded at the filter stage
@@ -343,7 +345,7 @@ Recipients and subject are shown above the body — copy those separately into t
 - **50-company cap:** After all filters, if >50 remain, keep the 50 largest raises. Unknown amounts rank last in selection.
 - **Thesis routing:** Route every company using the routing table in Step 4.5. Ambiguous entries pause for user confirmation before proceeding.
 - **Thesis section order (fixed):** Future of Autonomous Work → Fintech → Global Supply Chain → European Resilience → Surf and Turf. Only include sections with entries.
-- **Sort order within each thesis section:** Not-seen (No) first, then seen (Yes). Within each group: Pre-Seed → Seed → Series A, then alphabetical by company name.
-- **Did We See?** styling: "Yes" bold green (`#1a7a1a`) / "No" bold light red (`#c0392b`)
-- **Affinity Entry**: "View in Affinity" hyperlink (`color:#1a5fa8`) for seen companies; "—" for not seen
+- **Sort order within each thesis section:** No first, then active (In Comms 12mo). Within each group: Pre-Seed → Seed → Series A, then alphabetical by company name.
+- **Did We See?** styling: "In Comms (12mo)" bold green (`#1a7a1a`) / "No" bold light red (`#c0392b`). Active = in master deals list + communication within last 12 months.
+- **Master Deals Entry**: "View in Affinity" hyperlink (`color:#1a5fa8`) for active companies; "—" for no
 - Affinity Master Deals List: https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations
