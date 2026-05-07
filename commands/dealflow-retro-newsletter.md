@@ -250,20 +250,20 @@ Use this HTML structure:
 </head>
 <body>
 
-<h2>Deal Flow Retro — CW [X] | [Start Date] – [End Date]</h2>
+<h2>Deal Flow Retro Newsletter — CW [X] | [Start Date] – [End Date]</h2>
 
 <div class="section-label">RECIPIENTS — paste into To: field</div>
 <div class="field-box">Investment Team &lt;investmentteam@project-a.vc&gt;, Anton Waitz &lt;anton.waitz@project-a.vc&gt;, Uwe Horstmann &lt;uwe.horstmann@project-a.vc&gt;, Florian Heinemann &lt;florian.heinemann@project-a.vc&gt;, Thies Sander &lt;thies.sander@project-a.vc&gt;, Philipp Werner &lt;philipp.werner@project-a.vc&gt;, Malin Posern &lt;malin.posern@project-a.vc&gt;, Jack Wang &lt;jack.wang@project-a.vc&gt;</div>
 
 <div class="section-label">SUBJECT</div>
-<div class="field-box">Deal Flow Retro — CW [X] | [DD Mon] – [DD Mon YYYY]</div>
+<div class="field-box">Deal Flow Retro Newsletter — CW [X] | [DD Mon] – [DD Mon YYYY]</div>
 
 <div class="section-label">BODY — select all text below and copy into Gmail</div>
 <div class="email-body">
 
 <p>Hi everyone,</p>
 
-<p>Please find below this month's European funding round retro covering <strong>[Start Date] – [End Date]</strong>. [Summary line]</p>
+<p>Please find below this month's European funding round retro newsletter covering <strong>[Start Date] – [End Date]</strong>. [Summary line]</p>
 
 <!-- REPEAT THIS BLOCK FOR EACH THESIS SECTION THAT HAS ENTRIES — fixed order: Future of Autonomous Work, Fintech, Global Supply Chain, European Resilience, Surf and Turf -->
 
@@ -363,7 +363,7 @@ Recipients and subject are shown above the body — copy those separately into t
 
 - Never write "Unknown" anywhere — omit values or use "—"
 - All table styles must be inline (Gmail strips `<style>` block rules on copy-paste)
-- Subject format: `Deal Flow Retro — CW [X] | [DD Mon] – [DD Mon YYYY]`
+- Subject format: `Deal Flow Retro Newsletter — CW [X] | [DD Mon] – [DD Mon YYYY]`
 - CW number = ISO week number of the period's **end date**
 - Country = country only, never city (strip city names from Crunchbase location strings)
 - Enrich all companies — only flag `[needs review]` if a specific field genuinely cannot be found or verified after searching. Descriptions must be 2–5 word category labels, never full sentences.
