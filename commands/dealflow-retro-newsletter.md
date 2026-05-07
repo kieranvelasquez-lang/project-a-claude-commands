@@ -31,7 +31,7 @@ Ask the user to export data from Crunchbase Pro:
 > 2. Set filters:
 >    - **Headquarters Location:** Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, United Kingdom, Switzerland, Norway
 >    - **Announced Date:** [Start Date] to [End Date]
->    - **Funding Type:** Pre-Seed, Seed, Series A
+>    - **Funding Type:** Pre-Seed, Seed *(Series A excluded — retro targets pre-seed for seed follow-on and seed for Series A follow-on)*
 > 3. Export to CSV
 > 4. Paste the file path here (e.g. ~/Downloads/crunchbase-export.csv)"
 
@@ -63,7 +63,7 @@ WebFetch the EU-Startups weekly funding round-up articles covering the same peri
 
 If the user also provides a Dealroom CSV path, read it and merge using the same deduplication logic. Dealroom data takes precedence over Crunchbase on conflicting fields.
 
-**Stage filter:** After merging all sources, remove any company whose stage is Series B, Series C, Series D, Growth Equity, or any round beyond Series A. Keep: Pre-Seed, Seed, Series A, Series A+, Undisclosed. Also remove VC fund closes (Fund, Fund Close) — these are not relevant. Do not include a "Source" column in the preview or the final email.
+**Stage filter:** After merging all sources, keep only Pre-Seed and Seed. Remove Series A, Series A+, Series B, Series C, Series D, Growth Equity, and any later stage. Also remove VC fund closes (Fund, Fund Close). Do not include a "Source" column in the preview or the final email.
 
 **Country filter:** After applying the stage filter, remove any company whose headquarters is **not** in the following list: Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, United Kingdom, Switzerland, Norway. This explicitly excludes Turkey and any other non-listed country.
 
@@ -119,17 +119,17 @@ Print the structured preview grouped by thesis in the fixed section order:
 [N] companies — [Start Date] – [End Date]
 
 === Future of Autonomous Work ===
-# | Company            | Country   | Stage    | Amount | Lead Investors        | Description                   | Did We See? | Affinity Entry
---|--------------------|-----------|---------:|--------|----------------------|-------------------------------|-------------|---------------
-1 | Acme AI            | Germany   | Seed     | €5M    | Sequoia              | AI-powered dev tool           | (TBD)       | (TBD)
+# | Company            | Country   | Stage     | Amount | Lead Investors        | Description                   | In Comms 12mo | Ever in Master Deals | Affinity Entry
+--|--------------------|-----------|---------:|--------|----------------------|-------------------------------|---------------|----------------------|---------------
+1 | Acme AI            | Germany   | Pre-Seed  | €5M    | Sequoia              | AI-powered dev tool           | (TBD)         | (TBD)                | (TBD)
 
 === Fintech ===
-# | Company            | Country   | Stage    | Amount | Lead Investors        | Description                   | Did We See? | Affinity Entry
-2 | Beta Labs          | France    | Series A | €12M   | Kima Ventures        | Payments infra                | (TBD)       | (TBD)
+# | Company            | Country   | Stage    | Amount | Lead Investors        | Description                   | In Comms 12mo | Ever in Master Deals | Affinity Entry
+2 | Beta Labs          | France    | Seed     | €12M   | Kima Ventures        | Payments infra                | (TBD)         | (TBD)                | (TBD)
 ...
 ```
 
-Companies are numbered sequentially across all sections. Within each section, order is Pre-Seed → Seed → Series A. "Did We See?" and "Affinity Entry" are shown as (TBD) at preview time — filled in during Steps 6–7.
+Companies are numbered sequentially across all sections. Within each section, order is **Pre-Seed first, then Seed** (alphabetical within each stage). "In Comms 12mo", "Ever in Master Deals", and "Affinity Entry" are shown as (TBD) at preview time — filled in during Steps 6–7.
 
 Only include sections that have entries. Use the fixed order: Future of Autonomous Work → Fintech → Global Supply Chain → European Resilience → Surf and Turf.
 
@@ -143,49 +143,43 @@ Apply any corrections the user provides, then confirm the final count before mov
 
 ## Step 6 — Automated Affinity check (MCP)
 
-For each company in the list, run a two-call MCP lookup to determine master deals list membership and communication recency. Process all companies sequentially — no user input required.
+For each company in the list, run MCP lookups to populate two independent columns: **"In Comms 12mo"** and **"Ever in Master Deals"**. Process all companies in parallel batches — no user input required.
 
 ### Per-company logic
 
 **Call 1 — Search for the company:**
 
-Use `search_companies(term="[Company Name]", with_interaction_dates=true)`.
+Use `search_companies(term="[Company Name]")`.
 
-- Pick the best match from results: exact name match first, then domain match. Use the company's verified website domain (from Step 4) to disambiguate if multiple results share a name.
-- If no results: retry with the company domain as the search term (e.g. `search_companies(term="solidroad.com", with_interaction_dates=true)`)
-- If still no results: mark as `[not found in Affinity]` — do NOT default to `no`
+- Pick the best match: exact name first, then domain match. Use the verified website domain (from Step 4) to disambiguate.
+- If no results: retry with the company domain as the search term
+- If still no results: mark company as `[not found in Affinity]` — both columns default to `No`
 
-**Call 2 — Check master deals list membership:**
+**Call 2 — Ever in Master Deals (list 99030, not time-bounded):**
 
 Use `get_company_list_entries(company_id=[id from Call 1])`.
 
-- If any entry has `listId: 99030` → company is on the master deals list
-- If no entry has `listId: 99030` → not on master deals list
+- If any entry has `listId: 99030` → **Ever in Master Deals = Yes**
+- If no entries or `Resource not found` error → **Ever in Master Deals = No**
 
-**Status decision:**
+**Call 3 — In Comms 12mo (notes check):**
 
-| Condition | Status |
-|-----------|--------|
-| On list 99030 AND `last_interaction_date` ≥ today − 365 days | `active` |
-| On list 99030 AND `last_interaction_date` is null or > 365 days ago | `no` |
-| Found in Affinity but NOT on list 99030 | `no` |
-| Not found in Affinity (both search attempts failed) | `[not found in Affinity]` |
+Use `get_notes_for_entity(entity_id=[id], entity_type=0)`.
 
-The 12-month cutoff = today's date minus 365 days. Use `last_interaction_date` from the `search_companies` response.
+- If any note has `createdAt` after (today − 365 days) → **In Comms 12mo = Yes**
+- If no qualifying notes → **In Comms 12mo = No**
+- Companies with `[not found in Affinity]` or global-only records that return `Resource not found` on list entries → **In Comms 12mo = No**
+
+The 12-month cutoff = today's date minus 365 days.
 
 ### Output after completing all lookups
 
 ```
 Affinity check complete — [N] companies processed.
 
-Active (in comms 12mo): [X]
-Not seen / inactive: [Y]
-Not found in Affinity: [Z]
-  → [company names]
-
-Active companies:
-  [Company] | last contact: [YYYY-MM-DD] | https://projecta.affinity.co/companies/[id]
-  ...
+In Comms 12mo (Yes): [X] — [company names]
+Ever in Master Deals (Yes): [Y] — [company names]
+Not found in Affinity: [Z] — [company names]
 ```
 
 Then ask:
@@ -199,13 +193,13 @@ Wait for the user's response before continuing.
 
 Apply any manual corrections the user provides from Step 6. Then build the internal lookup used for HTML generation:
 
-| Company | Active? | Affinity ID | Master Deals Link |
-|---------|---------|-------------|-------------------|
-| Acme AI | Yes | 289372786 | https://projecta.affinity.co/companies/289372786 |
-| Beta Labs | No | — | — |
-| Gamma Systems | [not found] | — | — |
+| Company | In Comms 12mo | Ever in Master Deals | Affinity ID | Affinity Link |
+|---------|---------------|----------------------|-------------|---------------|
+| Acme AI | Yes | Yes | 289372786 | https://www.affinity.co/companies/289372786 |
+| Beta Labs | No | No | — | — |
+| Gamma Systems | [not found] | [not found] | — | — |
 
-For `[not found in Affinity]` entries: render "Did We See?" as "No" (red) and "Master Deals Entry" as "—" in the HTML.
+For `[not found in Affinity]` entries: render both Affinity columns as "No" (red) and "Affinity Entry" as "—" in the HTML.
 
 ---
 
@@ -278,8 +272,9 @@ Use this HTML structure:
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Amount Raised</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Lead Investors</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Description</th>
-    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Did We See?</th>
-    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Master Deals Entry</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">In Comms 12mo</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Ever in Master Deals</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Affinity Entry</th>
   </tr>
   <!-- INSERT ROWS FOR THIS THESIS SECTION — sort: no first, then active; within each group: Pre-Seed → Seed → Series A, then alphabetical -->
 </table>
@@ -307,8 +302,9 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Amount or —]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Lead Investors or —]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;color:#555;">[Description or —]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:bold;color:[#1a7a1a if active, #c0392b if no];">[In Comms (12mo) or No]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[<a href="[master deals link]" style="color:#1a5fa8;">View in Affinity</a> if active, — if no]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:bold;color:[#1a7a1a if Yes, #c0392b if No];">[Yes or No]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:bold;color:[#1a7a1a if Yes, #c0392b if No];">[Yes or No]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[<a href="[affinity link]" style="color:#1a5fa8;">View</a> if found in Affinity, — if not]</td>
 </tr>
 ```
 
@@ -318,12 +314,13 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
 - **Amount**: format as "€12M" / "$5M" / "£8M" — omit the cell content (render as "—") if unknown; never write "Unknown"
 - **Lead Investors**: list up to 3 names; if more, append `+ N more`; render as "—" if unknown
 - **Description**: 2–5 word category label from enrichment (e.g., `Autonomous driving technology`); render as "—" if unavailable
-- **Did We See?**: "In Comms (12mo)" in green (`#1a7a1a`, bold) / "No" in light red (`#c0392b`, bold)
-- **Master Deals Entry**: `<a href="[link]" style="color:#1a5fa8;">View in Affinity</a>` for active companies; "—" for no
+- **In Comms 12mo**: "Yes" bold green (`#1a7a1a`) / "No" bold red (`#c0392b`). Based on Affinity notes with `createdAt` after today − 365 days. Notes OR email interactions qualify.
+- **Ever in Master Deals**: "Yes" bold green (`#1a7a1a`) / "No" bold red (`#c0392b`). Based on `listId: 99030` in `get_company_list_entries` — not time-bounded.
+- **Affinity Entry**: `<a href="..." style="color:#1a5fa8;">View</a>` for any company with an Affinity ID; "—" if not found in Affinity
 
 ### Sort order (within each thesis section)
 
-Sort within each thesis section: companies **not seen** (No) first, then companies seen (Yes). Within each seen/not-seen group: Pre-Seed → Seed → Series A, then alphabetical by company name. Row numbers (#) are sequential across all sections.
+Within each thesis section: **Pre-Seed rows first, then Seed rows** — alphabetical by company name within each stage. Row numbers (#) are sequential across all sections.
 
 ---
 
@@ -374,8 +371,9 @@ Recipients and subject are shown above the body — copy those separately into t
 - **50-company cap:** After all filters, if >50 remain, keep the 50 largest raises. Unknown amounts rank last in selection.
 - **Thesis routing:** Route every company using the routing table in Step 4.5. Ambiguous entries pause for user confirmation before proceeding.
 - **Thesis section order (fixed):** Future of Autonomous Work → Fintech → Global Supply Chain → European Resilience → Surf and Turf. Only include sections with entries.
-- **Sort order within each thesis section:** No first, then active (In Comms 12mo). Within each group: Pre-Seed → Seed → Series A, then alphabetical by company name.
-- **Did We See?** styling: "In Comms (12mo)" bold green (`#1a7a1a`) / "No" bold light red (`#c0392b`). Active = on master deals list (99030) + `last_interaction_date` within 365 days. `[not found in Affinity]` renders as "No".
-- **Master Deals Entry**: "View in Affinity" hyperlink (`color:#1a5fa8`) for active companies; "—" for no or not found
-- **Affinity MCP — Step 6 lookup:** `search_companies(with_interaction_dates=true)` → `get_company_list_entries` → check `listId: 99030`. Fallback: retry with domain. If both fail: mark `[not found in Affinity]`, never default to `no`.
+- **Sort order within each thesis section:** Pre-Seed rows first, then Seed rows. Alphabetical within each stage. Row numbers are sequential across all sections.
+- **In Comms 12mo**: "Yes" bold green (`#1a7a1a`) / "No" bold red (`#c0392b`). Check `get_notes_for_entity` — any note with `createdAt` > today − 365 days. `[not found in Affinity]` → No.
+- **Ever in Master Deals**: "Yes" bold green / "No" bold red. Check `get_company_list_entries` for `listId: 99030` — no date filter. `[not found in Affinity]` or `Resource not found` → No.
+- **Affinity Entry**: "View" hyperlink for any company with an Affinity ID; "—" if not found at all.
+- **Affinity MCP — Step 6 lookup:** `search_companies` → `get_company_list_entries` (Master Deals) + `get_notes_for_entity` (comms check). Fallback: retry with domain. If both fail: mark `[not found in Affinity]`.
 - Affinity Master Deals List ID: `99030` (URL: https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations)
