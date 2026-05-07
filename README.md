@@ -13,7 +13,7 @@ Custom Claude Code slash commands for the Project A investment team.
 | `/deal-flow-review` | Pulls deal flow for a specific team member + date range and sends a formatted DM to their Slack |
 | `/investment-team-dealflow-meetings` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
 | `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by thesis, and posts a signal digest to Slack |
-| `/dealflow-retro-newsletter` | Bi-weekly European funding round retro — imports Crunchbase Pro CSV, cross-references Affinity, outputs a formatted HTML email with direct Affinity entry links |
+| `/dealflow-retro-newsletter` | Monthly European funding round retro newsletter — imports Crunchbase Pro CSV, auto-checks Affinity MCP for active contact (12mo), outputs a formatted HTML email grouped by thesis |
 | `/dealflow-screener` | Paste any ad-hoc deal flow list — Claude enriches and routes companies (Part 1), then handles LinkedIn profiles with a user context step before routing (Part 2), posting both to #automation-tests |
 | `/call-prep` | Give Claude a company name, website, and/or pitch deck/memo — get back a concise VC investment brief (tech, team, traction, key questions) that opens as an HTML page in your browser |
 
@@ -238,17 +238,17 @@ Give Claude a company name plus any available materials (website URL, pitch deck
 ---
 
 ### `/dealflow-retro-newsletter`
-Bi-weekly digest of all European tech funding rounds. Import a Crunchbase Pro CSV export (filtered to Europe + date range), Claude supplements with EU-Startups WebFetch, you paste Affinity cross-reference results, and Claude generates a formatted HTML email table — ready to copy into Gmail and send to the investment team.
+Monthly digest of all European tech funding rounds. Import a Crunchbase Pro CSV export (filtered to Europe + date range), Claude supplements with EU-Startups WebFetch, routes companies by thesis, automatically checks Affinity MCP for active contact in the last 12 months, and generates a formatted HTML email — ready to copy into Gmail and send to the investment team.
 
 **Stage filter:** Only Pre-Seed, Seed, and Series A rounds are included. Series B and beyond, fund closes, and growth rounds are automatically excluded.
 
-**Affinity checklist:** Each company is listed with its website URL (for the Affinity scraper). For seen companies, paste the Affinity organisation URL inline — `1: seen | https://projecta.affinity.co/...`. The email table includes a clickable "Affinity Entry" link for each seen company so readers can self-serve.
+**Affinity check (automated):** Claude uses the Affinity MCP to look up every company against the Master Deals List (list 99030) and check `last-contact` date via relationship-intelligence fields. Companies contacted within 12 months are marked **"in comms 12mo"** (green). All companies present in Affinity get a "View in Affinity" link regardless of contact status — no manual paste-back required.
 
 **Recipients:** Investment Team, Anton Waitz, Uwe Horstmann, Florian Heinemann, Thies Sander, Philipp Werner, Malin Posern, Jack Wang.
 
-**Usage:** `/dealflow-retro-newsletter` then follow prompts (confirm date range → export Crunchbase CSV → Affinity check → email opens in browser)
+**Usage:** `/dealflow-retro-newsletter` then follow prompts (confirm date range → export Crunchbase CSV → Affinity check runs automatically → email opens in browser)
 
-**Requires:** Crunchbase Pro subscription (for CSV export). EU-Startups is fetched automatically as a supplementary source. Dealroom CSV can be provided alongside for better coverage if access is available.
+**Requires:** Crunchbase Pro subscription (for CSV export). Affinity MCP must be connected. EU-Startups is fetched automatically as a supplementary source. Dealroom CSV can be provided alongside for better coverage if access is available.
 
 ---
 
