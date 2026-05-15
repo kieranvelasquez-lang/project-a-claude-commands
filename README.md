@@ -8,13 +8,13 @@ Custom Claude Code slash commands for the Project A investment team.
 
 | Command | What it does |
 |---|---|
-| `/morning-recap` | Pulls new #deal-flow Slack messages, routes by thesis, and posts the Morning Recap to #automation-tests |
+| `/morning-recap` | Pulls new #deal-flow Slack messages, routes by deep dive, and posts the Morning Recap to #automation-tests |
 | `/net-new-affinity` | Takes Affinity scraper results and generates the Net New to Affinity post to #automation-tests |
 | `/deal-flow-review` | Pulls deal flow for a specific team member + date range and sends a formatted DM to their Slack |
 | `/investment-team-dealflow-meetings` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
-| `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by thesis, and posts a signal digest to Slack |
-| `/dealflow-retro-newsletter` | Monthly European funding round retro newsletter — imports Crunchbase Pro CSV, auto-checks Affinity MCP for active contact (12mo), outputs a formatted HTML email grouped by thesis |
-| `/dealflow-screener` | Paste any ad-hoc deal flow list — Claude enriches and routes companies (Part 1), then handles LinkedIn profiles with a user context step before routing (Part 2), posting both to #automation-tests |
+| `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by deep dive, and posts a signal digest to Slack |
+| `/dealflow-retro-newsletter` | Monthly European funding round retro newsletter — imports Crunchbase Pro CSV, auto-checks Affinity MCP for active contact (12mo), outputs a formatted HTML email grouped by deep dive |
+| `/dealflow-screener` | Paste any ad-hoc deal flow list — Claude enriches, routes companies and profiles by deep dive, and posts a unified digest to #automation-tests |
 | `/call-prep` | Give Claude a company name, website, and/or pitch deck/memo — get back a concise VC investment brief (tech, team, traction, key questions) that opens as an HTML page in your browser |
 
 ---
@@ -126,17 +126,27 @@ cp commands/*.md ~/.claude/commands/
 
 ---
 
-## Routing rules
+## Deep Dives 2.0 — Routing
 
-All commands use the same thesis routing table. A few hardcoded rules override the defaults:
+All commands use the same deep dive routing table (updated May 2026):
 
-- **Cybersecurity** → Future of Autonomous Work (not European Resilience)
-- **AI sales tools** (commissions, revenue ops) → Surf and Turf (not Fintech)
-- **Blockchain / crypto / web3** → Fintech (not Future of Autonomous Work)
-- **Energy companies** → Surf and Turf by default; software-based energy tags Oskar Lingk, hardware-based energy tags Miha Pavlovic
-- **Robotics — software/AI-first** (foundation models, physical intelligence, robot OS, AI frameworks) → Future of Autonomous Work
-- **Robotics — hardware/industrial/applied** (robot hardware, manufacturing automation, applied robotics) → Global Supply Chain, tags Miha Pavlovic as action item
-- **Defense** (including defense robotics) → European Resilience — nothing defense-related routes to Global Supply Chain
+| What they build | Deep Dive |
+|---|---|
+| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | **Autonomous Intelligence** (Daria, Oskar) |
+| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | **Industrial Autonomy** (Ciara, Oskar) |
+| Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | **Regulated Industries** (Marjorie, Oskar) |
+| Defense tech, military, weapons; space, semiconductors, quantum, frontier biotech, deep tech hardware | **European Resilience** (Jack, Omar, Miha) |
+
+**Hardcoded overrides:**
+- **Cybersecurity** — commercial pentesting/infosec/security tooling → Autonomous Intelligence; offensive/defense-grade → European Resilience
+- **AI sales tools** (commissions, revenue ops) → Autonomous Intelligence (not Regulated Industries)
+- **Blockchain / crypto / web3** → Regulated Industries (not Autonomous Intelligence)
+- **Energy** → Industrial Autonomy
+- **Robotics — software/AI-first** (foundation models, physical intelligence, robot OS) → Autonomous Intelligence
+- **Robotics — hardware/industrial/applied** → Industrial Autonomy; defense robotics stays European Resilience
+- **Biotech** — frontier (synthetic biology, genomics, drug discovery) → European Resilience (Frontier Tech, Omar); commercial healthtech/medtech/clinical → Regulated Industries
+
+**Section order (fixed across all skills):** Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience
 
 These rules are baked into every skill. Company-specific overrides live in your local corrections memory (see below).
 
@@ -157,13 +167,13 @@ These files live on **your machine only** — not in the repo. They're personal 
 ## Commands in detail
 
 ### `/morning-recap`
-Pulls every new message from #deal-flow since the last Morning Recap (auto-anchored), routes all deals to the correct thesis owner, captures any Slack-explicit action items, enriches entries missing a description, and posts a Morning Recap + Affinity Check List to #automation-tests. Runs automatically every weekday at 8am Berlin time.
+Pulls every new message from #deal-flow since the last Morning Recap (auto-anchored), routes all deals to the correct deep dive, captures any Slack-explicit action items, enriches entries missing a description, and posts a Morning Recap + Affinity Check List to #automation-tests.
 
 **Flow:** Auto-anchor → Pull Slack → Parse + route entries → Capture action items → Enrich missing descriptions → Post Morning Recap + Affinity Check List to #automation-tests
 
-**Anchor exclusion rule:** The last Morning Recap / Daily Dealflow post by Kieran is used as the time boundary only — its text is never parsed for company or LinkedIn entries, and its thread replies are also skipped entirely. Thread replies on that anchor message are where the Net New to Affinity post now lives, so they must not be processed here.
+**Anchor exclusion rule:** The last Morning Recap by Kieran is used as the time boundary only — its text is never parsed for company or LinkedIn entries, and its thread replies are also skipped entirely. Thread replies on that anchor message are where the Net New to Affinity post now lives, so they must not be processed here.
 
-**Affinity Check List format:** The second message posted to #automation-tests contains every entry from the Morning Recap — all thesis sections, including LinkedIn profiles — one per line, as plain URLs (not Slack `<url|text>` link syntax). Entries are not grouped by thesis and descriptions are omitted.
+**Affinity Check List format:** The second message posted to #automation-tests contains every entry from the Morning Recap — all deep dive sections, including LinkedIn profiles — one per line, as plain URLs (not Slack `<url|text>` link syntax). Entries are not grouped by deep dive and descriptions are omitted.
 
 **Requires:** Slack MCP
 
@@ -179,7 +189,7 @@ Run this after your Affinity scraper. Paste your found/not-found results, confir
 ---
 
 ### `/deal-flow-review`
-Given a team member's name and a date range, pulls all #deal-flow messages where they were tagged (action items) or where entries match their thesis (thesis matches). Formats a clean summary and sends it as a Slack DM to that person.
+Given a team member's name and a date range, pulls all #deal-flow messages where they were tagged (action items) or where entries match their deep dive (deep dive matches). Formats a clean summary and sends it as a Slack DM to that person.
 
 **Usage:** `/deal-flow-review` then enter a name when prompted and select a date range (this week / last 2 weeks / custom)
 
@@ -197,7 +207,7 @@ Paste a Granola meeting transcript and get back two ready-to-send email summarie
 ---
 
 ### `/evertrace-signals`
-Export a CSV from Evertrace, run this command, answer three questions (CSV path, week label, include stealth?), and get a clean signal digest posted to Slack. Companies are auto-routed to thesis owners. Previews in #automation-tests before posting to #deal-flow.
+Export a CSV from Evertrace, run this command, answer three questions (CSV path, week label, include stealth?), and get a clean signal digest posted to Slack. Companies are auto-routed to deep dive owners. Previews in #automation-tests before posting to #deal-flow.
 
 **Usage:** `/evertrace-signals` then follow prompts (drag CSV into terminal for path)
 
@@ -206,11 +216,11 @@ Export a CSV from Evertrace, run this command, answer three questions (CSV path,
 ---
 
 ### `/dealflow-screener`
-Paste any ad-hoc deal flow list (from an email, WhatsApp, DM, etc.) and get back two separate posts to #automation-tests.
+Paste any ad-hoc deal flow list (from an email, WhatsApp, DM, etc.) and get back a unified post to #automation-tests with companies and profiles merged by deep dive.
 
-**Part 1 — Companies:** Claude enriches every company entry (WebFetch if a URL is provided, WebSearch for exact-name matches only), routes to the correct thesis owners, and composes a clean digest. Flags entries with no exact match and asks for a URL before composing.
+**Companies:** Claude enriches every company entry (WebFetch if a URL is provided, WebSearch for exact-name matches only), routes to the correct deep dive, and composes a clean digest. Flags entries with no exact match and asks for a URL before composing.
 
-**Part 2 — Profiles:** LinkedIn profiles are handled separately. Profiles that already have context (inline background note) are routed directly. For profiles with no context, Claude pauses and surfaces a numbered list — you click through, write a brief note on each person, and Claude routes and composes Part 2 from your notes.
+**Profiles:** Profiles with an inline background note are routed directly. For profiles with no context, Claude pauses and surfaces a numbered list — you click through, write a brief note on each person, and Claude routes and includes them in the same unified message.
 
 **Enrichment rule:** Only uses web results where the company name is an exact match — never assumes or guesses. If the original list includes a description, that is kept even if no URL is found.
 
@@ -238,7 +248,7 @@ Give Claude a company name plus any available materials (website URL, pitch deck
 ---
 
 ### `/dealflow-retro-newsletter`
-Monthly digest of all European tech funding rounds. Import a Crunchbase Pro CSV export (filtered to Europe + date range), Claude supplements with EU-Startups WebFetch, routes companies by thesis, automatically checks Affinity MCP for active contact in the last 12 months, and generates a formatted HTML email — ready to copy into Gmail and send to the investment team.
+Monthly digest of all European tech funding rounds. Import a Crunchbase Pro CSV export (filtered to Europe + date range), Claude supplements with EU-Startups WebFetch, routes companies by deep dive, automatically checks Affinity MCP for active contact in the last 12 months, and generates a formatted HTML email — ready to copy into Gmail and send to the investment team.
 
 **Stage filter:** Only Pre-Seed, Seed, and Series A rounds are included. Series B and beyond, fund closes, and growth rounds are automatically excluded.
 
