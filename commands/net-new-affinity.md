@@ -9,21 +9,22 @@ Run this after `/morning-recap` has posted the Morning Recap and Affinity list t
 
 ## Thesis routing table
 
-| What they build | Thesis |
+| What they build | Deep Dive |
 |---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics (software/AI-architecture-first only — see hardcoded rules below) | Future of Autonomous Work |
-| Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech |
-| Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience |
-| Supply chain, logistics, manufacturing, materials, robotics (hardware/industrial/applied) | Global Supply Chain |
-| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence |
+| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy |
+| Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries |
+| Military, weapons, defense-facing, defense tech (DefenceTech) | European Resilience |
+| Space, semiconductors, quantum computing, frontier biotech, deep tech hardware (Frontier Tech) | European Resilience |
 
 **Hardcoded routing rules:**
-- Cybersecurity → Future of Autonomous Work, not European Resilience
-- AI sales tools → Surf and Turf, not Fintech
-- Blockchain / crypto / web3 → Fintech, not Future of Autonomous Work
-- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Future of Autonomous Work
-- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Global Supply Chain (defense robotics remains European Resilience — the existing defense rule takes precedence)
-- Biotech, chemistry, life sciences, physical sciences — pharma, medtech, synthetic biology, genomics, drug discovery, materials science → Surf and Turf. Add `| _Action: Malin Posern_` (`<@U0A9MUWM77Z>`).
+- Cybersecurity: commercial pentesting, infosec, security tooling → Autonomous Intelligence, not European Resilience. Offensive / defense-grade cybersecurity → European Resilience.
+- AI sales tools (commissions, sales enablement, revenue ops) → Autonomous Intelligence, not Regulated Industries
+- Blockchain / crypto / web3 → Regulated Industries, not Autonomous Intelligence
+- Energy companies → Industrial Autonomy
+- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Autonomous Intelligence
+- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Industrial Autonomy (defense robotics remains European Resilience — the existing defense rule takes precedence)
+- Biotech: frontier biotech (synthetic biology, genomics, drug discovery, materials science) → European Resilience (Frontier Tech). Commercial healthtech / medtech / clinical → Regulated Industries.
 
 ---
 
@@ -60,17 +61,14 @@ Match this format exactly:
 **Net New to Affinity — [Month D, YYYY]**
 _Entries not yet tracked in Affinity · [Month D, YYYY]_
 
-**Future of Autonomous Work**
+**Autonomous Intelligence**
 - <https://company.com|CompanyName>
 - <https://linkedin.com/in/handle|Full Name>
 
-**Global Supply Chain**
+**Industrial Autonomy**
 - <https://company.com|CompanyName>
 
-**Fintech**
-- <https://company.com|CompanyName>
-
-**Surf and Turf**
+**Regulated Industries**
 - <https://company.com|CompanyName>
 
 **European Resilience**
@@ -106,7 +104,7 @@ Then output:
 ## Step 6 — Ask for routing corrections
 
 Ask:
-> "Were any thesis routings wrong? If yes, tell me: 'CompanyName should be [Thesis]' and I'll learn it. Type 'no' to finish."
+> "Were any deep dive routings wrong? If yes, tell me: 'CompanyName should be [Deep Dive]' and I'll learn it. Type 'no' to finish."
 
 ---
 

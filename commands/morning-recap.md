@@ -8,17 +8,17 @@ allowed-tools: Read, Write, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_rea
 ## Team member Slack display names
 User IDs are hardcoded below — do not call `slack_search_users` for core team members.
 
-| Thesis | Member | User ID |
+| Deep Dive | Member | User ID |
 |---|---|---|
-| Future of Autonomous Work | Daria Gneusheva | `U0AA0044W1K` |
-| Future of Autonomous Work | Omar Hedeya | `U0A9MUM30AK` |
-| Fintech | Malin Posern | `U0A9MUWM77Z` |
-| Fintech | Marjorie Lengereau | `U0AAGADJCQ1` |
+| Autonomous Intelligence | Daria Gneusheva | `U0AA0044W1K` |
+| Autonomous Intelligence | Oskar Lingk | `U0AA1BDG7D4` |
+| Industrial Autonomy | Ciara Gumsheimer | `U0AA004TEQ5` |
+| Industrial Autonomy | Oskar Lingk | `U0AA1BDG7D4` |
+| Regulated Industries | Marjorie Lengereau | `U0AAGADJCQ1` |
+| Regulated Industries | Oskar Lingk | `U0AA1BDG7D4` |
 | European Resilience | Jack Wang | `U0A9X1FNV19` |
+| European Resilience | Omar Hedeya | `U0A9MUM30AK` |
 | European Resilience | Miha Pavlovic | `U0A9X1DAVTM` |
-| Global Supply Chain | Philipp Werner | `U0A9MUWK50X` |
-| Global Supply Chain | Oskar Lingk | `U0AA1BDG7D4` |
-| Surf and Turf | Ciara Gumsheimer | `U0AA004TEQ5` |
 
 ---
 
@@ -77,13 +77,13 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 
 **Otherwise, use default routing:**
 
-| What they build | Thesis | Team |
+| What they build | Deep Dive | Team |
 |---|---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics (software/AI-architecture-first only — see hardcoded rules below) | Future of Autonomous Work | Daria Gneusheva, Omar Hedeya |
-| Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech | Malin Posern, Marjorie Lengereau |
-| Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience | Jack Wang, Miha Pavlovic |
-| Supply chain, logistics, manufacturing, materials | Global Supply Chain | Philipp Werner, Oskar Lingk |
-| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf | Ciara Gumsheimer |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence | Daria Gneusheva, Oskar Lingk |
+| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy | Ciara Gumsheimer, Oskar Lingk |
+| Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries | Marjorie Lengereau, Oskar Lingk |
+| Military, weapons, defense-facing, defense tech (DefenceTech) | European Resilience | Jack Wang, Miha Pavlovic |
+| Space, semiconductors, quantum computing, frontier biotech, deep tech hardware (Frontier Tech) | European Resilience | Omar Hedeya, Miha Pavlovic |
 
 **Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
 - Building AI tools / infrastructure / agents → Future of Autonomous Work
@@ -92,13 +92,13 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 Never default to Future of Autonomous Work without applying this test first.
 
 **Hardcoded routing rules (confirmed corrections, already baked in):**
-- Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work, not European Resilience
-- AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
-- Blockchain / crypto / web3 startups → Fintech, not Future of Autonomous Work (even if building observability or tooling for blockchain networks)
-- Energy companies → Surf and Turf by default. If software-based energy → add `| _Action: Oskar Lingk_`. If hardware-based energy → add `| _Action: Miha Pavlovic_`. (Resolve to `<@USERID>` in Step 5.)
-- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Future of Autonomous Work
-- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Global Supply Chain | Action: Miha Pavlovic (defense robotics remains European Resilience — the existing defense rule takes precedence)
-- Biotech, chemistry, life sciences, physical sciences — pharma, medtech, synthetic biology, genomics, drug discovery, materials science → Surf and Turf by default. Add `| _Action: Malin Posern_`. (Resolve to `<@U0A9MUWM77Z>` in Step 5.)
+- Cybersecurity: commercial pentesting, infosec, security tooling → Autonomous Intelligence, not European Resilience. Offensive / defense-grade cybersecurity → European Resilience.
+- AI sales tools (commissions, sales enablement, revenue ops) → Autonomous Intelligence, not Regulated Industries
+- Blockchain / crypto / web3 startups → Regulated Industries, not Autonomous Intelligence (even if building observability or tooling for blockchain networks)
+- Energy companies → Industrial Autonomy (energy is explicit in this deep dive)
+- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Autonomous Intelligence
+- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Industrial Autonomy (defense robotics remains European Resilience — the existing defense rule takes precedence)
+- Biotech: frontier biotech (synthetic biology, genomics, drug discovery, materials science) → European Resilience (Frontier Tech — Omar). Commercial healthtech / medtech / clinical → Regulated Industries.
 
 ### 3c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.
@@ -155,21 +155,18 @@ Match this format exactly:
 **Morning Recap — [Month D, YYYY]**
 _Review of yesterday's dealflow · [Month D, YYYY]_
 
-**Future of Autonomous Work** <@DARIA_ID> <@OMAR_ID>
+**Autonomous Intelligence** <@U0AA0044W1K> <@U0AA1BDG7D4>
 - <https://company.com|CompanyName> — One-sentence description.
 - <https://company.com|CompanyName2> — One-sentence description. | _Action: <@USERID>_
 - <https://linkedin.com/in/handle|Full Name> — One-sentence bio/context.
 
-**Global Supply Chain** <@PHILIPP_ID> <@OSKAR_ID>
+**Industrial Autonomy** <@U0AA004TEQ5> <@U0AA1BDG7D4>
 - <https://company.com|CompanyName> — One-sentence description.
 
-**Fintech** <@MALIN_ID> <@MARJORIE_ID>
-- <https://company.com|CompanyName> — One-sentence description. | _Action: <@MARJORIE_ID>_
+**Regulated Industries** <@U0AAGADJCQ1> <@U0AA1BDG7D4>
+- <https://company.com|CompanyName> — One-sentence description. | _Action: <@U0AAGADJCQ1>_
 
-**Surf and Turf** <@CIARA_ID>
-- <https://company.com|CompanyName> — One-sentence description.
-
-**European Resilience** <@JACK_ID> <@MIHA_ID>
+**European Resilience** <@U0A9X1FNV19> <@U0A9MUM30AK> <@U0A9X1DAVTM>
 - <https://company.com|CompanyName> — One-sentence description.
 
 ---
@@ -180,7 +177,7 @@ _Review of yesterday's dealflow · [Month D, YYYY]_
 
 Rules:
 - Include **all** entries from the day — not just Net New. Companies already in Affinity belong here too.
-- Only include thesis sections that have entries.
+- Only include deep dive sections that have entries.
 - Only include "Flagged for Review" if there are actual flags.
 - One blank line between each thesis section.
 - Do **not** include `| _Raised:_` in the Recap — funding info belongs in `/net-new-affinity` only.
@@ -225,7 +222,7 @@ Then output to the terminal:
 ## Step 8 — Ask for routing corrections
 
 Ask:
-> "Were any thesis routings wrong? If yes, tell me: 'CompanyName should be [Thesis]' and I'll learn it. Type 'no' to finish."
+> "Were any deep dive routings wrong? If yes, tell me: 'CompanyName should be [Deep Dive]' and I'll learn it. Type 'no' to finish."
 
 ---
 
@@ -233,7 +230,7 @@ Ask:
 
 For each routing correction provided:
 
-1. Determine if this is **company-specific** (e.g. "AcmeCorp → Fintech") or **general** (e.g. "AI sales tools → Surf and Turf").
+1. Determine if this is **company-specific** (e.g. "AcmeCorp → Regulated Industries") or **general** (e.g. "AI sales tools → Autonomous Intelligence").
    - **General rules** should be baked directly into the hardcoded routing rules in Step 3b of this skill — ask Kieran to confirm before editing.
    - **Company-specific corrections** go into the staging file.
 
@@ -243,12 +240,12 @@ For each routing correction provided:
 # Morning Recap — Corrections Memory
 
 ## Staged Corrections (not yet baked into skill)
-<!-- Format: CompanyName → Thesis | added YYYY-MM-DD -->
+<!-- Format: CompanyName → Deep Dive | added YYYY-MM-DD -->
 ```
 
 3. Append only new entries (skip duplicates):
 ```
-- CompanyName → Thesis Name | added YYYY-MM-DD
+- CompanyName → Deep Dive Name | added YYYY-MM-DD
 ```
 
 4. Tell the user:

@@ -61,12 +61,11 @@ Apply theme assignments in this priority order:
 
 | Theme key | Short label | Keywords (case-insensitive regex) |
 |---|---|---|
-| `autonomous` | Future of Autonomous Work | `\bai\b`, `artificial intelligence`, `machine learning`, `saas`, `automation`, `developer tools`, `software`, `data analytics`, `no.?code`, `low.?code`, `cybersecurity`, `security`, `api`, `devops`, `cloud` |
-| `fintech` | Fintech | `payment`, `banking`, `neobank`, `crypto`, `blockchain`, `insurance`, `insurtech`, `regtech`, `accounting`, `legaltech`, `compliance`, `fintech`, `wealth`, `lending`, `invoice` |
-| `resilience` | European Resilience | `defence`, `defense`, `military`, `hardware`, `aerospace`, `materials`, `semiconductor`, `deep.?tech` |
-| `supplychain` | Global Supply Chain | `logistics`, `freight`, `warehousing`, `warehouse`, `procurement`, `shipping`, `e.?commerce`, `supply.?chain`, `retail`, `last.?mile`, `fulfilment`, `fulfillment`, `manufacturing`, `robotics` |
+| `autonomous` | Autonomous Intelligence | `\bai\b`, `artificial intelligence`, `machine learning`, `saas`, `automation`, `developer tools`, `software`, `data analytics`, `no.?code`, `low.?code`, `cybersecurity`, `security`, `api`, `devops`, `cloud`, `gaming`, `consumer`, `edtech`, `creator`, `fitness` |
+| `industrial` | Industrial Autonomy | `logistics`, `freight`, `warehousing`, `warehouse`, `procurement`, `shipping`, `supply.?chain`, `manufacturing`, `robotics`, `energy`, `cleantech`, `climate`, `construction`, `agriculture`, `agritech`, `last.?mile`, `fulfilment`, `fulfillment` |
+| `regulated` | Regulated Industries | `payment`, `banking`, `neobank`, `crypto`, `blockchain`, `insurance`, `insurtech`, `regtech`, `accounting`, `legaltech`, `compliance`, `fintech`, `wealth`, `lending`, `invoice`, `healthcare`, `health.?tech`, `real.?estate`, `proptech` |
+| `resilience` | European Resilience | `defence`, `defense`, `military`, `aerospace`, `semiconductor`, `quantum`, `space`, `deep.?tech`, `frontier` |
 | `biotech` | Biotech / Life Sciences | `biotech`, `life.?science`, `chemistry`, `pharma`, `medtech`, `genomics`, `synbio`, `synthetic.?biology`, `drug.?discovery`, `molecular`, `materials.?science` |
-| `other` | Surf and Turf | (catch-all — everything that matches none of the above, including energy, cleantech, climate) |
 
 Match in table order (first match wins). Apply name corrections from corrections memory to `First Name` and `Last Name` fields. Apply company name corrections to `Company Name` field.
 
@@ -78,14 +77,13 @@ Match in table order (first match wins). Apply name corrections from corrections
 
 | Theme key | Members | Slack pings |
 |---|---|---|
-| `autonomous` | Daria Gneusheva, Omar Hedeya | `<@U0AA0044W1K> <@U0A9MUM30AK>` |
-| `fintech` | Malin Posern, Marjorie Lengereau | `<@U0A9MUWM77Z> <@U0AAGADJCQ1>` |
-| `resilience` | Jack Wang, Miha Pavlovic | `<@U0A9X1FNV19> <@U0A9X1DAVTM>` |
-| `supplychain` | Philipp Werner, Oskar Lingk | `<@U0A9MUWK50X> <@U0AA1BDG7D4>` |
-| `biotech` | Malin Posern, Ciara Gumsheimer | `<@U0A9MUWM77Z> <@U0AA004TEQ5>` |
-| `other` | Ciara Gumsheimer | `<@U0AA004TEQ5>` |
+| `autonomous` | Daria Gneusheva, Oskar Lingk | `<@U0AA0044W1K> <@U0AA1BDG7D4>` |
+| `industrial` | Ciara Gumsheimer, Oskar Lingk | `<@U0AA004TEQ5> <@U0AA1BDG7D4>` |
+| `regulated` | Marjorie Lengereau, Oskar Lingk | `<@U0AAGADJCQ1> <@U0AA1BDG7D4>` |
+| `resilience` | Jack Wang, Omar Hedeya, Miha Pavlovic | `<@U0A9X1FNV19> <@U0A9MUM30AK> <@U0A9X1DAVTM>` |
+| `biotech` | Omar Hedeya, Marjorie Lengereau, Jack Wang | `<@U0A9MUM30AK> <@U0AAGADJCQ1> <@U0A9X1FNV19>` |
 
-### Theme order (always): autonomous → fintech → resilience → supplychain → biotech → other
+### Theme order (always): autonomous → industrial → regulated → resilience → biotech
 
 ### Part A — New Company entries, grouped by theme
 
@@ -179,7 +177,7 @@ Any corrections needed? Paste them (e.g. "CompanyX should be Fintech", "Name was
 ```
 
 If corrections are given, append them to `~/.claude/projects/-Users-kvelasquez-Projects/memory/evertrace-signals-corrections.md` under the appropriate section:
-- Theme routing overrides: `CompanyName → theme_key | added YYYY-MM-DD`
+- Theme routing overrides: `CompanyName → theme_key | added YYYY-MM-DD` (valid keys: `autonomous`, `industrial`, `regulated`, `resilience`, `biotech`)
 - Name corrections: `WRONG → CORRECT | added YYYY-MM-DD`
 - Company name corrections: `WRONG → CORRECT | added YYYY-MM-DD`
 

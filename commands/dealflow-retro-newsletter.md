@@ -86,22 +86,24 @@ Enrich all companies. If a website or description cannot be found or verified af
 
 ## Step 4.5 — Route by thesis
 
-Route every company to one of the 5 theses using the description and company domain. Apply the routing test: is this company *building* AI/software infrastructure, or *using* it for a specific domain? Route to the domain if the latter.
+Route every company to one of the 4 deep dives using the description and company domain. Apply the routing test: is this company *building* AI/software infrastructure, or *using* it for a specific domain? Route to the domain if the latter.
 
-| What they build | Thesis |
+| What they build | Deep Dive |
 |---|---|
-| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, software/AI-first robotics | Future of Autonomous Work |
-| Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech |
-| Supply chain, logistics, manufacturing, materials, hardware/industrial robotics | Global Supply Chain |
-| Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infra | European Resilience |
-| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf |
+| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence |
+| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy |
+| Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries |
+| Military, weapons, defense-facing, defense tech (DefenceTech) | European Resilience |
+| Space, semiconductors, quantum computing, frontier biotech, deep tech hardware (Frontier Tech) | European Resilience |
 
 **Hardcoded routing rules:**
-- Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work
-- Robotics (software/AI-first: foundation models, robot OS, physical intelligence) → Future of Autonomous Work
-- Robotics (hardware/industrial/applied) → Global Supply Chain
+- Cybersecurity: commercial pentesting, infosec, security tooling → Autonomous Intelligence. Offensive / defense-grade cybersecurity → European Resilience.
+- Robotics (software/AI-first: foundation models, robot OS, physical intelligence) → Autonomous Intelligence
+- Robotics (hardware/industrial/applied) → Industrial Autonomy
 - Defense (including defense robotics) → European Resilience — overrides all other routing
-- Blockchain / crypto / web3 → Fintech
+- Blockchain / crypto / web3 → Regulated Industries
+- Energy → Industrial Autonomy
+- Biotech: frontier biotech (synthetic biology, genomics, drug discovery, materials science) → European Resilience (Frontier Tech). Commercial healthtech / medtech / clinical → Regulated Industries.
 
 If a company cannot be confidently routed after applying the table, pause and ask the user before proceeding. Do not place uncertain entries in a catch-all; flag them explicitly.
 
@@ -113,17 +115,17 @@ If a company cannot be confidently routed after applying the table, pause and as
 
 > "[N] companies after filtering → capped to top 50 by raise amount."
 
-Print the structured preview grouped by thesis in the fixed section order:
+Print the structured preview grouped by deep dive in the fixed section order:
 
 ```
 [N] companies — [Start Date] – [End Date]
 
-=== Future of Autonomous Work ===
+=== Autonomous Intelligence ===
 # | Company            | Country   | Stage     | Amount | Lead Investors        | Description                   | In Comms 12mo | Ever in Master Deals | Affinity Entry
 --|--------------------|-----------|---------:|--------|----------------------|-------------------------------|---------------|----------------------|---------------
 1 | Acme AI            | Germany   | Pre-Seed  | €5M    | Sequoia              | AI-powered dev tool           | (TBD)         | (TBD)                | (TBD)
 
-=== Fintech ===
+=== Industrial Autonomy ===
 # | Company            | Country   | Stage    | Amount | Lead Investors        | Description                   | In Comms 12mo | Ever in Master Deals | Affinity Entry
 2 | Beta Labs          | France    | Seed     | €12M   | Kima Ventures        | Payments infra                | (TBD)         | (TBD)                | (TBD)
 ...
@@ -131,7 +133,7 @@ Print the structured preview grouped by thesis in the fixed section order:
 
 Companies are numbered sequentially across all sections. Within each section, order is **Pre-Seed first, then Seed** (alphabetical within each stage). "In Comms 12mo", "Ever in Master Deals", and "Affinity Entry" are shown as (TBD) at preview time — filled in during Steps 6–7.
 
-Only include sections that have entries. Use the fixed order: Future of Autonomous Work → Fintech → Global Supply Chain → European Resilience → Surf and Turf.
+Only include sections that have entries. Use the fixed order: Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience.
 
 Then ask:
 
@@ -259,9 +261,9 @@ Use this HTML structure:
 
 <p>Please find below this month's European funding round retro newsletter covering <strong>[Start Date] – [End Date]</strong>. [Summary line]</p>
 
-<!-- REPEAT THIS BLOCK FOR EACH THESIS SECTION THAT HAS ENTRIES — fixed order: Future of Autonomous Work, Fintech, Global Supply Chain, European Resilience, Surf and Turf -->
+<!-- REPEAT THIS BLOCK FOR EACH DEEP DIVE SECTION THAT HAS ENTRIES — fixed order: Autonomous Intelligence, Industrial Autonomy, Regulated Industries, European Resilience -->
 
-<h3 style="font-family:Arial,sans-serif;font-size:13px;font-weight:bold;margin:28px 0 8px 0;padding-bottom:4px;border-bottom:2px solid #ddd;">[Thesis Name]</h3>
+<h3 style="font-family:Arial,sans-serif;font-size:13px;font-weight:bold;margin:28px 0 8px 0;padding-bottom:4px;border-bottom:2px solid #ddd;">[Deep Dive Name]</h3>
 
 <table style="border-collapse:collapse;width:100%;font-family:Arial,sans-serif;font-size:12px;">
   <tr>
@@ -276,7 +278,7 @@ Use this HTML structure:
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Ever in Master Deals</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Affinity Entry</th>
   </tr>
-  <!-- INSERT ROWS FOR THIS THESIS SECTION — sort: no first, then active; within each group: Pre-Seed → Seed → Series A, then alphabetical -->
+  <!-- INSERT ROWS FOR THIS DEEP DIVE SECTION — sort: no first, then active; within each group: Pre-Seed → Seed → Series A, then alphabetical -->
 </table>
 
 <!-- END REPEAT -->
@@ -318,9 +320,9 @@ Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<s
 - **Ever in Master Deals**: "Yes" bold green (`#1a7a1a`) / "No" bold red (`#c0392b`). Based on `listId: 99030` in `get_company_list_entries` — not time-bounded.
 - **Affinity Entry**: `<a href="..." style="color:#1a5fa8;">View</a>` for any company with an Affinity ID; "—" if not found in Affinity
 
-### Sort order (within each thesis section)
+### Sort order (within each deep dive section)
 
-Within each thesis section: **Pre-Seed rows first, then Seed rows** — alphabetical by company name within each stage. Row numbers (#) are sequential across all sections.
+Within each deep dive section: **Pre-Seed rows first, then Seed rows** — alphabetical by company name within each stage. Row numbers (#) are sequential across all sections.
 
 ---
 
@@ -340,11 +342,10 @@ Output:
 Done. [N] companies in this retro — [X] active (in comms 12mo), [W] not seen.
 
 Breakdown:
-  Future of Autonomous Work: [N]
-  Fintech: [N]
-  Global Supply Chain: [N]
+  Autonomous Intelligence: [N]
+  Industrial Autonomy: [N]
+  Regulated Industries: [N]
   European Resilience: [N]
-  Surf and Turf: [N]
 
 To copy the email body into Gmail:
 1. Select all body text in the browser (manually, from "Hi everyone" to "Kieran")
@@ -369,9 +370,9 @@ Recipients and subject are shown above the body — copy those separately into t
 - Country whitelist: EU 27 + UK + Switzerland + Norway only — Turkey and all other countries are excluded at the filter stage
 - **Minimum raise filter:** Remove companies with a known raise below €1M equivalent. Keep undisclosed/blank amounts.
 - **50-company cap:** After all filters, if >50 remain, keep the 50 largest raises. Unknown amounts rank last in selection.
-- **Thesis routing:** Route every company using the routing table in Step 4.5. Ambiguous entries pause for user confirmation before proceeding.
-- **Thesis section order (fixed):** Future of Autonomous Work → Fintech → Global Supply Chain → European Resilience → Surf and Turf. Only include sections with entries.
-- **Sort order within each thesis section:** Pre-Seed rows first, then Seed rows. Alphabetical within each stage. Row numbers are sequential across all sections.
+- **Deep dive routing:** Route every company using the routing table in Step 4.5. Ambiguous entries pause for user confirmation before proceeding.
+- **Deep dive section order (fixed):** Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience. Only include sections with entries.
+- **Sort order within each deep dive section:** Pre-Seed rows first, then Seed rows. Alphabetical within each stage. Row numbers are sequential across all sections.
 - **In Comms 12mo**: "Yes" bold green (`#1a7a1a`) / "No" bold red (`#c0392b`). Check `get_notes_for_entity` — any note with `createdAt` > today − 365 days. `[not found in Affinity]` → No.
 - **Ever in Master Deals**: "Yes" bold green / "No" bold red. Check `get_company_list_entries` for `listId: 99030` — no date filter. `[not found in Affinity]` or `Resource not found` → No.
 - **Affinity Entry**: "View" hyperlink for any company with an Affinity ID; "—" if not found at all.

@@ -7,17 +7,17 @@ allowed-tools: Read, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_send_messa
 
 ## Team member → thesis mapping
 
-| Thesis | Member | User ID |
+| Deep Dive | Member | User ID |
 |---|---|---|
-| Future of Autonomous Work | Daria Gneusheva | `U0AA0044W1K` |
-| Future of Autonomous Work | Omar Hedeya | `U0A9MUM30AK` |
-| Fintech | Malin Posern | `U0A9MUWM77Z` |
-| Fintech | Marjorie Lengereau | `U0AAGADJCQ1` |
-| Global Supply Chain | Philipp Werner | `U0A9MUWK50X` |
-| Global Supply Chain | Oskar Lingk | `U0AA1BDG7D4` |
+| Autonomous Intelligence | Daria Gneusheva | `U0AA0044W1K` |
+| Autonomous Intelligence | Oskar Lingk | `U0AA1BDG7D4` |
+| Industrial Autonomy | Ciara Gumsheimer | `U0AA004TEQ5` |
+| Industrial Autonomy | Oskar Lingk | `U0AA1BDG7D4` |
+| Regulated Industries | Marjorie Lengereau | `U0AAGADJCQ1` |
+| Regulated Industries | Oskar Lingk | `U0AA1BDG7D4` |
 | European Resilience | Jack Wang | `U0A9X1FNV19` |
+| European Resilience | Omar Hedeya | `U0A9MUM30AK` |
 | European Resilience | Miha Pavlovic | `U0A9X1DAVTM` |
-| Surf and Turf | Ciara Gumsheimer | `U0AA004TEQ5` |
 
 ---
 
@@ -79,25 +79,25 @@ First, load staged corrections: read `~/.claude/projects/-Users-kvelasquez-Proje
 
 **Default routing table:**
 
-| What they build | Thesis |
+| What they build | Deep Dive |
 |---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, robotics | Future of Autonomous Work |
-| Fintech, payments, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Fintech |
-| Supply chain, logistics, manufacturing, materials | Global Supply Chain |
-| Defense, hardware, chips, non-GNSS navigation, industrial security, cloud infrastructure | European Resilience |
-| Health, biotech, edtech, consumer, gaming, fitness, energy, creator, construction, agriculture | Surf and Turf |
+| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence |
+| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy |
+| Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries |
+| Military, weapons, defense-facing, defense tech (DefenceTech) | European Resilience |
+| Space, semiconductors, quantum computing, frontier biotech, deep tech hardware (Frontier Tech) | European Resilience |
 
 **Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
-- Building AI tools / infrastructure / agents → Future of Autonomous Work
-- Using AI to solve a domain problem → route to that domain's thesis
+- Building AI tools / infrastructure / agents → Autonomous Intelligence
+- Using AI to solve a domain problem → route to that domain's deep dive
 
-Never default to Future of Autonomous Work without applying this test first.
+Never default to Autonomous Intelligence without applying this test first.
 
 **Hardcoded routing rules:**
-- Cybersecurity (pentesting, infosec, security tooling) → Future of Autonomous Work, not European Resilience
-- AI sales tools (commissions, sales enablement, revenue ops) → Surf and Turf, not Fintech
-- Blockchain / crypto / web3 → Fintech, not Future of Autonomous Work
-- Energy companies → Surf and Turf by default. If software-based → add `| _Action: Oskar Lingk_`. If hardware-based → add `| _Action: Miha Pavlovic_`. (Resolve to `<@USERID>` in Step 7.)
+- Cybersecurity: commercial pentesting, infosec, security tooling → Autonomous Intelligence, not European Resilience. Offensive / defense-grade cybersecurity → European Resilience.
+- AI sales tools (commissions, sales enablement, revenue ops) → Autonomous Intelligence, not Regulated Industries
+- Blockchain / crypto / web3 → Regulated Industries, not Autonomous Intelligence
+- Energy companies → Industrial Autonomy (energy is explicit in this deep dive)
 
 If a company still cannot be routed with confidence, place it in **⚠️ Flagged for Review**.
 
@@ -121,12 +121,11 @@ Wait for the user's response. Accept notes in any format (e.g. "1. robotics, ex-
 
 If all profiles already have context, skip this pause and proceed directly.
 
-**Profile routing** uses the same thesis table as companies — route based on domain expertise and background:
-- AI/ML engineers, AI researchers, AI infra → Future of Autonomous Work
-- Fintech, crypto, compliance professionals → Fintech
-- Supply chain, manufacturing, logistics → Global Supply Chain
-- Defense, aerospace, hardware, robotics (defense context) → European Resilience
-- Health, consumer, construction, energy, real estate → Surf and Turf
+**Profile routing** uses the same deep dive table as companies — route based on domain expertise and background:
+- AI/ML engineers, AI researchers, AI infra; consumer, gaming, edtech, fitness, creator → Autonomous Intelligence
+- Supply chain, manufacturing, logistics, energy, construction, agriculture → Industrial Autonomy
+- Fintech, crypto, compliance, healthcare, real estate → Regulated Industries
+- Defense, aerospace, hardware, frontier tech, space, semiconductors → European Resilience
 
 ---
 
@@ -143,23 +142,19 @@ Companies and profiles go into one single message, merged by thesis. Within each
 ```
 **Ad-hoc Deal Flow Screen — [Month D, YYYY]**
 
-**Future of Autonomous Work** <@DARIA_ID> <@OMAR_ID>
+**Autonomous Intelligence** <@U0AA0044W1K> <@U0AA1BDG7D4>
 - <https://company.com|CompanyName> — One-sentence description.
 - <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
-**Fintech** <@MALIN_ID> <@MARJORIE_ID>
+**Industrial Autonomy** <@U0AA004TEQ5> <@U0AA1BDG7D4>
 - <https://company.com|CompanyName> — One-sentence description.
 - <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
-**Global Supply Chain** <@PHILIPP_ID> <@OSKAR_ID>
+**Regulated Industries** <@U0AAGADJCQ1> <@U0AA1BDG7D4>
 - <https://company.com|CompanyName> — One-sentence description.
 - <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
-**European Resilience** <@JACK_ID> <@MIHA_ID>
-- <https://company.com|CompanyName> — One-sentence description.
-- <https://www.linkedin.com/in/slug/|Full Name> — background context note.
-
-**Surf and Turf** <@CIARA_ID>
+**European Resilience** <@U0A9X1FNV19> <@U0A9MUM30AK> <@U0A9X1DAVTM>
 - <https://company.com|CompanyName> — One-sentence description.
 - <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
@@ -168,11 +163,10 @@ Companies and profiles go into one single message, merged by thesis. Within each
 ```
 
 **Section order (fixed — never deviate):**
-1. Future of Autonomous Work
-2. Fintech
-3. Global Supply Chain
+1. Autonomous Intelligence
+2. Industrial Autonomy
+3. Regulated Industries
 4. European Resilience
-5. Surf and Turf
 
 **Formatting rules:**
 - Bold: `**double asterisk**`
@@ -203,7 +197,7 @@ Then output to terminal:
 ## Step 9 — Ask for routing corrections
 
 Ask:
-> "Were any thesis routings wrong? If yes, tell me: 'CompanyName should be [Thesis]' and I'll learn it. Type 'no' to finish."
+> "Were any deep dive routings wrong? If yes, tell me: 'CompanyName should be [Deep Dive]' and I'll learn it. Type 'no' to finish."
 
 ---
 
