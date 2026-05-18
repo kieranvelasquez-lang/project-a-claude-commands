@@ -8,7 +8,7 @@ allowed-tools: Read, Write, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_rea
 ## Team member Slack display names
 User IDs are hardcoded below — do not call `slack_search_users` for core team members.
 
-| Deep Dive | Member | User ID |
+| Thesis | Member | User ID |
 |---|---|---|
 | Autonomous Intelligence | Daria Gneusheva | `U0AA0044W1K` |
 | Autonomous Intelligence | Oskar Lingk | `U0AA1BDG7D4` |
@@ -29,7 +29,7 @@ Read `~/.claude/projects/-Users-kvelasquez-Projects/memory/morning-recap-correct
 This file is a **staging area** for new corrections that haven't yet been baked into the skill. The default routing rules below already incorporate all previously confirmed corrections.
 
 - If the file is empty or has no entries: proceed — no delta to apply.
-- If the file has entries: load them into context as overrides. Note them briefly (e.g. "1 staged correction: CompanyX → Surf and Turf"). These take precedence over default routing for any matching company name.
+- If the file has entries: load them into context as overrides. Note them briefly (e.g. "1 staged correction: CompanyX → Regulated Industries"). These take precedence over default routing for any matching company name.
 
 Do not re-read or re-explain the full routing table — just flag what's new.
 
@@ -77,28 +77,21 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 
 **Otherwise, use default routing:**
 
-| What they build | Deep Dive | Team |
+| What they build | Thesis | Team |
 |---|---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence | Daria Gneusheva, Oskar Lingk |
+| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence | Daria Gneusheva, Oskar Lingk |
 | Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy | Ciara Gumsheimer, Oskar Lingk |
 | Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries | Marjorie Lengereau, Oskar Lingk |
-| Military, weapons, defense-facing, defense tech (DefenceTech) | European Resilience | Jack Wang, Miha Pavlovic |
-| Space, semiconductors, quantum computing, frontier biotech, deep tech hardware (Frontier Tech) | European Resilience | Omar Hedeya, Miha Pavlovic |
-
-**Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
-- Building AI tools / infrastructure / agents → Future of Autonomous Work
-- Using AI to solve a domain problem (e.g. AI for insurance, AI for logistics, AI for plant breeding) → route to that domain's thesis
-
-Never default to Future of Autonomous Work without applying this test first.
+| Defense tech, military, weapons; space, semiconductors, quantum, frontier biotech, deep tech hardware | European Resilience | Jack Wang, Omar Hedeya, Miha Pavlovic |
 
 **Hardcoded routing rules (confirmed corrections, already baked in):**
-- Cybersecurity: commercial pentesting, infosec, security tooling → Autonomous Intelligence, not European Resilience. Offensive / defense-grade cybersecurity → European Resilience.
+- Cybersecurity — commercial pentesting/infosec/SOC/security tooling → Autonomous Intelligence; offensive/defense-grade → European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Autonomous Intelligence, not Regulated Industries
-- Blockchain / crypto / web3 startups → Regulated Industries, not Autonomous Intelligence (even if building observability or tooling for blockchain networks)
-- Energy companies → Industrial Autonomy (energy is explicit in this deep dive)
-- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Autonomous Intelligence
-- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Industrial Autonomy (defense robotics remains European Resilience — the existing defense rule takes precedence)
-- Biotech: frontier biotech (synthetic biology, genomics, drug discovery, materials science) → European Resilience (Frontier Tech — Omar). Commercial healthtech / medtech / clinical → Regulated Industries.
+- Blockchain / crypto / web3 → Regulated Industries (even if building tooling or infra for blockchain networks)
+- Energy → Industrial Autonomy
+- Robotics (software/AI-first — foundation models, physical intelligence, robot OS) → Autonomous Intelligence
+- Robotics (hardware/industrial/applied) → Industrial Autonomy; defense robotics → European Resilience
+- Biotech — frontier (synthetic biology, genomics, drug discovery) → European Resilience (Omar); commercial healthtech/medtech/clinical → Regulated Industries
 
 ### 3c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.
@@ -177,7 +170,7 @@ _Review of yesterday's dealflow · [Month D, YYYY]_
 
 Rules:
 - Include **all** entries from the day — not just Net New. Companies already in Affinity belong here too.
-- Only include deep dive sections that have entries.
+- Only include thesis sections that have entries.
 - Only include "Flagged for Review" if there are actual flags.
 - One blank line between each thesis section.
 - Do **not** include `| _Raised:_` in the Recap — funding info belongs in `/net-new-affinity` only.
@@ -222,7 +215,7 @@ Then output to the terminal:
 ## Step 8 — Ask for routing corrections
 
 Ask:
-> "Were any deep dive routings wrong? If yes, tell me: 'CompanyName should be [Deep Dive]' and I'll learn it. Type 'no' to finish."
+> "Were any thesis routings wrong? If yes, tell me: 'CompanyName should be [Thesis]' and I'll learn it. Type 'no' to finish."
 
 ---
 
@@ -230,7 +223,7 @@ Ask:
 
 For each routing correction provided:
 
-1. Determine if this is **company-specific** (e.g. "AcmeCorp → Regulated Industries") or **general** (e.g. "AI sales tools → Autonomous Intelligence").
+1. Determine if this is **company-specific** (e.g. "AcmeCorp → Fintech") or **general** (e.g. "AI sales tools → Surf and Turf").
    - **General rules** should be baked directly into the hardcoded routing rules in Step 3b of this skill — ask Kieran to confirm before editing.
    - **Company-specific corrections** go into the staging file.
 
@@ -240,12 +233,13 @@ For each routing correction provided:
 # Morning Recap — Corrections Memory
 
 ## Staged Corrections (not yet baked into skill)
-<!-- Format: CompanyName → Deep Dive | added YYYY-MM-DD -->
+<!-- Format: CompanyName → Thesis | added YYYY-MM-DD -->
+<!-- Valid theses: Autonomous Intelligence, Industrial Autonomy, Regulated Industries, European Resilience -->
 ```
 
 3. Append only new entries (skip duplicates):
 ```
-- CompanyName → Deep Dive Name | added YYYY-MM-DD
+- CompanyName → Thesis Name | added YYYY-MM-DD
 ```
 
 4. Tell the user:
