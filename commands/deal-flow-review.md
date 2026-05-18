@@ -5,8 +5,8 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 
 # Deal Flow Review
 
-## Team member → deep dive mapping
-| Deep Dive | Member | User ID |
+## Team member → thesis mapping
+| Thesis | Member | User ID |
 |---|---|---|
 | Autonomous Intelligence | Daria Gneusheva | `U0AA0044W1K` |
 | Autonomous Intelligence | Oskar Lingk | `U0AA1BDG7D4` |
@@ -20,27 +20,21 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 
 ---
 
-## Deep dive routing table
-| What they build | Deep Dive |
+## Thesis routing table
+| What they build | Thesis |
 |---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence |
+| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence |
 | Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy |
 | Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries |
-| Military, weapons, defense-facing, defense tech (DefenceTech) | European Resilience |
-| Space, semiconductors, quantum computing, frontier biotech, deep tech hardware (Frontier Tech) | European Resilience |
-
-**Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
-- Building AI tools / infrastructure / agents → Autonomous Intelligence
-- Using AI to solve a domain problem → route to that domain's deep dive
+| Defense tech, military, weapons; space, semiconductors, quantum, frontier biotech, deep tech hardware | European Resilience |
 
 **Hardcoded routing rules:**
-- Cybersecurity: commercial pentesting, infosec, security tooling → Autonomous Intelligence, not European Resilience. Offensive / defense-grade cybersecurity → European Resilience.
+- Cybersecurity — commercial pentesting/infosec/SOC/security tooling → Autonomous Intelligence; offensive/defense-grade → European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Autonomous Intelligence, not Regulated Industries
-- Blockchain / crypto / web3 → Regulated Industries, not Autonomous Intelligence
-- Energy companies → Industrial Autonomy (energy is explicit in this deep dive)
-- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Autonomous Intelligence
-- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Industrial Autonomy (defense robotics remains European Resilience — the existing defense rule takes precedence)
-- Biotech: frontier biotech (synthetic biology, genomics, drug discovery, materials science) → European Resilience (Frontier Tech). Commercial healthtech / medtech / clinical → Regulated Industries.
+- Blockchain / crypto / web3 → Regulated Industries
+- Energy → Industrial Autonomy
+- Robotics (software/AI-first) → Autonomous Intelligence; robotics (hardware/industrial/applied) → Industrial Autonomy; defense robotics → European Resilience
+- Biotech — frontier → European Resilience (Omar); commercial healthtech/medtech/clinical → Regulated Industries
 
 ---
 
@@ -49,7 +43,7 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 If not already provided in the arguments, ask the following two questions **separately and in order**:
 
 **Question 1 — Name:**
-Ask: "Who should I pull deal flow for?" — accept any free-text response (first name, full name, or nickname). Do not suggest or list any team member names. Once provided, use `slack_search_users` to resolve the full name and Slack user ID. Note their first name (for output headers) and look up which deep dive they belong to using the team member → deep dive mapping table above.
+Ask: "Who should I pull deal flow for?" — accept any free-text response (first name, full name, or nickname). Do not suggest or list any team member names. Once provided, use `slack_search_users` to resolve the full name and Slack user ID. Note their first name (for output headers) and look up which thesis they belong to using the team member → thesis mapping table above.
 
 **Question 2 — Date range:**
 After confirming the name, present exactly these three options:
@@ -86,8 +80,8 @@ For each message and thread, determine which of the following applies to the tar
 - Contains a plaintext `@FirstName` or `@FullName` reference, OR
 - Explicitly mentions the person in a tagging or routing context (e.g. "for Marjorie", "tagging Malin")
 
-**Deep Dive Match** — the entry:
-- Is relevant to the person's deep dive area (use the routing table above)
+**Thesis Match** — the entry:
+- Is relevant to the person's thesis area (use the routing table above)
 - Was NOT directly tagged to the person
 
 **Flagged** — anything anomalous:
@@ -117,7 +111,7 @@ Action Items (directly tagged to [First Name])
   ↳ Action: [why they were tagged — verbatim or summarized from Slack]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Deep Dive Matches ([Deep Dive Name] — not directly tagged)
+Thesis Matches ([Thesis Name] — not directly tagged)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 • [Company Name] — [One-sentence description]. | Sourced by: [name] · [Day, Mon DD]
@@ -163,7 +157,7 @@ Format the Slack message using Slack mrkdwn — *not* terminal unicode. Key diff
 - **Blank lines**: one blank line between each thematic section
 - **Raised / Sourced by / date** — keep inline as in the terminal version
 - **To-do list**: keep as a numbered list under `**Your to-do list:**`
-- End the message with the summary line: `[N] action items · [M] deep dive matches · Pulled from #deal-flow · [Start Date]–[End Date]`
+- End the message with the summary line: `[N] action items · [M] thesis matches · Pulled from #deal-flow · [Start Date]–[End Date]`
 - **Message length**: Slack has a ~4000 character practical limit. If the message exceeds this, split into two messages: Part 1 (Action Items + Flagged) and Part 2 (Thesis Matches + to-do list), with the title repeated and marked _(continued)_ on the second.
 
 After sending, confirm to the terminal: `Sent to [First Name]'s Slack DMs.`
@@ -175,5 +169,5 @@ After sending, confirm to the terminal: `Sent to [First Name]'s Slack DMs.`
 After the full output, print this final line:
 
 ```
-[N] action items · [M] deep dive matches · Pulled from #deal-flow · [Start Date]–[End Date]
+[N] action items · [M] thesis matches · Pulled from #deal-flow · [Start Date]–[End Date]
 ```

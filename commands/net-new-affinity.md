@@ -9,22 +9,20 @@ Run this after `/morning-recap` has posted the Morning Recap and Affinity list t
 
 ## Thesis routing table
 
-| What they build | Deep Dive |
+| What they build | Thesis |
 |---|---|
-| AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence |
+| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence |
 | Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy |
 | Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries |
-| Military, weapons, defense-facing, defense tech (DefenceTech) | European Resilience |
-| Space, semiconductors, quantum computing, frontier biotech, deep tech hardware (Frontier Tech) | European Resilience |
+| Defense tech, military, weapons; space, semiconductors, quantum, frontier biotech, deep tech hardware | European Resilience |
 
 **Hardcoded routing rules:**
-- Cybersecurity: commercial pentesting, infosec, security tooling → Autonomous Intelligence, not European Resilience. Offensive / defense-grade cybersecurity → European Resilience.
+- Cybersecurity — commercial pentesting/infosec/SOC/security tooling → Autonomous Intelligence; offensive/defense-grade → European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Autonomous Intelligence, not Regulated Industries
-- Blockchain / crypto / web3 → Regulated Industries, not Autonomous Intelligence
-- Energy companies → Industrial Autonomy
-- Robotics (software/AI-first) — foundation models for robotics, physical intelligence, robot OS, AI frameworks → Autonomous Intelligence
-- Robotics (hardware/industrial/applied) — robot hardware, manufacturing automation, applied robotics verticals → Industrial Autonomy (defense robotics remains European Resilience — the existing defense rule takes precedence)
-- Biotech: frontier biotech (synthetic biology, genomics, drug discovery, materials science) → European Resilience (Frontier Tech). Commercial healthtech / medtech / clinical → Regulated Industries.
+- Blockchain / crypto / web3 → Regulated Industries
+- Energy → Industrial Autonomy
+- Robotics (software/AI-first) → Autonomous Intelligence; robotics (hardware/industrial/applied) → Industrial Autonomy; defense robotics → European Resilience
+- Biotech — frontier → European Resilience (Omar); commercial healthtech/medtech/clinical → Regulated Industries
 
 ---
 
@@ -104,7 +102,7 @@ Then output:
 ## Step 6 — Ask for routing corrections
 
 Ask:
-> "Were any deep dive routings wrong? If yes, tell me: 'CompanyName should be [Deep Dive]' and I'll learn it. Type 'no' to finish."
+> "Were any thesis routings wrong? If yes, tell me: 'CompanyName should be [Thesis]' and I'll learn it. Type 'no' to finish."
 
 ---
 
@@ -123,6 +121,7 @@ For each routing correction provided:
 
 ## Staged Corrections (not yet baked into skill)
 <!-- Format: CompanyName → Thesis | added YYYY-MM-DD -->
+<!-- Valid theses: Autonomous Intelligence, Industrial Autonomy, Regulated Industries, European Resilience -->
 ```
 
 3. Append only new entries:

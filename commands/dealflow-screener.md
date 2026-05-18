@@ -84,20 +84,15 @@ First, load staged corrections: read `~/.claude/projects/-Users-kvelasquez-Proje
 | AI agents, orchestration, LLM infrastructure, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence |
 | Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy |
 | Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries |
-| Military, weapons, defense-facing, defense tech (DefenceTech) | European Resilience |
-| Space, semiconductors, quantum computing, frontier biotech, deep tech hardware (Frontier Tech) | European Resilience |
-
-**Critical routing test:** Is this company *building* AI, or *using* AI for a specific domain?
-- Building AI tools / infrastructure / agents → Autonomous Intelligence
-- Using AI to solve a domain problem → route to that domain's deep dive
-
-Never default to Autonomous Intelligence without applying this test first.
+| Defense tech, military, weapons; space, semiconductors, quantum, frontier biotech, deep tech hardware | European Resilience |
 
 **Hardcoded routing rules:**
-- Cybersecurity: commercial pentesting, infosec, security tooling → Autonomous Intelligence, not European Resilience. Offensive / defense-grade cybersecurity → European Resilience.
+- Cybersecurity — commercial pentesting/infosec/SOC/security tooling → Autonomous Intelligence; offensive/defense-grade → European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Autonomous Intelligence, not Regulated Industries
-- Blockchain / crypto / web3 → Regulated Industries, not Autonomous Intelligence
-- Energy companies → Industrial Autonomy (energy is explicit in this deep dive)
+- Blockchain / crypto / web3 → Regulated Industries
+- Energy → Industrial Autonomy
+- Robotics (software/AI-first) → Autonomous Intelligence; robotics (hardware/industrial/applied) → Industrial Autonomy; defense robotics → European Resilience
+- Biotech — frontier → European Resilience (Omar); commercial healthtech/medtech/clinical → Regulated Industries
 
 If a company still cannot be routed with confidence, place it in **⚠️ Flagged for Review**.
 
@@ -197,7 +192,7 @@ Then output to terminal:
 ## Step 9 — Ask for routing corrections
 
 Ask:
-> "Were any deep dive routings wrong? If yes, tell me: 'CompanyName should be [Deep Dive]' and I'll learn it. Type 'no' to finish."
+> "Were any thesis routings wrong? If yes, tell me: 'CompanyName should be [Thesis]' and I'll learn it. Type 'no' to finish."
 
 ---
 
