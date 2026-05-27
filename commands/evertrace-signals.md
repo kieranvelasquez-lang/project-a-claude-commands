@@ -8,15 +8,14 @@ You are processing a CSV export from Evertrace and posting a formatted signal di
 
 ---
 
-## Step 1 — Ask four questions upfront. Wait for a single combined response before proceeding.
+## Step 1 — Ask three questions upfront. Wait for a single combined response before proceeding.
 
 ```
-Four quick questions:
+Three quick questions:
 
 1. CSV file path? (drag the file into the terminal or paste the path)
 2. Week label? (auto-detected as "w/c [MONDAY_OF_CURRENT_ISO_WEEK]" — confirm or correct)
-3. Include stealth profiles? (yes/no)
-4. Theme mapping? Paste profile names grouped by theme — e.g. "autonomous: Cord, Robin Bilgil / fintech: Josep Nolla / other: Jakub". Use company name or founder name (partial is fine). Leave blank to use auto-detection as fallback.
+3. Theme mapping? Paste profile names grouped by theme — e.g. "autonomous: Cord, Robin Bilgil / industrial: Josep Nolla / regulated: Jakub / resilience: SomeName". Valid keys: autonomous, industrial, regulated, resilience. Use company name or founder name (partial is fine). Leave blank to use auto-detection as fallback.
 ```
 
 To compute the auto-detected week label: find today's date, determine which day of the week it is (Monday=1 … Sunday=7 in ISO week), subtract (dayOfWeek - 1) days to get Monday, format as "w/c D Mon YYYY" (e.g. "w/c 23 Mar 2026"). Show this in the question so Kieran can confirm or override.
@@ -83,26 +82,28 @@ Match in table order (first match wins — resilience and industrial checked bef
 
 ### Theme order (always): autonomous → industrial → regulated → resilience
 
-### Part A — New Company entries, grouped by theme
+### Unified list — all entries grouped by theme
 
 Header:
 ```
 **Evertrace Signals — w/c [DATE]**
 ```
 
-For each theme that has ≥1 New Company entry:
+For each theme that has ≥1 entry (New Company or Stealth):
 ```
 **[Short label]**  [tags]
-• [company bullet]
-• [company bullet]
+• [bullet]
+• [bullet]
 ```
 
-**Company bullet format:**
+Within each theme block: New Company entries first, then Stealth entries. No separator between them.
+
+**New Company bullet format:**
 ```
 • <https://WEBSITE|CompanyName> — Description. _(ex-Co1, Co2)_ | _Founder: <https://LINKEDIN_URL|First Last> | City, Country_
 ```
 
-Rules for building each part:
+Rules:
 - **Company link**: if `Company Website URL` is non-empty, wrap company name: `<https://url|CompanyName>`. If URL is empty, use plain `CompanyName`
 - **Description**: use `Company Description` if it is ≤120 chars and ends with `.`, `!`, or `?`. Otherwise omit it.
 - **ex- field**: take `Past Companies`, split by common delimiters (`,` `/` `|`), strip whitespace, exclude any token that looks like a university (contains: `university`, `université`, `universität`, `college`, `school`, `institute`, `academy`), take first 2 remaining tokens. Format: `_(ex-Co1, Co2)_`. If no valid tokens remain, omit the whole ex- field.
@@ -112,16 +113,12 @@ Rules for building each part:
 - If description is omitted, write: `• [company] [ex-field] | _Founder: [founder] | [location]_`
 - If ex-field is omitted, skip that part.
 
-### Part B — Stealth section (only if user said yes and there are stealth entries)
-
+**Stealth bullet format:**
 ```
-**Profiles — Stealth / Early Movers**
-
-**[Short label]**  [tags]
 • <https://www.linkedin.com/in/[handle]/|Full Name>, ex-Co1, Co2 (City, Country)
 ```
 
-Apply the same theme grouping and order. Stealth bullet rules:
+Rules:
 - Use LinkedIn URL if available, else construct from handle, else plain name
 - ex- companies: same filtering rules (max 2, no universities)
 - Location in parentheses at end

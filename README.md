@@ -207,7 +207,7 @@ Paste a Granola meeting transcript and get back two ready-to-send email summarie
 ---
 
 ### `/evertrace-signals`
-Export a CSV from Evertrace, run this command, answer three questions (CSV path, week label, include stealth?), and get a clean signal digest posted to Slack. Companies are auto-routed to deep dive owners. Previews in #automation-tests before posting to #deal-flow.
+Export a CSV from Evertrace, run this command, answer three questions (CSV path, week label, optional theme mapping), and get a clean signal digest posted to Slack. Stealth profiles are always included and merged inline with New Company entries per deep dive. Companies are auto-routed to deep dive owners.
 
 **Usage:** `/evertrace-signals` then follow prompts (drag CSV into terminal for path)
 
