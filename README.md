@@ -135,18 +135,21 @@ All commands use the same deep dive routing table (updated May 2026):
 | AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | **Autonomous Intelligence** (Daria, Oskar) |
 | Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | **Industrial Autonomy** (Ciara, Oskar) |
 | Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | **Regulated Industries** (Marjorie, Oskar) |
-| Defense tech, military, weapons; space, semiconductors, quantum, frontier biotech, deep tech hardware | **European Resilience** (Jack, Omar, Miha) |
+| Defense tech, military, weapons, space | **European Resilience** (Jack, Miha) |
+| Semiconductors, chips, quantum computing, novel computation; breakthrough energy hardware (novel generation/storage methods); frontier biotech (synthetic biology, genomics, drug discovery); novel AI architectures/paradigms, fundamental CS algorithm research | **Frontier Tech** (Jack, Omar) |
 
 **Hardcoded overrides:**
 - **Cybersecurity** — commercial pentesting/infosec/security tooling → Autonomous Intelligence; offensive/defense-grade → European Resilience
 - **AI sales tools** (commissions, revenue ops) → Autonomous Intelligence (not Regulated Industries)
 - **Blockchain / crypto / web3** → Regulated Industries (not Autonomous Intelligence)
-- **Energy** → Industrial Autonomy
+- **Energy software, cleantech SaaS, grid optimization** → Industrial Autonomy; breakthrough energy hardware (novel generation/storage technology) → Frontier Tech
 - **Robotics — software/AI-first** (foundation models, physical intelligence, robot OS) → Autonomous Intelligence
 - **Robotics — hardware/industrial/applied** → Industrial Autonomy; defense robotics stays European Resilience
-- **Biotech** — frontier (synthetic biology, genomics, drug discovery) → European Resilience (Frontier Tech, Omar); commercial healthtech/medtech/clinical → Regulated Industries
+- **Biotech** — frontier (synthetic biology, genomics, drug discovery) → Frontier Tech (Omar); commercial healthtech/medtech/clinical → Regulated Industries
+- **Semiconductors, chips, quantum computing** → Frontier Tech
+- **Fundamental AI research** (novel model architectures or paradigms, CS algorithm research) → Frontier Tech; applied AI products → Autonomous Intelligence
 
-**Section order (fixed across all skills):** Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience
+**Section order (fixed across all skills):** Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience → Frontier Tech
 
 These rules are baked into every skill. Company-specific overrides live in your local corrections memory (see below).
 

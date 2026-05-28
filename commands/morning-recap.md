@@ -17,8 +17,9 @@ User IDs are hardcoded below — do not call `slack_search_users` for core team 
 | Regulated Industries | Marjorie Lengereau | `U0AAGADJCQ1` |
 | Regulated Industries | Oskar Lingk | `U0AA1BDG7D4` |
 | European Resilience | Jack Wang | `U0A9X1FNV19` |
-| European Resilience | Omar Hedeya | `U0A9MUM30AK` |
 | European Resilience | Miha Pavlovic | `U0A9X1DAVTM` |
+| Frontier Tech | Jack Wang | `U0A9X1FNV19` |
+| Frontier Tech | Omar Hedeya | `U0A9MUM30AK` |
 
 ---
 
@@ -82,16 +83,19 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 | AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence | Daria Gneusheva, Oskar Lingk |
 | Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy | Ciara Gumsheimer, Oskar Lingk |
 | Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries | Marjorie Lengereau, Oskar Lingk |
-| Defense tech, military, weapons; space, semiconductors, quantum, frontier biotech, deep tech hardware | European Resilience | Jack Wang, Omar Hedeya, Miha Pavlovic |
+| Defense tech, military, weapons, space | European Resilience | Jack Wang, Miha Pavlovic |
+| Semiconductors, chips, quantum computing, novel computation; breakthrough energy hardware (novel generation/storage methods); frontier biotech (synthetic biology, genomics, drug discovery); novel AI architectures/paradigms, fundamental CS algorithm research | Frontier Tech | Jack Wang, Omar Hedeya |
 
 **Hardcoded routing rules (confirmed corrections, already baked in):**
 - Cybersecurity — commercial pentesting/infosec/SOC/security tooling → Autonomous Intelligence; offensive/defense-grade → European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Autonomous Intelligence, not Regulated Industries
 - Blockchain / crypto / web3 → Regulated Industries (even if building tooling or infra for blockchain networks)
-- Energy → Industrial Autonomy
+- Energy software, cleantech SaaS, grid optimization → Industrial Autonomy; breakthrough energy hardware (novel generation/storage technology) → Frontier Tech
 - Robotics (software/AI-first — foundation models, physical intelligence, robot OS) → Autonomous Intelligence
 - Robotics (hardware/industrial/applied) → Industrial Autonomy; defense robotics → European Resilience
-- Biotech — frontier (synthetic biology, genomics, drug discovery) → European Resilience (Omar); commercial healthtech/medtech/clinical → Regulated Industries
+- Biotech — frontier (synthetic biology, genomics, drug discovery) → Frontier Tech (Omar); commercial healthtech/medtech/clinical → Regulated Industries
+- Semiconductors, chips, quantum computing → Frontier Tech
+- Fundamental AI research (novel model architectures or paradigms, CS algorithm research) → Frontier Tech; applied AI products → Autonomous Intelligence
 
 ### 3c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.
@@ -159,7 +163,10 @@ _Review of yesterday's dealflow · [Month D, YYYY]_
 **Regulated Industries** <@U0AAGADJCQ1> <@U0AA1BDG7D4>
 - <https://company.com|CompanyName> — One-sentence description. | _Action: <@U0AAGADJCQ1>_
 
-**European Resilience** <@U0A9X1FNV19> <@U0A9MUM30AK> <@U0A9X1DAVTM>
+**European Resilience** <@U0A9X1FNV19> <@U0A9X1DAVTM>
+- <https://company.com|CompanyName> — One-sentence description.
+
+**Frontier Tech** <@U0A9X1FNV19> <@U0A9MUM30AK>
 - <https://company.com|CompanyName> — One-sentence description.
 
 ---
@@ -234,7 +241,7 @@ For each routing correction provided:
 
 ## Staged Corrections (not yet baked into skill)
 <!-- Format: CompanyName → Thesis | added YYYY-MM-DD -->
-<!-- Valid theses: Autonomous Intelligence, Industrial Autonomy, Regulated Industries, European Resilience -->
+<!-- Valid theses: Autonomous Intelligence, Industrial Autonomy, Regulated Industries, European Resilience, Frontier Tech -->
 ```
 
 3. Append only new entries (skip duplicates):

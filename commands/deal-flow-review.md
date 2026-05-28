@@ -15,8 +15,9 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 | Regulated Industries | Marjorie Lengereau | `U0AAGADJCQ1` |
 | Regulated Industries | Oskar Lingk | `U0AA1BDG7D4` |
 | European Resilience | Jack Wang | `U0A9X1FNV19` |
-| European Resilience | Omar Hedeya | `U0A9MUM30AK` |
 | European Resilience | Miha Pavlovic | `U0A9X1DAVTM` |
+| Frontier Tech | Jack Wang | `U0A9X1FNV19` |
+| Frontier Tech | Omar Hedeya | `U0A9MUM30AK` |
 
 ---
 
@@ -26,15 +27,18 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 | AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence |
 | Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy |
 | Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries |
-| Defense tech, military, weapons; space, semiconductors, quantum, frontier biotech, deep tech hardware | European Resilience |
+| Defense tech, military, weapons, space | European Resilience |
+| Semiconductors, chips, quantum computing, novel computation; breakthrough energy hardware (novel generation/storage methods); frontier biotech (synthetic biology, genomics, drug discovery); novel AI architectures/paradigms, fundamental CS algorithm research | Frontier Tech |
 
 **Hardcoded routing rules:**
 - Cybersecurity — commercial pentesting/infosec/SOC/security tooling → Autonomous Intelligence; offensive/defense-grade → European Resilience
 - AI sales tools (commissions, sales enablement, revenue ops) → Autonomous Intelligence, not Regulated Industries
 - Blockchain / crypto / web3 → Regulated Industries
-- Energy → Industrial Autonomy
+- Energy software, cleantech SaaS, grid optimization → Industrial Autonomy; breakthrough energy hardware (novel generation/storage technology) → Frontier Tech
 - Robotics (software/AI-first) → Autonomous Intelligence; robotics (hardware/industrial/applied) → Industrial Autonomy; defense robotics → European Resilience
-- Biotech — frontier → European Resilience (Omar); commercial healthtech/medtech/clinical → Regulated Industries
+- Biotech — frontier (synthetic biology, genomics, drug discovery) → Frontier Tech (Omar); commercial healthtech/medtech/clinical → Regulated Industries
+- Semiconductors, chips, quantum computing → Frontier Tech
+- Fundamental AI research (novel model architectures or paradigms, CS algorithm research) → Frontier Tech; applied AI products → Autonomous Intelligence
 
 ---
 
