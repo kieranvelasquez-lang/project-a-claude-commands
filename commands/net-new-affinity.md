@@ -18,11 +18,11 @@ Run this after `/morning-recap` has posted the Morning Recap and Affinity list t
 | Semiconductors, chips, quantum computing, novel computation; breakthrough energy hardware (novel generation/storage methods); frontier biotech (synthetic biology, genomics, drug discovery); novel AI architectures/paradigms, fundamental CS algorithm research | Frontier Tech |
 
 **Hardcoded routing rules:**
-- Cybersecurity — commercial pentesting/infosec/SOC/security tooling → Autonomous Intelligence; offensive/defense-grade → European Resilience
+- Cybersecurity — all cybersecurity (commercial pentesting/infosec/SOC/security tooling and offensive/defense-grade) → Frontier Tech (Omar)
 - AI sales tools (commissions, sales enablement, revenue ops) → Autonomous Intelligence, not Regulated Industries
 - Blockchain / crypto / web3 → Regulated Industries
 - Energy software, cleantech SaaS, grid optimization → Industrial Autonomy; breakthrough energy hardware (novel generation/storage technology) → Frontier Tech
-- Robotics (software/AI-first) → Autonomous Intelligence; robotics (hardware/industrial/applied) → Industrial Autonomy; defense robotics → European Resilience
+- Robotics (software/AI-first — foundation models, physical intelligence, robot OS) → Frontier Tech (Omar); robotics (hardware/industrial/applied) → Industrial Autonomy; defense robotics → European Resilience
 - Biotech — frontier (synthetic biology, genomics, drug discovery) → Frontier Tech (Omar); commercial healthtech/medtech/clinical → Regulated Industries
 - Semiconductors, chips, quantum computing → Frontier Tech
 - Fundamental AI research (novel model architectures or paradigms, CS algorithm research) → Frontier Tech; applied AI products → Autonomous Intelligence

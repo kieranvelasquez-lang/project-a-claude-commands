@@ -139,11 +139,11 @@ All commands use the same deep dive routing table (updated May 2026):
 | Semiconductors, chips, quantum computing, novel computation; breakthrough energy hardware (novel generation/storage methods); frontier biotech (synthetic biology, genomics, drug discovery); novel AI architectures/paradigms, fundamental CS algorithm research | **Frontier Tech** (Jack, Omar) |
 
 **Hardcoded overrides:**
-- **Cybersecurity** — commercial pentesting/infosec/security tooling → Autonomous Intelligence; offensive/defense-grade → European Resilience
+- **Cybersecurity** — all cybersecurity (commercial pentesting/infosec/SOC/security tooling and offensive/defense-grade) → Frontier Tech (Omar)
 - **AI sales tools** (commissions, revenue ops) → Autonomous Intelligence (not Regulated Industries)
 - **Blockchain / crypto / web3** → Regulated Industries (not Autonomous Intelligence)
 - **Energy software, cleantech SaaS, grid optimization** → Industrial Autonomy; breakthrough energy hardware (novel generation/storage technology) → Frontier Tech
-- **Robotics — software/AI-first** (foundation models, physical intelligence, robot OS) → Autonomous Intelligence
+- **Robotics — software/AI-first** (foundation models, physical intelligence, robot OS) → Frontier Tech (Omar)
 - **Robotics — hardware/industrial/applied** → Industrial Autonomy; defense robotics stays European Resilience
 - **Biotech** — frontier (synthetic biology, genomics, drug discovery) → Frontier Tech (Omar); commercial healthtech/medtech/clinical → Regulated Industries
 - **Semiconductors, chips, quantum computing** → Frontier Tech
