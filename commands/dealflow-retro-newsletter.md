@@ -1,17 +1,17 @@
 ---
 description: Monthly European funding round retro — source, cross-reference Affinity, output email
-allowed-tools: Read, Write, WebFetch, WebSearch, Bash(open:*), mcp__claude_ai_Affinity__search_companies, mcp__claude_ai_Affinity__get_company_list_entries
+allowed-tools: Read, Write, WebFetch, WebSearch, Bash(open:*), mcp__claude_ai_Affinity__search_companies, mcp__claude_ai_Affinity__semantic_search, mcp__claude_ai_Affinity__get_company_list_entries, mcp__claude_ai_Affinity__get_single_list_entry
 ---
 
 # Deal Flow Retro Newsletter
 
-Monthly digest of all European tech funding rounds — cross-referenced against Affinity — formatted as a ready-to-send email to the investment team and all partners.
+Monthly digest of European Pre-Seed and Seed funding rounds — cross-referenced against Affinity — formatted as a ready-to-send email to the investment team and all partners, organized by investment thesis.
 
 ---
 
 ## Step 1 — Confirm date range
 
-Based on today's date, suggest the most recently completed calendar month (e.g. if today is 1 Apr 2026, suggest "1 Mar – 31 Mar 2026").
+Based on today's date, suggest the most recently completed calendar month (e.g. if today is 1 Jun 2026, suggest "1 May – 31 May 2026").
 
 Ask the user:
 
@@ -31,7 +31,7 @@ Ask the user to export data from Crunchbase Pro:
 > 2. Set filters:
 >    - **Headquarters Location:** Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, United Kingdom, Switzerland, Norway
 >    - **Announced Date:** [Start Date] to [End Date]
->    - **Funding Type:** Pre-Seed, Seed *(Series A excluded — retro targets pre-seed for seed follow-on and seed for Series A follow-on)*
+>    - **Funding Type:** Pre-Seed, Seed
 > 3. Export to CSV
 > 4. Paste the file path here (e.g. ~/Downloads/crunchbase-export.csv)"
 
@@ -50,6 +50,14 @@ Read the CSV using the Read tool. Map columns flexibly — Crunchbase column nam
 
 If a column is missing or named differently, infer from context. Strip city names from Country (keep country only).
 
+**Name/domain mismatch check:** After parsing, flag any row where the company name and the Organization Website domain look inconsistent (e.g. company name is "CodeWords" but website is `agemo.ai`). Print the flagged rows and ask:
+> "The following companies have a potential name/website mismatch — please confirm the correct website URL before we continue:
+> - [Company Name]: CSV website is [url] — is this correct, or should I use a different URL?
+>
+> Type the correct URL or 'ok' to keep as-is."
+
+The website URL embedded in the HTML and used for Affinity domain searches must always come from the CSV (or a correction you provide here). Never substitute a different URL silently.
+
 ---
 
 ## Step 3 — Supplementary sourcing (EU-Startups)
@@ -59,155 +67,135 @@ WebFetch the EU-Startups weekly funding round-up articles covering the same peri
 1. Fetch `https://www.eu-startups.com/category/funding/` to find the relevant weekly articles for the date range
 2. Fetch each relevant article and parse: company name, country, amount, stage, investors, brief description
 3. Compare against the Crunchbase data by company name (case-insensitive, strip legal suffixes like "GmbH", "Ltd", "SAS")
-4. Add any companies NOT already present as supplementary entries — mark their source as "EU-Startups"
+4. Add any companies NOT already present as supplementary entries
 
 If the user also provides a Dealroom CSV path, read it and merge using the same deduplication logic. Dealroom data takes precedence over Crunchbase on conflicting fields.
 
-**Stage filter:** After merging all sources, keep only Pre-Seed and Seed. Remove Series A, Series A+, Series B, Series C, Series D, Growth Equity, and any later stage. Also remove VC fund closes (Fund, Fund Close). Do not include a "Source" column in the preview or the final email.
+**Stage filter:** After merging all sources, keep only: Pre-Seed, Seed. Remove everything else: Series A, Series A+, Series B+, Undisclosed, Fund closes, Growth Equity. Do not include a "Source" column in any output.
 
 **Country filter:** After applying the stage filter, remove any company whose headquarters is **not** in the following list: Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, United Kingdom, Switzerland, Norway. This explicitly excludes Turkey and any other non-listed country.
 
-**Minimum raise filter:** After applying the country filter, remove any company where the Money Raised is a **known value below €1,000,000** (or the equivalent in GBP, USD, SEK, or any other currency). If the amount is blank, "Undisclosed", or not provided, **keep** the company — do not penalize for non-disclosure.
-
 ---
 
-## Step 4 — Enrich missing fields
+## Step 4 — Preview structured table + curation
 
-For any row missing a website URL or a description:
-1. WebSearch `[Company Name] startup [Country]` to identify the likely official website
-2. **Verify the URL before using it**: WebFetch the homepage to confirm it resolves and the content matches the company
-   - If the fetch succeeds and content matches → use the URL and extract a **2–5 word category label** describing what the company does (e.g., `Autonomous driving technology`, `B2B payments infrastructure`, `AI-native HR software`). Do not write full sentences or include founding context, university affiliations, or marketing language.
-   - If the fetch returns an error (403, 404, timeout, domain-for-sale page, or unrelated content) → do **not** embed the URL; mark the website field as `[needs review]`
-3. Never embed a URL that has not been successfully verified via WebFetch
-
-Enrich all companies. If a website or description cannot be found or verified after searching, flag that specific row with `[needs review]` in the relevant field. Descriptions must always be 2–5 word category labels — never full sentences.
-
----
-
-## Step 4.5 — Route by thesis
-
-Route every company to one of the 4 deep dives using the description and company domain. Apply the routing test: is this company *building* AI/software infrastructure, or *using* it for a specific domain? Route to the domain if the latter.
-
-| What they build | Deep Dive |
-|---|---|
-| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence |
-| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy |
-| Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries |
-| Military, weapons, defense-facing, defense tech (DefenceTech) | European Resilience |
-| Space, semiconductors, quantum computing, frontier biotech, deep tech hardware (Frontier Tech) | European Resilience |
-
-**Hardcoded routing rules:**
-- Cybersecurity: commercial pentesting, infosec, security tooling → Autonomous Intelligence. Offensive / defense-grade cybersecurity → European Resilience.
-- Robotics (software/AI-first: foundation models, robot OS, physical intelligence) → Autonomous Intelligence
-- Robotics (hardware/industrial/applied) → Industrial Autonomy
-- Defense (including defense robotics) → European Resilience — overrides all other routing
-- Blockchain / crypto / web3 → Regulated Industries
-- Energy → Industrial Autonomy
-- Biotech: frontier biotech (synthetic biology, genomics, drug discovery, materials science) → European Resilience (Frontier Tech). Commercial healthtech / medtech / clinical → Regulated Industries.
-
-If a company cannot be confidently routed after applying the table, pause and ask the user before proceeding. Do not place uncertain entries in a catch-all; flag them explicitly.
-
----
-
-## Step 5 — Apply cap and preview structured table
-
-**50-company cap:** If more than 50 companies remain after all filters, sort by amount raised descending (largest first) and keep the top 50. Companies with unknown/undisclosed amounts rank last in this sort (keep them only if there is still room within 50). Print a note before the preview:
-
-> "[N] companies after filtering → capped to top 50 by raise amount."
-
-Print the structured preview grouped by deep dive in the fixed section order:
+Print the full filtered list as-is from the CSV/sources — **do not enrich yet**. Show whatever data is already present; missing fields display as "—".
 
 ```
-[N] companies — [Start Date] – [End Date]
+[N] companies after filtering — [Start Date] – [End Date]
 
-=== Autonomous Intelligence ===
-# | Company            | Country   | Stage     | Amount | Lead Investors        | Description                   | In Comms 12mo | Ever in Master Deals | Affinity Entry
---|--------------------|-----------|---------:|--------|----------------------|-------------------------------|---------------|----------------------|---------------
-1 | Acme AI            | Germany   | Pre-Seed  | €5M    | Sequoia              | AI-powered dev tool           | (TBD)         | (TBD)                | (TBD)
-
-=== Industrial Autonomy ===
-# | Company            | Country   | Stage    | Amount | Lead Investors        | Description                   | In Comms 12mo | Ever in Master Deals | Affinity Entry
-2 | Beta Labs          | France    | Seed     | €12M   | Kima Ventures        | Payments infra                | (TBD)         | (TBD)                | (TBD)
+# | Company            | Country   | Stage   | Amount | Lead Investors        | Description
+--|--------------------|-----------|---------:|--------|----------------------|------------------------------
+1 | Acme AI            | Germany   | Seed     | €12M   | Sequoia, Index       | AI-powered logistics platform
+2 | Beta Labs          | France    | Pre-Seed | —      | —                    | —
 ...
 ```
 
-Companies are numbered sequentially across all sections. Within each section, order is **Pre-Seed first, then Seed** (alphabetical within each stage). "In Comms 12mo", "Ever in Master Deals", and "Affinity Entry" are shown as (TBD) at preview time — filled in during Steps 6–7.
-
-Only include sections that have entries. Use the fixed order: Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience.
-
 Then ask:
 
-> "Does this look correct? Any companies to add, remove, or correct before we continue? Type 'ok' to proceed or describe your changes."
+> "Above is the full filtered list of [N] companies. Please select up to 50 to include in the retro:
+> - Type **'all'** to use everything (only if ≤50)
+> - List row numbers to **include**: e.g. `1,3,5-12,20`
+> - List row numbers to **remove**: e.g. `remove 4,7,15`"
 
-Apply any corrections the user provides, then confirm the final count before moving on.
+Apply the selection. Confirm final count before proceeding.
 
 ---
 
-## Step 6 — Automated Affinity check (MCP)
+## Step 5 — Enrich missing fields (selected 50 only)
 
-For each company in the list, run MCP lookups to populate two independent columns: **"In Comms 12mo"** and **"Ever in Master Deals"**. Process all companies in parallel batches — no user input required.
+Now enrich only the selected companies. For any row missing a website URL or a description:
+1. WebSearch `[Company Name] startup [Country]` to identify the likely official website
+2. **Verify the URL before using it**: WebFetch the homepage to confirm it resolves and the content matches the company
+   - If the fetch succeeds and content matches → use the URL and extract a 1-sentence description
+   - If the fetch returns an error (403, 404, timeout, domain-for-sale page, or unrelated content) → do **not** embed the URL; mark the website field as `[needs review]`
+3. Never embed a URL that has not been successfully verified via WebFetch
 
-### Per-company logic
-
-**Call 1 — Search for the company:**
-
-Use `search_companies(term="[Company Name]")`.
-
-- Pick the best match: exact name first, then domain match. Use the verified website domain (from Step 4) to disambiguate.
-- If no results: retry with the company domain as the search term
-- If still no results: mark company as `[not found in Affinity]` — both columns default to `No`
-
-**Call 2 — Ever in Master Deals (list 99030, not time-bounded):**
-
-Use `get_company_list_entries(company_id=[id from Call 1])`.
-
-- If any entry has `listId: 99030` → **Ever in Master Deals = Yes**
-- If no entries or `Resource not found` error → **Ever in Master Deals = No**
-
-**Call 3 — In Comms 12mo (notes check):**
-
-Use `get_notes_for_entity(entity_id=[id], entity_type=0)`.
-
-- If any note has `createdAt` after (today − 365 days) → **In Comms 12mo = Yes**
-- If no qualifying notes → **In Comms 12mo = No**
-- Companies with `[not found in Affinity]` or global-only records that return `Resource not found` on list entries → **In Comms 12mo = No**
-
-The 12-month cutoff = today's date minus 365 days.
-
-### Output after completing all lookups
-
-```
-Affinity check complete — [N] companies processed.
-
-In Comms 12mo (Yes): [X] — [company names]
-Ever in Master Deals (Yes): [Y] — [company names]
-Not found in Affinity: [Z] — [company names]
-```
-
-Then ask:
-> "Does this look correct? Any manual corrections before I generate the HTML? Type 'ok' to continue."
-
-Wait for the user's response before continuing.
+If a website or description cannot be found or verified after searching, flag that specific row with `[needs review]` in the relevant field.
 
 ---
 
-## Step 7 — Apply Affinity results
+## Step 6 — Thesis routing
 
-Apply any manual corrections the user provides from Step 6. Then build the internal lookup used for HTML generation:
+After curation, assign each company to one of the five thesis areas using its description, sector, and country.
 
-| Company | In Comms 12mo | Ever in Master Deals | Affinity ID | Affinity Link |
-|---------|---------------|----------------------|-------------|---------------|
-| Acme AI | Yes | Yes | 289372786 | https://www.affinity.co/companies/289372786 |
-| Beta Labs | No | No | — | — |
-| Gamma Systems | [not found] | [not found] | — | — |
+**Routing rules:**
+- **Autonomous Intelligence** — software/AI-first companies: AI agents, LLM platforms, autonomous software systems, AI-first robotics (software layer), developer tooling, data/AI infrastructure
+- **Industrial Autonomy** — hardware/applied companies: industrial robotics, manufacturing automation, supply chain hardware, logistics hardware, energy grid hardware
+- **Regulated Industries** — healthcare tech, fintech, legal tech, gov tech, insurance tech, compliance
+- **European Resilience** — defense, military, space, dual-use hardware, cybersecurity infrastructure (not consumer security)
+- **Frontier Tech** — semiconductors, quantum computing, frontier biotech, breakthrough energy hardware, novel AI architectures
 
-For `[not found in Affinity]` entries: render both Affinity columns as "No" (red) and "Affinity Entry" as "—" in the HTML.
+When a company spans two areas, pick the primary one based on what they're **selling**, not what they use internally (e.g. an AI company selling into manufacturing → Industrial Autonomy if the product is hardware/process automation; → Autonomous Intelligence if the product is software/AI).
+
+Print the routing table:
+
+```
+# | Company        | Assigned Thesis         | Reason
+--|----------------|-------------------------|--------------------------------------------
+1 | Acme AI        | Autonomous Intelligence | Software platform for warehouse automation
+2 | Beta Labs      | European Resilience     | Drone swarm systems for defense applications
+...
+```
+
+Ask:
+> "Any routing corrections? Type 'ok' to proceed or list corrections (e.g. `3: Industrial Autonomy`, `7: Frontier Tech`)."
+
+Apply corrections, then proceed.
+
+---
+
+## Step 7 — Affinity MCP contact check
+
+Run an automated check against the Affinity Master Deals List (list ID 99030). **First run on the initial 5 companies as a test batch** — print results and wait for confirmation before running the rest.
+
+### Per-company process
+
+**Step A — Find company in Affinity:**
+1. Call `search_companies(term=[Company Name])` → get `company_id`
+   - If no match, try `semantic_search(query=[Company Name] [Country])`
+   - If still no match → not in Affinity at all → `affinity_link = null`, `seen = false`, `in_contact_12mo = false`
+
+**Step B — Check Master Deals List (list 99030):**
+2. Call `get_company_list_entries(company_id=[company_id])` → look for an entry where `listId == 99030`
+   - If none found → not in Master Deals List → `affinity_link = https://projecta.affinity.co/companies/[company_id]` (company exists in Affinity but not in pipeline), `seen = false`, `in_contact_12mo = false`
+   - If found → record `list_entry_id`; set `affinity_link = https://projecta.affinity.co/companies/[company_id]`
+
+**Step C — Check contact history:**
+3. Call `get_single_list_entry(list_id=99030, list_entry_id=[list_entry_id], field_types=['relationship-intelligence'])`
+   - Look for both `last-contact` and `last-interaction` fields in the response
+   - If **both are null** → never contacted → `seen = false`, `in_contact_12mo = false`
+   - If **either has a date** → was contacted at some point → `seen = true`
+     - If that date is within the last 12 months → `in_contact_12mo = true`
+     - If that date is older than 12 months → `in_contact_12mo = false`
+
+### Test batch (first 5 companies)
+
+Print raw results for the first 5:
+
+```
+Test batch — 5 companies
+
+# | Company        | In Affinity? | In List 99030? | Last Contact / Interaction | Seen? | In Contact 12mo?
+--|----------------|--------------|----------------|---------------------------|-------|------------------
+1 | Acme AI        | Yes          | Yes            | 2025-09-03 (last-contact) | Yes   | Yes
+2 | Beta Labs      | Yes          | Yes            | 2023-02-16 (last-contact) | Yes   | No (old)
+3 | Gamma Systems  | Yes          | Yes            | null / null               | No    | No
+4 | Delta Corp     | Yes          | No             | —                         | No    | No
+5 | Echo Ventures  | No           | —              | —                         | No    | No
+```
+
+Ask:
+> "Does this test batch look correct? If the logic looks right, type 'continue' to run the remaining [N] companies. Otherwise describe any issues."
+
+Wait for confirmation, then run the full batch. After completing all companies, print the full summary table and ask:
+> "Full Affinity check complete. Does this look correct? Type 'ok' to proceed."
 
 ---
 
 ## Step 8 — Pre-HTML missing info check
 
-Before generating the HTML, scan all companies for missing data. If any row is still missing a website URL, lead investors, or description (including any flagged `[needs review]`), pause and output:
+Before generating HTML, scan all 50 companies for missing data. If any row still has `[needs review]` in website, lead investors, or description, pause and output:
 
 > "The following companies are missing information — please provide corrections before I generate the HTML:
 > - [Company]: missing [website / lead investors / description]
@@ -225,10 +213,10 @@ Wait for the user's response and apply any corrections before proceeding.
 Write the file to `/Users/kvelasquez/Desktop/dealflow-retro-newsletter.html` using the Write tool.
 
 Calculate:
-- **CW number**: ISO week number of the end date of the period
-- **Summary line**: "[N] rounds tracked across [X] thesis areas. We saw [Y] of them."
+- **CW number**: ISO week number of the **end date** of the period
+- **Summary line**: "[N] rounds tracked across 5 thesis areas. [X] seen, [Y] in contact within 12 months."
 
-Use this HTML structure:
+### HTML structure
 
 ```html
 <!DOCTYPE html>
@@ -261,27 +249,23 @@ Use this HTML structure:
 
 <p>Please find below this month's European funding round retro newsletter covering <strong>[Start Date] – [End Date]</strong>. [Summary line]</p>
 
-<!-- REPEAT THIS BLOCK FOR EACH DEEP DIVE SECTION THAT HAS ENTRIES — fixed order: Autonomous Intelligence, Industrial Autonomy, Regulated Industries, European Resilience -->
-
-<h3 style="font-family:Arial,sans-serif;font-size:13px;font-weight:bold;margin:28px 0 8px 0;padding-bottom:4px;border-bottom:2px solid #ddd;">[Deep Dive Name]</h3>
-
-<table style="border-collapse:collapse;width:100%;font-family:Arial,sans-serif;font-size:12px;">
+<!-- ONE SECTION PER THESIS — repeat this block 5 times -->
+<h3 style="font-family:Arial,sans-serif;font-size:14px;margin:28px 0 10px 0;border-left:3px solid #444;padding-left:10px;">[Thesis Name]</h3>
+<table style="border-collapse:collapse;width:100%;font-family:Arial,sans-serif;font-size:12px;margin-bottom:32px;">
   <tr>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">#</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Company</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Country</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Stage</th>
-    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Amount Raised</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Amount</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Lead Investors</th>
     <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Description</th>
-    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">In Comms 12mo</th>
-    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Ever in Master Deals</th>
-    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Affinity Entry</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Seen?</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">In Contact (12mo)?</th>
+    <th style="background:#f0f0f0;text-align:left;padding:8px 10px;border:1px solid #ddd;">Affinity</th>
   </tr>
-  <!-- INSERT ROWS FOR THIS DEEP DIVE SECTION — sort: no first, then active; within each group: Pre-Seed → Seed → Series A, then alphabetical -->
+  <!-- INSERT ROWS HERE -->
 </table>
-
-<!-- END REPEAT -->
 
 <p>Best,<br>Kieran</p>
 
@@ -290,39 +274,45 @@ Use this HTML structure:
 </html>
 ```
 
-### Table row format
+### Row template (all styles inline — Gmail strips style blocks)
 
-Each company gets one `<tr>`. All styles must be **inline** — Gmail strips `<style>` block rules on copy-paste.
-
-**Row template:**
 ```html
-<tr style="background:[#fff or #fafafa for alternating];">
+<tr style="background:[#fff or #fafafa alternating];">
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[#]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;"><a href="[website]" style="color:#000;text-decoration:underline;">[Company Name]</a></td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Country]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Stage]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Amount or —]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Pre-Seed or Seed]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[€12M or —]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[Lead Investors or —]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;color:#555;">[Description or —]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:bold;color:[#1a7a1a if Yes, #c0392b if No];">[Yes or No]</td>
   <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;font-weight:bold;color:[#1a7a1a if Yes, #c0392b if No];">[Yes or No]</td>
-  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[<a href="[affinity link]" style="color:#1a5fa8;">View</a> if found in Affinity, — if not]</td>
+  <td style="padding:7px 10px;border:1px solid #ddd;vertical-align:top;">[<a href="[affinity link]" style="color:#1a5fa8;">View</a> or —]</td>
 </tr>
 ```
 
+### Sort order within each thesis table
+
+1. Pre-Seed rows first, then Seed rows
+2. Within each stage group: Seen=No rows first (alphabetical), then Seen=Yes rows (alphabetical)
+
+### Thesis table order in the email
+
+1. Autonomous Intelligence
+2. Industrial Autonomy
+3. Regulated Industries
+4. European Resilience
+5. Frontier Tech
+
 ### Field rules
 
-- **Company**: always linked inline to website — `<a href="..." style="color:#000;text-decoration:underline;">Name</a>`; if no website available, plain text
-- **Amount**: format as "€12M" / "$5M" / "£8M" — omit the cell content (render as "—") if unknown; never write "Unknown"
-- **Lead Investors**: list up to 3 names; if more, append `+ N more`; render as "—" if unknown
-- **Description**: 2–5 word category label from enrichment (e.g., `Autonomous driving technology`); render as "—" if unavailable
-- **In Comms 12mo**: "Yes" bold green (`#1a7a1a`) / "No" bold red (`#c0392b`). Based on Affinity notes with `createdAt` after today − 365 days. Notes OR email interactions qualify.
-- **Ever in Master Deals**: "Yes" bold green (`#1a7a1a`) / "No" bold red (`#c0392b`). Based on `listId: 99030` in `get_company_list_entries` — not time-bounded.
-- **Affinity Entry**: `<a href="..." style="color:#1a5fa8;">View</a>` for any company with an Affinity ID; "—" if not found in Affinity
-
-### Sort order (within each deep dive section)
-
-Within each deep dive section: **Pre-Seed rows first, then Seed rows** — alphabetical by company name within each stage. Row numbers (#) are sequential across all sections.
+- **Company**: linked inline to verified website; plain text if no website available
+- **Amount**: format as "€12M" / "$5M" / "£8M"; render "—" if unknown — never write "Unknown"
+- **Lead Investors**: up to 3 names; append `+ N more` if there are more; "—" if unknown
+- **Description**: 3–5 word one-liner (e.g. "AI-powered logistics platform"); "—" if unavailable
+- **Seen?**: bold green `#1a7a1a` if Yes; bold red `#c0392b` if No
+- **In Contact (12mo)?**: bold green `#1a7a1a` if Yes; bold red `#c0392b` if No
+- **Affinity**: `<a href="..." style="color:#1a5fa8;">View</a>` for any company found in Affinity (regardless of seen/contact status); "—" only if company has no Affinity presence at all
 
 ---
 
@@ -339,42 +329,31 @@ open /Users/kvelasquez/Desktop/dealflow-retro-newsletter.html
 Output:
 
 ```
-Done. [N] companies in this retro — [X] active (in comms 12mo), [W] not seen.
-
-Breakdown:
-  Autonomous Intelligence: [N]
-  Industrial Autonomy: [N]
-  Regulated Industries: [N]
-  European Resilience: [N]
+Done. [N] companies in this retro — [X] seen, [Y] in contact within 12 months.
 
 To copy the email body into Gmail:
-1. Select all body text in the browser (manually, from "Hi everyone" to "Kieran")
+1. Select all body text in the browser (from "Hi everyone" to "Kieran")
 2. Cmd+C to copy
-3. Click into Gmail compose body → Cmd+V to paste (NOT Cmd+Shift+V — preserves table formatting)
+3. Click into Gmail compose body → Cmd+V (NOT Cmd+Shift+V — preserves table formatting)
 
-Recipients and subject are shown above the body — copy those separately into the To: and Subject: fields.
+Recipients and subject are shown above the body — copy those separately.
 ```
 
 ---
 
 ## Key rules
 
-- Never write "Unknown" anywhere — omit values or use "—"
+- Never write "Unknown" — use "—"
 - All table styles must be inline (Gmail strips `<style>` block rules on copy-paste)
 - Subject format: `Deal Flow Retro Newsletter — CW [X] | [DD Mon] – [DD Mon YYYY]`
 - CW number = ISO week number of the period's **end date**
 - Country = country only, never city (strip city names from Crunchbase location strings)
-- Enrich all companies — only flag `[needs review]` if a specific field genuinely cannot be found or verified after searching. Descriptions must be 2–5 word category labels, never full sentences.
-- Website URLs must be verified via WebFetch before embedding — never use an unverified URL in the HTML output
-- If Dealroom CSV is provided, its data takes precedence over Crunchbase on conflicting fields
-- Country whitelist: EU 27 + UK + Switzerland + Norway only — Turkey and all other countries are excluded at the filter stage
-- **Minimum raise filter:** Remove companies with a known raise below €1M equivalent. Keep undisclosed/blank amounts.
-- **50-company cap:** After all filters, if >50 remain, keep the 50 largest raises. Unknown amounts rank last in selection.
-- **Deep dive routing:** Route every company using the routing table in Step 4.5. Ambiguous entries pause for user confirmation before proceeding.
-- **Deep dive section order (fixed):** Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience. Only include sections with entries.
-- **Sort order within each deep dive section:** Pre-Seed rows first, then Seed rows. Alphabetical within each stage. Row numbers are sequential across all sections.
-- **In Comms 12mo**: "Yes" bold green (`#1a7a1a`) / "No" bold red (`#c0392b`). Check `get_notes_for_entity` — any note with `createdAt` > today − 365 days. `[not found in Affinity]` → No.
-- **Ever in Master Deals**: "Yes" bold green / "No" bold red. Check `get_company_list_entries` for `listId: 99030` — no date filter. `[not found in Affinity]` or `Resource not found` → No.
-- **Affinity Entry**: "View" hyperlink for any company with an Affinity ID; "—" if not found at all.
-- **Affinity MCP — Step 6 lookup:** `search_companies` → `get_company_list_entries` (Master Deals) + `get_notes_for_entity` (comms check). Fallback: retry with domain. If both fail: mark `[not found in Affinity]`.
-- Affinity Master Deals List ID: `99030` (URL: https://projecta.affinity.co/lists/99030/board/views/490142-open-organizations)
+- Stage = Pre-Seed or Seed only — no Series A in any output
+- Website URLs must be verified via WebFetch before embedding — never use an unverified URL
+- Country whitelist: EU 27 + UK + Switzerland + Norway only — all others excluded
+- Affinity test gate: always run the first 5 companies as a test batch and wait for confirmation before processing the rest
+- **Seen?** = in Master Deals List (list 99030) AND has at least one contact record (`last-contact` or `last-interaction` is non-null)
+- **In Contact (12mo)?** = `last-contact` or `last-interaction` date exists and is within 12 months of today
+- **Affinity column**: link for any company in Affinity; "—" only if not found in Affinity at all
+- Affinity MCP call sequence: `search_companies` → `get_company_list_entries` (filter `listId==99030`) → `get_single_list_entry(field_types=['relationship-intelligence'])` → check both `last-contact` and `last-interaction`
+- Affinity Master Deals List: https://projecta.affinity.co/lists/99030
