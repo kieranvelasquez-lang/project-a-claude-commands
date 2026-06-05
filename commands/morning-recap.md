@@ -100,7 +100,7 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 ### 3c. Flag unknowns
 Flag entries with no URL and no name, but still capture them — never skip entries.
 
-### 3d. Capture inline assignments and action items
+### 3d. Capture inline assignments, action items, and thread commentary
 
 After routing, check for explicit Slack-level assignments that override default routing:
 
@@ -120,6 +120,25 @@ After routing, check for explicit Slack-level assignments that override default 
 Record who owns the action item (if anyone). This will be displayed inline in the Morning Recap as `| _Action: <@USERID>_`.
 
 If no explicit action item exists, leave this field blank — do not invent one.
+
+**Thread commentary to surface:**
+For each thread reply that is from a human (non-bot) and contains substantive text beyond a pure routing phrase, capture the reply text and the sender's user ID as a comment to surface under the entry.
+
+- A reply is "pure routing" only if its **entire body** is a routing/assignment phrase with no additional content (e.g. "Tagging to <@X>" alone). If the reply contains routing AND commentary, capture the full text.
+- Ignore empty replies and bot/app messages.
+- Store these as an ordered list of `{userId, text}` per entry — they will be rendered in Step 6.
+
+### 3e. Capture inline notes from the main message body
+
+For each company or LinkedIn profile link extracted from the main message, also capture any inline text the poster wrote around that link:
+
+1. **Same-line text**: Take the text on the same line as the URL, stripping the URL itself. Common patterns: `"Met at NOAH: https://url"`, `"https://url — pass, no EU traction"`, `"https://url (great team)"`.
+2. **Preceding-line fallback**: If the URL line has no text besides the URL itself, check the immediately preceding non-empty line. If it reads as a natural annotation (not itself a URL, not a section header, not a standalone company name), capture it as the inline note.
+3. Do **not** capture lines that are clearly the company name or a category header.
+4. Attribute to the original poster's user ID.
+5. If no inline note is found, leave blank — do not invent one.
+
+These notes are separate from the Slack description used for the entry's one-liner. Store as `{userId: originalPosterUserId, text: inlineNote}` per entry alongside thread comments.
 
 ---
 
@@ -155,7 +174,10 @@ _Review of yesterday's dealflow · [Month D, YYYY]_
 **Autonomous Intelligence** <@U0AA0044W1K> <@U0AA1BDG7D4>
 - <https://company.com|CompanyName> — One-sentence description.
 - <https://company.com|CompanyName2> — One-sentence description. | _Action: <@USERID>_
+  › _<@U456>: "Met them at NOAH, really impressive team"_
+  › _<@U789>: "I know the founder, happy to intro"_
 - <https://linkedin.com/in/handle|Full Name> — One-sentence bio/context.
+  › _<@U456>: "Strong background in robotics, worth a look"_
 
 **Industrial Autonomy** <@U0AA004TEQ5> <@U0AA1BDG7D4>
 - <https://company.com|CompanyName> — One-sentence description.
@@ -186,6 +208,15 @@ Rules:
 - Do NOT include `_Sent using Claude_` — the MCP appends it automatically.
 - If post exceeds ~4000 characters, split into Part 1 / Part 2.
 
+**Commentary sub-bullets (inline notes from main message and thread replies):**
+- If an entry has any inline notes (from the main message body, Step 3e) or thread comments (from Step 3d), render them as indented sub-bullets immediately after the entry line.
+- Main message note first (if any), then thread replies in chronological order.
+- Format each: `  › _<@USERID>: "note text"_` — two spaces + `›` + space + italic attribution.
+- Truncate individual notes at ~200 characters, appending `…` if cut.
+- Entries with no commentary at all render exactly as before — no sub-bullets.
+- Commentary sub-bullets count toward the ~4000-char split threshold.
+- Do **not** add sub-bullets to the Affinity Check List — plain URLs only there.
+
 ### Formatting rules (CRITICAL — never deviate)
 
 - Bold: `**double asterisk**`
@@ -193,7 +224,7 @@ Rules:
 - Links: `<https://url|display text>` — never markdown `[text](url)` format
 - @mentions: `<@USERID>` — never plain `@name`
 - Ampersands: raw `&` — never `&amp;`
-- No internal commentary in entries (who's keen, who's following up, investor opinions)
+- Commentary sub-bullets: `  › _<@USERID>: "text"_` — two spaces + `›` glyph + italic (never markdown `>` blockquote)
 - No "sourced by" attribution
 - Do NOT append `_Sent using Claude_`
 

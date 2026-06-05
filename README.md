@@ -172,7 +172,13 @@ These files live on **your machine only** — not in the repo. They're personal 
 ### `/morning-recap`
 Pulls every new message from #deal-flow since the last Morning Recap (auto-anchored), routes all deals to the correct deep dive, captures any Slack-explicit action items, enriches entries missing a description, and posts a Morning Recap + Affinity Check List to #automation-tests.
 
-**Flow:** Auto-anchor → Pull Slack → Parse + route entries → Capture action items → Enrich missing descriptions → Post Morning Recap + Affinity Check List to #automation-tests
+**Flow:** Auto-anchor → Pull Slack → Parse + route entries → Capture action items + commentary → Enrich missing descriptions → Post Morning Recap + Affinity Check List to #automation-tests
+
+**Inline commentary:** Every entry now preserves two sources of commentary as `  › _<@person>: "note"_` sub-bullets beneath the entry line:
+- **Main message notes** — any text the poster wrote around a link on the same line (e.g. "Met at NOAH: https://url", "https://url — pass, no EU traction")
+- **Thread reply comments** — substantive replies from humans in the thread (pure routing phrases like "Tagging to X" are excluded; replies that mix routing + commentary are included in full)
+
+Commentary sub-bullets appear after the main entry line, main message note first then thread replies in order. Entries with no commentary are unchanged. The Affinity Check List is never annotated.
 
 **Anchor exclusion rule:** The last Morning Recap by Kieran is used as the time boundary only — its text is never parsed for company or LinkedIn entries, and its thread replies are also skipped entirely. Thread replies on that anchor message are where the Net New to Affinity post now lives, so they must not be processed here.
 
