@@ -271,11 +271,12 @@ Monthly digest of European Pre-Seed and Seed funding rounds, organised into five
 7. HTML email generated → opens in browser
 
 **Affinity check (two columns):**
-- **Seen?** — company is in Master Deals List (99030) AND has at least one contact record (`last-contact` or `last-interaction` non-null). In list but never contacted = No.
+- **Seen?** — company is in Master Deals List (99030). Being in the list is the signal — null contact records do not mean unseen.
 - **In Contact (12mo)?** — `last-contact` or `last-interaction` within the past 12 months.
 - All companies found in Affinity get a "View in Affinity" link regardless of contact status.
+- If a name search fails, Claude retries by domain (handles rebrands and generic names).
 
-**Output:** Five thesis tables (Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience → Frontier Tech), sorted Pre-Seed before Seed, unseen companies first within each stage group.
+**Output:** Five thesis tables (Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience → Frontier Tech), sorted Pre-Seed before Seed, with three priority tiers per stage: unseen (No/No) → seen not contacted (Yes/No) → active relationship (Yes/Yes).
 
 **Recipients:** Investment Team, Anton Waitz, Uwe Horstmann, Florian Heinemann, Thies Sander, Philipp Werner, Malin Posern, Jack Wang.
 
