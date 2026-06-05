@@ -5,7 +5,7 @@ description: >
   "run call prep for [startup]", "call prep [company name]", or shares a startup
   name / website / deck ahead of a founder meeting. Produces a concise VC
   investment brief and opens it as an HTML file in the browser.
-allowed-tools: WebFetch, WebSearch, Read, Bash
+allowed-tools: WebFetch, WebSearch, Read, Bash, mcp__claude_ai_Affinity__get_notes_for_entity, mcp__claude_ai_Affinity__get_meetings_for_entity, mcp__claude_ai_Affinity__get_transcript_fragments
 ---
 
 # Call Prep — Investment Brief
@@ -29,10 +29,29 @@ If the user has already provided inputs, extract them and proceed. Otherwise, pr
 > 2. **Website URL** (optional)
 > 3. **Pitch deck or memo** — local file path (PDF or DOCX) or paste the text (optional)
 > 4. **Any context note** — stage, sector, how you heard about them (optional)
+> 5. **Affinity link** (optional) — paste the Affinity company URL (e.g. `https://app.affinity.co/companies/12345678`) to pull prior team engagement
 
 ---
 
-## Step 2 — Read documents (highest signal, do this first)
+## Step 2 — Pull Affinity context (skip if no link provided)
+
+If an Affinity link was provided:
+
+1. Extract the numeric company ID from the URL path: `https://app.affinity.co/companies/[ID]`
+2. Call `get_notes_for_entity(entity_id=ID, entity_type=1)` — retrieve all notes on file
+3. Call `get_meetings_for_entity(entity_id=ID, entity_type=1, start_time="[90 days ago]T00:00:00Z", end_time="[today]T23:59:59Z")` — last 3 months of meetings
+4. If meetings are returned, call `get_transcript_fragments` for any that have transcripts
+5. From all returned data, extract into `affinityContext`:
+   - **Who met**: team members who attended, dates, meeting format
+   - **Topics covered**: what was discussed or pitched
+   - **Questions already asked**: any Q&A captured in notes or transcripts
+   - **Open threads**: items flagged for follow-up in prior notes
+
+If no Affinity link was provided, set `affinityContext = null` and continue.
+
+---
+
+## Step 3 — Read documents (highest signal, do this first)
 
 Documents carry far more signal than websites. Attempt all provided files before anything else.
 
@@ -49,13 +68,13 @@ Extract everything — do not filter at this stage. Capture: problem, solution, 
 
 ---
 
-## Step 3 — Fetch website (secondary, homepage only)
+## Step 4 — Fetch website (secondary, homepage only)
 
 Fetch only the homepage. Extract: company description, product, team names, any press or customer mentions. Do not attempt sub-pages unless the homepage explicitly links to them and they appear high-signal. Cap at 2 pages total.
 
 ---
 
-## Step 4 — Targeted external research (max 5 searches)
+## Step 5 — Targeted external research (max 5 searches)
 
 Run focused, specific searches only. Suggested queries (adapt to the company):
 1. `"[Company name]" funding OR investment OR raise` — funding news
@@ -68,7 +87,15 @@ Do not do open-ended research. Stop after 5 searches. Label anything unverifiabl
 
 ---
 
-## Step 5 — Write the brief (8 sections, tight)
+## Step 6 — Write the brief (8 sections, tight; 9 if prior engagement exists)
+
+### 0. Prior Engagement *(only if `affinityContext` is non-null)*
+- **Meeting history**: who from the team met, when, format (call / in-person / demo)
+- **Topics already covered**: what was discussed or pitched in prior interactions
+- **Questions already asked**: explicit questions documented in notes or transcripts
+- **Open threads**: items flagged for follow-up that were not yet resolved
+
+Omit this section entirely if no Affinity link was provided.
 
 ### 1. Snapshot
 5 bullets: what they do, stage, geography, core offering, one-line differentiator.
@@ -98,11 +125,11 @@ Founders and key hires: name, background, relevant experience, prior exits. Note
 - **Biggest risk** (one sentence)
 
 ### 8. Key Questions (5 max)
-Full, askable sentences. Probe traction quality, technical credibility, GTM reality, and the risks from Section 7.
+Full, askable sentences. Probe traction quality, technical credibility, GTM reality, and the risks from Section 7. If `affinityContext` is non-null, cross-reference against questions already asked in prior notes and transcripts — do not repeat any of them. All 5 questions must be net-new.
 
 ---
 
-## Step 6 — Write HTML file and open in browser
+## Step 7 — Write HTML file and open in browser
 
 Write the brief as a clean HTML file to `/tmp/call-prep-[CompanyName].html`, then open it.
 
