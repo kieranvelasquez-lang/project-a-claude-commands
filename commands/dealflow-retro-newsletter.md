@@ -153,7 +153,7 @@ Run an automated check against the Affinity Master Deals List (list ID 99030). *
 
 **Step A — Find company in Affinity:**
 1. Call `search_companies(term=[Company Name])` → get `company_id`
-   - If no match, try `semantic_search(query=[Company Name] [Country])`
+   - If no match or only clearly wrong results, **retry by domain**: `search_companies(term=[domain])` (e.g. `agemo.ai` instead of `CodeWords`) — companies that have rebranded or have generic names often only surface via domain search
    - If still no match → not in Affinity at all → `affinity_link = null`, `seen = false`, `in_contact_12mo = false`
 
 **Step B — Check Master Deals List (list 99030):**
@@ -163,11 +163,11 @@ Run an automated check against the Affinity Master Deals List (list ID 99030). *
 
 **Step C — Check contact history:**
 3. Call `get_single_list_entry(list_id=99030, list_entry_id=[list_entry_id], field_types=['relationship-intelligence'])`
-   - Look for both `last-contact` and `last-interaction` fields in the response
-   - If **both are null** → never contacted → `seen = false`, `in_contact_12mo = false`
-   - If **either has a date** → was contacted at some point → `seen = true`
-     - If that date is within the last 12 months → `in_contact_12mo = true`
-     - If that date is older than 12 months → `in_contact_12mo = false`
+   - **`seen = true` as soon as a company is confirmed in list 99030** — being added to the list IS the seen signal. A null `last-contact` does NOT mean unseen; it just means the interaction wasn't logged in relationship intelligence.
+   - Look for `last-contact` and `last-interaction` fields only to determine `in_contact_12mo`:
+     - If both are null → `in_contact_12mo = false`
+     - If either has a date within the last 12 months → `in_contact_12mo = true`
+     - If either has a date older than 12 months → `in_contact_12mo = false`
 
 ### Test batch (first 5 companies)
 
@@ -294,7 +294,10 @@ Calculate:
 ### Sort order within each thesis table
 
 1. Pre-Seed rows first, then Seed rows
-2. Within each stage group: Seen=No rows first (alphabetical), then Seen=Yes rows (alphabetical)
+2. Within each stage group, three tiers in order:
+   1. **Seen=No, In Contact=No** (alphabetical) — unseen deals, highest priority for the reader
+   2. **Seen=Yes, In Contact=No** (alphabetical) — previously seen, not followed up
+   3. **Seen=Yes, In Contact=Yes** (alphabetical) — active relationship, lowest urgency, always last
 
 ### Thesis table order in the email
 
@@ -352,7 +355,7 @@ Recipients and subject are shown above the body — copy those separately.
 - Website URLs must be verified via WebFetch before embedding — never use an unverified URL
 - Country whitelist: EU 27 + UK + Switzerland + Norway only — all others excluded
 - Affinity test gate: always run the first 5 companies as a test batch and wait for confirmation before processing the rest
-- **Seen?** = in Master Deals List (list 99030) AND has at least one contact record (`last-contact` or `last-interaction` is non-null)
+- **Seen?** = company is in Master Deals List (list 99030) — being in the list is the signal, regardless of whether contact records are null
 - **In Contact (12mo)?** = `last-contact` or `last-interaction` date exists and is within 12 months of today
 - **Affinity column**: link for any company in Affinity; "—" only if not found in Affinity at all
 - Affinity MCP call sequence: `search_companies` → `get_company_list_entries` (filter `listId==99030`) → `get_single_list_entry(field_types=['relationship-intelligence'])` → check both `last-contact` and `last-interaction`
