@@ -209,6 +209,10 @@ Given a team member's name and a date range, pulls all #deal-flow messages where
 ### `/investment-team-dealflow-meetings`
 Paste a Granola meeting transcript and get back two ready-to-send email summaries — Version 1 (internal, full detail) and Version 2 (clean, compliance-facing). Output opens directly in your browser for copy-paste into Gmail.
 
+**V1 recipients:** Investment Team, Anton Waitz, Uwe Horstmann, Florian Heinemann, Thies Sander, Philipp Werner, Malin Posern, Jack Wang.
+
+**V2 recipients (compliance):** Investment Team, Anton Waitz, Vincent Synde, Miriam Ayasse, Martin Laudien, Christian Kurz, Andreas Kühnke, Anton Grabovski, Jan-Willem Jensen, Elias Wahl, Christoph Heiland, Frieder Zinkel.
+
 **Usage:** `/investment-team-dealflow-meetings` then paste transcript when prompted
 
 **Requires:** Nothing beyond Claude Code
