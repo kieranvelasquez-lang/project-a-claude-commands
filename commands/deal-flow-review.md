@@ -9,11 +9,8 @@ allowed-tools: mcp__claude_ai_Slack__slack_read_channel, mcp__claude_ai_Slack__s
 | Thesis | Member | User ID |
 |---|---|---|
 | Autonomous Intelligence | Daria Gneusheva | `U0AA0044W1K` |
-| Autonomous Intelligence | Oskar Lingk | `U0AA1BDG7D4` |
-| Industrial Autonomy | Ciara Gumsheimer | `U0AA004TEQ5` |
 | Industrial Autonomy | Oskar Lingk | `U0AA1BDG7D4` |
 | Regulated Industries | Marjorie Lengereau | `U0AAGADJCQ1` |
-| Regulated Industries | Oskar Lingk | `U0AA1BDG7D4` |
 | European Resilience | Jack Wang | `U0A9X1FNV19` |
 | European Resilience | Miha Pavlovic | `U0A9X1DAVTM` |
 | Frontier Tech | Jack Wang | `U0A9X1FNV19` |

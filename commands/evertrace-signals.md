@@ -76,9 +76,9 @@ Match in table order (first match wins — resilience and industrial checked bef
 
 | Theme key | Members | Slack pings |
 |---|---|---|
-| `autonomous` | Daria Gneusheva, Oskar Lingk | `<@U0AA0044W1K> <@U0AA1BDG7D4>` |
-| `industrial` | Ciara Gumsheimer, Oskar Lingk | `<@U0AA004TEQ5> <@U0AA1BDG7D4>` |
-| `regulated` | Marjorie Lengereau, Oskar Lingk | `<@U0AAGADJCQ1> <@U0AA1BDG7D4>` |
+| `autonomous` | Daria Gneusheva | `<@U0AA0044W1K>` |
+| `industrial` | Oskar Lingk | `<@U0AA1BDG7D4>` |
+| `regulated` | Marjorie Lengereau | `<@U0AAGADJCQ1>` |
 | `resilience` | Jack Wang, Miha Pavlovic | `<@U0A9X1FNV19> <@U0A9X1DAVTM>` |
 | `frontier` | Jack Wang, Omar Hedeya | `<@U0A9X1FNV19> <@U0A9MUM30AK>` |
 

@@ -11,11 +11,8 @@ User IDs are hardcoded below — do not call `slack_search_users` for core team 
 | Thesis | Member | User ID |
 |---|---|---|
 | Autonomous Intelligence | Daria Gneusheva | `U0AA0044W1K` |
-| Autonomous Intelligence | Oskar Lingk | `U0AA1BDG7D4` |
-| Industrial Autonomy | Ciara Gumsheimer | `U0AA004TEQ5` |
 | Industrial Autonomy | Oskar Lingk | `U0AA1BDG7D4` |
 | Regulated Industries | Marjorie Lengereau | `U0AAGADJCQ1` |
-| Regulated Industries | Oskar Lingk | `U0AA1BDG7D4` |
 | European Resilience | Jack Wang | `U0A9X1FNV19` |
 | European Resilience | Miha Pavlovic | `U0A9X1DAVTM` |
 | Frontier Tech | Jack Wang | `U0A9X1FNV19` |
@@ -80,9 +77,9 @@ Pull directly from Slack — no WebFetch or WebSearch yet:
 
 | What they build | Thesis | Team |
 |---|---|---|
-| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence | Daria Gneusheva, Oskar Lingk |
-| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy | Ciara Gumsheimer, Oskar Lingk |
-| Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries | Marjorie Lengereau, Oskar Lingk |
+| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | Autonomous Intelligence | Daria Gneusheva |
+| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | Industrial Autonomy | Oskar Lingk |
+| Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | Regulated Industries | Marjorie Lengereau |
 | Defense tech, military, weapons, space | European Resilience | Jack Wang, Miha Pavlovic |
 | Semiconductors, chips, quantum computing, novel computation; breakthrough energy hardware (novel generation/storage methods); frontier biotech (synthetic biology, genomics, drug discovery); novel AI architectures/paradigms, fundamental CS algorithm research | Frontier Tech | Jack Wang, Omar Hedeya |
 
@@ -171,7 +168,7 @@ Match this format exactly:
 **Morning Recap — [Month D, YYYY]**
 _Review of yesterday's dealflow · [Month D, YYYY]_
 
-**Autonomous Intelligence** <@U0AA0044W1K> <@U0AA1BDG7D4>
+**Autonomous Intelligence** <@U0AA0044W1K>
 - <https://company.com|CompanyName> — One-sentence description.
 - <https://company.com|CompanyName2> — One-sentence description. | _Action: <@USERID>_
   › _<@U456>: "Met them at NOAH, really impressive team"_
@@ -179,10 +176,10 @@ _Review of yesterday's dealflow · [Month D, YYYY]_
 - <https://linkedin.com/in/handle|Full Name> — One-sentence bio/context.
   › _<@U456>: "Strong background in robotics, worth a look"_
 
-**Industrial Autonomy** <@U0AA004TEQ5> <@U0AA1BDG7D4>
+**Industrial Autonomy** <@U0AA1BDG7D4>
 - <https://company.com|CompanyName> — One-sentence description.
 
-**Regulated Industries** <@U0AAGADJCQ1> <@U0AA1BDG7D4>
+**Regulated Industries** <@U0AAGADJCQ1>
 - <https://company.com|CompanyName> — One-sentence description. | _Action: <@U0AAGADJCQ1>_
 
 **European Resilience** <@U0A9X1FNV19> <@U0A9X1DAVTM>

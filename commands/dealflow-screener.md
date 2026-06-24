@@ -10,11 +10,8 @@ allowed-tools: Read, WebSearch, WebFetch, mcp__claude_ai_Slack__slack_send_messa
 | Deep Dive | Member | User ID |
 |---|---|---|
 | Autonomous Intelligence | Daria Gneusheva | `U0AA0044W1K` |
-| Autonomous Intelligence | Oskar Lingk | `U0AA1BDG7D4` |
-| Industrial Autonomy | Ciara Gumsheimer | `U0AA004TEQ5` |
 | Industrial Autonomy | Oskar Lingk | `U0AA1BDG7D4` |
 | Regulated Industries | Marjorie Lengereau | `U0AAGADJCQ1` |
-| Regulated Industries | Oskar Lingk | `U0AA1BDG7D4` |
 | European Resilience | Jack Wang | `U0A9X1FNV19` |
 | European Resilience | Miha Pavlovic | `U0A9X1DAVTM` |
 | Frontier Tech | Jack Wang | `U0A9X1FNV19` |
@@ -142,15 +139,15 @@ Companies and profiles go into one single message, merged by thesis. Within each
 ```
 **Ad-hoc Deal Flow Screen — [Month D, YYYY]**
 
-**Autonomous Intelligence** <@U0AA0044W1K> <@U0AA1BDG7D4>
+**Autonomous Intelligence** <@U0AA0044W1K>
 - <https://company.com|CompanyName> — One-sentence description.
 - <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
-**Industrial Autonomy** <@U0AA004TEQ5> <@U0AA1BDG7D4>
+**Industrial Autonomy** <@U0AA1BDG7D4>
 - <https://company.com|CompanyName> — One-sentence description.
 - <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
-**Regulated Industries** <@U0AAGADJCQ1> <@U0AA1BDG7D4>
+**Regulated Industries** <@U0AAGADJCQ1>
 - <https://company.com|CompanyName> — One-sentence description.
 - <https://www.linkedin.com/in/slug/|Full Name> — background context note.
 
