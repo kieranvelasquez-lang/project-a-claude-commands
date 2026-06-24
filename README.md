@@ -132,9 +132,9 @@ All commands use the same deep dive routing table (updated May 2026):
 
 | What they build | Deep Dive |
 |---|---|
-| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | **Autonomous Intelligence** (Daria, Oskar) |
-| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | **Industrial Autonomy** (Ciara, Oskar) |
-| Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | **Regulated Industries** (Marjorie, Oskar) |
+| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | **Autonomous Intelligence** (Daria) |
+| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | **Industrial Autonomy** (Oskar) |
+| Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | **Regulated Industries** (Marjorie) |
 | Defense tech, military, weapons, space | **European Resilience** (Jack, Miha) |
 | Semiconductors, chips, quantum computing, novel computation; breakthrough energy hardware (novel generation/storage methods); frontier biotech (synthetic biology, genomics, drug discovery); novel AI architectures/paradigms, fundamental CS algorithm research | **Frontier Tech** (Jack, Omar) |
 
