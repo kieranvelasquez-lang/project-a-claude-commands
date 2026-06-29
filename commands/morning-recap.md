@@ -46,7 +46,7 @@ Anchor automatically:
 
 Once the anchor `ts` is established from a found Morning Recap, call `slack_read_channel` again with `oldest` set to that `ts` to fetch only messages posted after the last Morning Recap.
 
-**Exclusion rule (Morning Recap anchor only):** When anchoring from a found Morning Recap, that message is a boundary marker only — do not parse its text for company or LinkedIn entries. Do not read or process its thread replies (these will contain the Net New to Affinity post going forward and should be ignored). Only process messages with `ts` strictly greater than the anchor `ts`. This exclusion does NOT apply when using a user-specified start message.
+**Exclusion rule (Morning Recap anchor only):** When anchoring from a found Morning Recap, that message is a boundary marker only — do not parse its text for company or LinkedIn entries. Do not read or process its thread replies. Only process messages with `ts` strictly greater than the anchor `ts`. This exclusion does NOT apply when using a user-specified start message.
 
 Remember: Project A is Berlin — CET = UTC+1, CEST = UTC+2 from late March.
 
@@ -147,7 +147,7 @@ For any entry where the Slack message included **no description**, enrich before
 - Use WebFetch on the company's actual website homepage to pull a one-sentence description.
 - If WebFetch fails, try WebSearch (company name + "startup" or "what does it do").
 - If both fail, flag the entry — do not invent a description.
-- Do **not** research funding here — that belongs in `/net-new-affinity`.
+- Do **not** research funding here.
 
 **LinkedIn profiles:**
 - LinkedIn blocks automated fetching. If no description was in Slack, omit the description in the Summary — do not attempt WebFetch.
@@ -199,7 +199,7 @@ Rules:
 - Only include thesis sections that have entries.
 - Only include "Flagged for Review" if there are actual flags.
 - One blank line between each thesis section.
-- Do **not** include `| _Raised:_` in the Recap — funding info belongs in `/net-new-affinity` only.
+- Do **not** include `| _Raised:_` in the Recap.
 - Action item format: `| _Action: <@USERID>_` appended at end of line, only when a confirmed action item owner exists.
 - LinkedIn profiles with no Slack description: show link and name only (`- <https://linkedin.com/in/handle|Full Name>`), no description fragment.
 - Do NOT include `_Sent using Claude_` — the MCP appends it automatically.
@@ -212,7 +212,6 @@ Rules:
 - Truncate individual notes at ~200 characters, appending `…` if cut.
 - Entries with no commentary at all render exactly as before — no sub-bullets.
 - Commentary sub-bullets count toward the ~4000-char split threshold.
-- Do **not** add sub-bullets to the Affinity Check List — plain URLs only there.
 
 ### Formatting rules (CRITICAL — never deviate)
 
@@ -231,19 +230,8 @@ Rules:
 
 Post the Morning Recap to channel ID `C0AKKPK3J1K` using `slack_send_message`.
 
-Then, as a **second message** to the same channel, post the Affinity Check List. Include **every** entry from the Morning Recap (all thesis sections, including LinkedIn profiles) — not a partial subset. Format each entry on its own line:
-
-```
-• CompanyName — https://url.com
-• FullName (LinkedIn) — https://linkedin.com/in/handle
-```
-
-Use plain URLs — **not** Slack `<url|text>` link syntax. Use `•` bullet prefix for every entry. Do not group by thesis. Do not include descriptions. Follow the list with one blank line, then:
-
-> "Morning Recap is live above. Run your Affinity scraper against this list, then run `/net-new-affinity` and paste your results to generate the Net New post."
-
 Then output to the terminal:
-> "Morning Recap and Affinity list are live in #automation-tests. Copy the Recap to #deal-flow when ready, then run `/net-new-affinity` with your scraper results."
+> "Morning Recap is live in #automation-tests. Copy to #deal-flow when ready."
 
 ---
 
