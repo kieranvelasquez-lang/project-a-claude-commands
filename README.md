@@ -9,7 +9,6 @@ Custom Claude Code slash commands for the Project A investment team.
 | Command | What it does |
 |---|---|
 | `/morning-recap` | Pulls new #deal-flow Slack messages, routes by deep dive, and posts the Morning Recap to #automation-tests |
-| `/net-new-affinity` | Takes Affinity scraper results and generates the Net New to Affinity post to #automation-tests |
 | `/deal-flow-review` | Pulls deal flow for a specific team member + date range and sends a formatted DM to their Slack |
 | `/investment-team-dealflow-meetings` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
 | `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by deep dive, and posts a signal digest to Slack |
@@ -83,7 +82,7 @@ cp ~/Projects/project-a-claude-commands/commands/*.md ~/.claude/commands/
 mkdir -p ~/.claude/memory
 ```
 
-Open a new Claude Code session. You should now see `/morning-recap`, `/net-new-affinity`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, `/evertrace-signals`, `/dealflow-retro-newsletter`, `/dealflow-screener`, and `/call-prep` in the slash command menu.
+Open a new Claude Code session. You should now see `/morning-recap`, `/deal-flow-review`, `/investment-team-dealflow-meetings`, `/evertrace-signals`, `/dealflow-retro-newsletter`, `/dealflow-screener`, and `/call-prep` in the slash command menu.
 
 ---
 
@@ -170,28 +169,17 @@ These files live on **your machine only** — not in the repo. They're personal 
 ## Commands in detail
 
 ### `/morning-recap`
-Pulls every new message from #deal-flow since the last Morning Recap (auto-anchored), routes all deals to the correct deep dive, captures any Slack-explicit action items, enriches entries missing a description, and posts a Morning Recap + Affinity Check List to #automation-tests.
+Pulls every new message from #deal-flow since the last Morning Recap (auto-anchored), routes all deals to the correct deep dive, captures any Slack-explicit action items, enriches entries missing a description, and posts the Morning Recap to #automation-tests.
 
-**Flow:** Auto-anchor → Pull Slack → Parse + route entries → Capture action items + commentary → Enrich missing descriptions → Post Morning Recap + Affinity Check List to #automation-tests
+**Flow:** Auto-anchor → Pull Slack → Parse + route entries → Capture action items + commentary → Enrich missing descriptions → Post Morning Recap to #automation-tests
 
-**Inline commentary:** Every entry now preserves two sources of commentary as `  › _<@person>: "note"_` sub-bullets beneath the entry line:
+**Inline commentary:** Every entry preserves two sources of commentary as `  › _<@person>: "note"_` sub-bullets beneath the entry line:
 - **Main message notes** — any text the poster wrote around a link on the same line (e.g. "Met at NOAH: https://url", "https://url — pass, no EU traction")
 - **Thread reply comments** — substantive replies from humans in the thread (pure routing phrases like "Tagging to X" are excluded; replies that mix routing + commentary are included in full)
 
-Commentary sub-bullets appear after the main entry line, main message note first then thread replies in order. Entries with no commentary are unchanged. The Affinity Check List is never annotated.
+Commentary sub-bullets appear after the main entry line, main message note first then thread replies in order. Entries with no commentary are unchanged.
 
-**Anchor exclusion rule:** The last Morning Recap by Kieran is used as the time boundary only — its text is never parsed for company or LinkedIn entries, and its thread replies are also skipped entirely. Thread replies on that anchor message are where the Net New to Affinity post now lives, so they must not be processed here.
-
-**Affinity Check List format:** The second message posted to #automation-tests contains every entry from the Morning Recap — all deep dive sections, including LinkedIn profiles — one per line, as plain URLs (not Slack `<url|text>` link syntax). Entries are not grouped by deep dive and descriptions are omitted.
-
-**Requires:** Slack MCP
-
----
-
-### `/net-new-affinity`
-Run this after your Affinity scraper. Paste your found/not-found results, confirm Net New entries, do the LinkedIn double-check, and get an enriched Net New to Affinity post (with descriptions and funding info) posted to #automation-tests.
-
-**Flow:** Paste scraper results → Confirm Net New → LinkedIn double-check → Enrich descriptions + funding → Post to #automation-tests
+**Anchor exclusion rule:** The last Morning Recap by Kieran is used as the time boundary only — its text is never parsed for company or LinkedIn entries, and its thread replies are skipped entirely.
 
 **Requires:** Slack MCP
 
@@ -297,7 +285,6 @@ project-a-claude-commands/
 ├── README.md
 ├── commands/
 │   ├── morning-recap.md
-│   ├── net-new-affinity.md
 │   ├── deal-flow-review.md
 │   ├── evertrace-signals.md
 │   ├── investment-team-dealflow-meetings.md
@@ -306,7 +293,6 @@ project-a-claude-commands/
 │   └── call-prep.md
 └── memory/
     ├── morning-recap/                       ← corrections + feedback for /morning-recap
-    ├── net-new-affinity/                    ← (created when first correction is learned)
     ├── deal-flow-review/                    ← (created when first correction is learned)
     ├── evertrace-signals/                   ← (created when first correction is learned)
     ├── investment-team-dealflow-meetings/   ← (created when first correction is learned)
