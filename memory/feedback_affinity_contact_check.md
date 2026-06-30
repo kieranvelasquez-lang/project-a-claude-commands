@@ -5,15 +5,15 @@ type: feedback
 originSessionId: 6f7886f1-bd1c-4885-879d-91c35f88f134
 ---
 
-Use `get_single_list_entry(list_id=99030, list_entry_id=X, field_types=['relationship-intelligence'])` to check for real contact in Affinity. Check the `last-contact` field — if non-null and within 12 months → "in comms 12mo".
+**Seen?** = company present in Master Deals List (list 99030). Being in the list is sufficient — no contact check needed. Many companies in list 99030 have null last-contact because Affinity sync is imperfect; they still count as Seen.
 
-**Why:** `get_notes_for_entity` returns manually typed meeting summaries — not proof of contact. `get_meetings_for_entity` only captures calendar events and misses email-only contact entirely (e.g., Performativ had email contact in Sept 2025 but zero calendar events). Affinity's "Losing Touch" / "Never Contacted" badges are driven by the `last-contact` relationship-intelligence field, which captures both emails and meetings.
+**In Contact (12mo)?** = an email, meeting, or formal interaction was synced in Affinity (`last-contact` or `last-interaction` non-null) within the last 12 months. Use `get_single_list_entry(list_id=99030, list_entry_id=X, field_types=['relationship-intelligence'])` to retrieve this.
+
+**Why:** Earlier logic required non-null contact to mark Seen=Yes, causing many false negatives for companies that were clearly reviewed and added to the Master Deals List but had no synced interaction record (LinkedIn, phone, unsynced email, etc.).
 
 **How to apply:** Three-step MCP process in Steps 6–7 of dealflow-retro-newsletter:
 1. `search_companies(term=[Name])` → get `company_id`
-2. `get_company_list_entries(company_id)` → filter for `listId == 99030` → get `list_entry_id`; "Resource not found" means company exists in Affinity but has no list entries (still show no link)
-3. `get_single_list_entry(list_id=99030, list_entry_id=X, field_types=['relationship-intelligence'])` → check `last-contact` date is non-null and within 12 months
+2. `get_company_list_entries(company_id)` → filter for `listId == 99030` → get `list_entry_id`; if found → Seen=Yes automatically
+3. `get_single_list_entry(list_id=99030, list_entry_id=X, field_types=['relationship-intelligence'])` → check `last-contact`/`last-interaction` date for In Contact (12mo) only
 
 **Affinity link rule:** Show "View in Affinity" link for ALL companies found in Affinity, regardless of contact status. "—" only for companies with no Affinity presence at all.
-
-**Label:** "in comms 12mo" (not "Yes") for contacted companies.
