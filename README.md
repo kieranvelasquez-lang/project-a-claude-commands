@@ -127,28 +127,30 @@ cp commands/*.md ~/.claude/commands/
 
 ## Deep Dives 2.0 — Routing
 
-All commands use the same deep dive routing table (updated May 2026):
+All commands use the same deep dive routing table (updated July 2026):
 
 | What they build | Deep Dive |
 |---|---|
-| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, general AI tech stack; gaming, consumer, edtech, creator, fitness | **Autonomous Intelligence** (Daria) |
-| Manufacturing, manufacturing robotics, factory software, supply chain, logistics, energy, construction, agriculture | **Industrial Autonomy** (Oskar) |
+| Space (civilian/non-defense), ocean, land, subsurface, agriculture, infrastructure, construction, energy (hardware and software for the physical world), new materials, robotics infrastructure | **Physical World Intelligence** (Daria) |
+| Manufacturing, factory automation, factory software, supply chain, logistics | **Industrial Autonomy** (Oskar) |
 | Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | **Regulated Industries** (Marjorie) |
-| Defense tech, military, weapons, space | **European Resilience** (Jack, Miha) |
+| Defense tech, military, weapons, military space | **European Resilience** (Jack, Miha) |
 | Semiconductors, chips, quantum computing, novel computation; breakthrough energy hardware (novel generation/storage methods); frontier biotech (synthetic biology, genomics, drug discovery); novel AI architectures/paradigms, fundamental CS algorithm research | **Frontier Tech** (Jack, Omar) |
+| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, gaming, consumer, edtech, creator, fitness | **Miscellaneous** (no team member — visibility only) |
 
 **Hardcoded overrides:**
 - **Cybersecurity** — all cybersecurity (commercial pentesting/infosec/SOC/security tooling and offensive/defense-grade) → Frontier Tech (Omar)
-- **AI sales tools** (commissions, revenue ops) → Autonomous Intelligence (not Regulated Industries)
-- **Blockchain / crypto / web3** → Regulated Industries (not Autonomous Intelligence)
-- **Energy software, cleantech SaaS, grid optimization** → Industrial Autonomy; breakthrough energy hardware (novel generation/storage technology) → Frontier Tech
-- **Robotics — software/AI-first** (foundation models, physical intelligence, robot OS) → Frontier Tech (Omar)
-- **Robotics — hardware/industrial/applied** → Industrial Autonomy; defense robotics stays European Resilience
+- **AI sales tools** (commissions, revenue ops) → Miscellaneous
+- **Blockchain / crypto / web3** → Regulated Industries
+- **Energy** (software, cleantech, grid, infrastructure) → Physical World Intelligence (Daria); breakthrough energy hardware (e.g. fusion) → Frontier Tech
+- **Agriculture, construction, infrastructure** → Physical World Intelligence (Daria)
+- **Space** — civilian/commercial (satellites, launch, orbital infra) → Physical World Intelligence (Daria); military/defense space → European Resilience
+- **Robotics — software/AI-first** (foundation models, physical intelligence, robot OS) → Frontier Tech (Omar); hardware/physical world (space, ocean, agriculture, construction) → Physical World Intelligence (Daria); factory/industrial floor → Industrial Autonomy; defense → European Resilience
 - **Biotech** — frontier (synthetic biology, genomics, drug discovery) → Frontier Tech (Omar); commercial healthtech/medtech/clinical → Regulated Industries
 - **Semiconductors, chips, quantum computing** → Frontier Tech
-- **Fundamental AI research** (novel model architectures or paradigms, CS algorithm research) → Frontier Tech; applied AI products → Autonomous Intelligence
+- **Fundamental AI research** → Frontier Tech; applied AI products → Miscellaneous
 
-**Section order (fixed across all skills):** Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience → Frontier Tech
+**Section order (fixed across all skills):** Physical World Intelligence → Industrial Autonomy → Regulated Industries → European Resilience → Frontier Tech → Miscellaneous
 
 These rules are baked into every skill. Company-specific overrides live in your local corrections memory (see below).
 
@@ -199,7 +201,7 @@ Paste a Granola meeting transcript and get back two ready-to-send email summarie
 
 **V1 recipients:** Investment Team, Anton Waitz, Uwe Horstmann, Florian Heinemann, Thies Sander, Philipp Werner, Malin Posern, Jack Wang.
 
-**V2 recipients (compliance):** Investment Team, Anton Waitz, Vincent Synde, Miriam Ayasse, Martin Laudien, Christian Kurz, Andreas Kühnke, Anton Grabovski, Jan-Willem Jensen, Elias Wahl, Christoph Heiland, Frieder Zinkel.
+**V2 recipients (compliance):** Investment Team, Anton Waitz, Vincent Synde, Miriam Ayasse, Martin Laudien, Christian Kurz, Andreas Kühnke, Anton Grabovski, Elias Wahl, Christoph Heiland, Frieder Zinkel.
 
 **Usage:** `/investment-team-dealflow-meetings` then paste transcript when prompted
 
@@ -249,7 +251,7 @@ Give Claude a company name plus any available materials (website URL, pitch deck
 ---
 
 ### `/dealflow-retro-newsletter`
-Monthly digest of European Pre-Seed and Seed funding rounds, organised into five thesis tables. Import a Crunchbase Pro CSV export, Claude supplements with EU-Startups WebFetch, you manually curate the top 50 companies, Claude routes them by thesis and runs an automated Affinity MCP check, then generates a formatted HTML email ready to copy into Gmail.
+Monthly digest of European Pre-Seed and Seed funding rounds, organised into six thesis tables. Import a Crunchbase Pro CSV export, Claude supplements with EU-Startups WebFetch, you manually curate the top 50 companies, Claude routes them by thesis and runs an automated Affinity MCP check, then generates a formatted HTML email ready to copy into Gmail.
 
 **Stage filter:** Pre-Seed and Seed only. Series A and above, fund closes, and growth rounds are excluded.
 
@@ -258,7 +260,7 @@ Monthly digest of European Pre-Seed and Seed funding rounds, organised into five
 2. EU-Startups supplementary fetch + merge + country/stage filter
 3. Preview full raw list → you curate to top 50 (enrichment only runs on selected companies)
 4. Enrich selected companies (WebSearch + WebFetch to verify URLs and get descriptions)
-5. Thesis routing: Claude assigns each company to one of 5 thesis areas → you confirm
+5. Thesis routing: Claude assigns each company to one of 6 thesis areas → you confirm
 6. Affinity check: test batch of 5 first → confirm logic → run all 50
 7. HTML email generated → opens in browser
 
@@ -268,7 +270,7 @@ Monthly digest of European Pre-Seed and Seed funding rounds, organised into five
 - All companies found in Affinity get a "View in Affinity" link regardless of contact status.
 - If a name search fails, Claude retries by domain (handles rebrands and generic names).
 
-**Output:** Five thesis tables (Autonomous Intelligence → Industrial Autonomy → Regulated Industries → European Resilience → Frontier Tech), sorted Pre-Seed before Seed, with three priority tiers per stage: unseen (No/No) → seen not contacted (Yes/No) → active relationship (Yes/Yes).
+**Output:** Six thesis tables (Physical World Intelligence → Industrial Autonomy → Regulated Industries → European Resilience → Frontier Tech → Miscellaneous), sorted Pre-Seed before Seed, with three priority tiers per stage: unseen (No/No) → seen not contacted (Yes/No) → active relationship (Yes/Yes).
 
 **Recipients:** Investment Team, Anton Waitz, Uwe Horstmann, Florian Heinemann, Thies Sander, Philipp Werner, Malin Posern, Jack Wang.
 
