@@ -12,7 +12,7 @@ Custom Claude Code slash commands for the Project A investment team.
 | `/deal-flow-review` | Pulls deal flow for a specific team member + date range and sends a formatted DM to their Slack |
 | `/investment-team-dealflow-meetings` | Formats a Granola meeting transcript into ready-to-send Gmail email summaries |
 | `/evertrace-signals` | Reads an Evertrace CSV export, routes companies by deep dive, and posts a signal digest to Slack |
-| `/dealflow-retro-newsletter` | Monthly European Pre-Seed + Seed funding round retro — imports Crunchbase CSV, manual top-50 curation, thesis routing, two-column Affinity MCP check (Seen? / In Contact 12mo?), outputs HTML email in 5 thesis tables |
+| `/dealflow-retro-newsletter` | Monthly European Pre-Seed + Seed funding round retro — imports Crunchbase CSV, manual top-50 curation, thesis routing, two-column Affinity MCP check (Seen? / In Contact 12mo?), outputs HTML email in 6 thesis tables |
 | `/dealflow-screener` | Paste any ad-hoc deal flow list — Claude enriches, routes companies and profiles by deep dive, and posts a unified digest to #automation-tests |
 | `/call-prep` | Give Claude a company name, website, and/or pitch deck/memo — get back a concise VC investment brief (tech, team, traction, key questions) that opens as an HTML page in your browser |
 
