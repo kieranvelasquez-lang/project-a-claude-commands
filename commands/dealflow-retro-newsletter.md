@@ -120,11 +120,11 @@ If a website or description cannot be found or verified after searching, flag th
 After curation, assign each company to one of the five thesis areas using its description, sector, and country.
 
 **Routing rules:**
-- **Physical World Intelligence** — space (civilian/non-defense), ocean, land, subsurface, agriculture, infrastructure, construction, energy (hardware and software for the physical world), new materials, robotics infrastructure
+- **Physical World Intelligence** — space (civilian/non-defense), ocean, land, subsurface, agriculture, infrastructure, construction, energy (hardware and software for the physical world), new materials
 - **Industrial Autonomy** — manufacturing, factory automation, factory software, supply chain, logistics
 - **Regulated Industries** — healthcare tech, fintech, legal tech, gov tech, insurance tech, compliance
 - **European Resilience** — defense, military, military space, dual-use hardware, cybersecurity infrastructure (not consumer security)
-- **Frontier Tech** — semiconductors, quantum computing, frontier biotech, breakthrough energy hardware (e.g. fusion), novel AI architectures
+- **Frontier Tech** — semiconductors, quantum computing, frontier biotech, breakthrough energy hardware (e.g. fusion), novel AI architectures, robotics infrastructure
 - **Miscellaneous** — AI agents, LLM platforms, dev tools, enterprise SaaS, gaming, consumer, edtech (no team member assigned — visibility only)
 
 When a company spans two areas, pick the primary one based on what they're **selling**, not what they use internally (e.g. an AI company selling into manufacturing → Industrial Autonomy if the product is hardware/process automation; → Miscellaneous if the product is software/AI).

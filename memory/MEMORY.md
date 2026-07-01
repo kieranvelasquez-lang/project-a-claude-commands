@@ -52,12 +52,6 @@
 - One Slack message with companies + profiles merged by thesis — no "Part 1 / Part 2" split
 
 
-## Project
-
-### Robotics routing split (all skills)
-- `project_robotics_routing.md`
-- Hardware/industrial/applied robotics → Global Supply Chain + Action: Miha Pavlovic; software/AI-first robotics → Future of Autonomous Work; defense always → European Resilience
-
 ## User
 
 ### Kieran's Slack user ID
