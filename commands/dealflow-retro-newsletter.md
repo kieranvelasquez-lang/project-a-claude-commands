@@ -117,15 +117,15 @@ If a website or description cannot be found or verified after searching, flag th
 
 ## Step 6 — Thesis routing
 
-After curation, assign each company to one of the five thesis areas using its description, sector, and country.
+After curation, assign each company to one of the six thesis areas using its description, sector, and country.
 
 **Routing rules:**
 - **Physical World Intelligence** — space (civilian/non-defense), ocean, land, subsurface, agriculture, infrastructure, construction, energy (hardware and software for the physical world), new materials
 - **Industrial Autonomy** — manufacturing, factory automation, factory software, supply chain, logistics
 - **Regulated Industries** — healthcare tech, fintech, legal tech, gov tech, insurance tech, compliance
 - **European Resilience** — defense, military, military space, dual-use hardware, cybersecurity infrastructure (not consumer security)
-- **Frontier Tech** — semiconductors, quantum computing, frontier biotech, breakthrough energy hardware (e.g. fusion), novel AI architectures, robotics infrastructure
-- **Miscellaneous** — AI agents, LLM platforms, dev tools, enterprise SaaS, gaming, consumer, edtech (no team member assigned — visibility only)
+- **Frontier Tech** — semiconductors, quantum computing, frontier biotech, breakthrough energy hardware (e.g. fusion), novel AI architectures, fundamental CS algorithm research, competitive-programming/algorithmic-research background (route here on any plausible fit, even from a terse note), robotics infrastructure
+- **Miscellaneous** — AI agents, LLM platforms, dev tools, enterprise SaaS (applied/practitioner work with no research or competitive-programming signal), gaming, consumer, edtech (no team member assigned — visibility only)
 
 When a company spans two areas, pick the primary one based on what they're **selling**, not what they use internally (e.g. an AI company selling into manufacturing → Industrial Autonomy if the product is hardware/process automation; → Miscellaneous if the product is software/AI).
 
@@ -215,7 +215,7 @@ Write the file to `/Users/kvelasquez/Desktop/dealflow-retro-newsletter.html` usi
 
 Calculate:
 - **CW number**: ISO week number of the **end date** of the period
-- **Summary line**: "[N] rounds tracked across 5 thesis areas. [X] seen, [Y] in contact within 12 months."
+- **Summary line**: "[N] rounds tracked across 6 thesis areas. [X] seen, [Y] in contact within 12 months."
 
 ### HTML structure
 

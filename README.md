@@ -135,8 +135,8 @@ All commands use the same deep dive routing table (updated July 2026):
 | Manufacturing, factory automation, factory software, supply chain, logistics | **Industrial Autonomy** (Oskar) |
 | Fintech, payments, healthcare, real estate, insurance, compliance, legal, payroll, tax, blockchain, crypto, web3 | **Regulated Industries** (Marjorie) |
 | Defense tech, military, weapons, military space | **European Resilience** (Jack, Miha) |
-| Semiconductors, chips, quantum computing, novel computation; breakthrough energy hardware (novel generation/storage methods); frontier biotech (synthetic biology, genomics, drug discovery); novel AI architectures/paradigms, fundamental CS algorithm research; robotics infrastructure | **Frontier Tech** (Jack, Omar) |
-| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS, gaming, consumer, edtech, creator, fitness | **Miscellaneous** (no team member — visibility only) |
+| Semiconductors, chips, quantum computing, novel computation; breakthrough energy hardware (novel generation/storage methods); frontier biotech (synthetic biology, genomics, drug discovery); novel AI architectures/paradigms, fundamental CS algorithm research, competitive-programming/algorithmic-research background (e.g. "ex-competitive programmer", "AI research background", "PhD, novel model work") — route here on any plausible fit, even from a terse note; robotics infrastructure | **Frontier Tech** (Jack, Omar) |
+| AI agents, orchestration, LLM infra, dev tools, enterprise AI-native SaaS (applied/practitioner work with no research or competitive-programming signal — e.g. "AI engineer", "ML ops", generic "works in AI"), gaming, consumer, edtech, creator, fitness | **Miscellaneous** (no team member — visibility only) |
 
 **Hardcoded overrides:**
 - **Cybersecurity** — all cybersecurity (commercial pentesting/infosec/SOC/security tooling and offensive/defense-grade) → Frontier Tech (Omar)
@@ -148,7 +148,7 @@ All commands use the same deep dive routing table (updated July 2026):
 - **Robotics** — all robotics infrastructure (software/AI-first: foundation models, physical intelligence, robot OS; hardware/physical world: space, ocean, agriculture, construction) → Frontier Tech (Omar); factory/industrial floor → Industrial Autonomy; defense → European Resilience
 - **Biotech** — frontier (synthetic biology, genomics, drug discovery) → Frontier Tech (Omar); commercial healthtech/medtech/clinical → Regulated Industries
 - **Semiconductors, chips, quantum computing** → Frontier Tech
-- **Fundamental AI research** → Frontier Tech; applied AI products → Miscellaneous
+- **AI/CS research or competitive-programming signal** (novel model/algorithm work, CS research roles, PhDs on new methods, competitive-programming background) → Frontier Tech, even on a terse note; applied AI product/practitioner roles with no research signal → Miscellaneous
 
 **Section order (fixed across all skills):** Physical World Intelligence → Industrial Autonomy → Regulated Industries → European Resilience → Frontier Tech → Miscellaneous
 
